@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Noa | links</title>
+  <meta name="description" content="Links" />
+  <style>
+    :root{
+      --bg:#f5f2ee; --card:#ffffff; --text:#222; --muted:#666;
+      --btn:#e3d9cf; --btnText:#222; --shadow: 0 10px 30px rgba(0,0,0,.08);
+      --radius:18px;
+    }
+    body{
+      margin:0; font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;
+      background:var(--bg); color:var(--text);
+    }
+    .wrap{ max-width:520px; margin:0 auto; padding:22px 16px 40px; }
+    .hero{
+      background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow);
+      overflow:hidden; margin-top:8px;
+    }
+    .hero img{ width:100%; height:220px; object-fit:cover; display:block; }
+    .hero .p{ padding:14px 16px 16px; }
+    h1{ font-size:20px; margin:0 0 6px; letter-spacing:.02em; }
+    .sub{ margin:0; color:var(--muted); font-size:13px; line-height:1.5; }
+    .links{ margin-top:14px; display:flex; flex-direction:column; gap:10px; }
+    a.btn{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 16px; border-radius:14px; text-decoration:none;
+      background:var(--btn); color:var(--btnText); font-weight:600;
+      box-shadow: 0 8px 20px rgba(0,0,0,.06);
+      transition: transform .08s ease, filter .2s ease;
+    }
+    a.btn:active{ transform: scale(.99); }
+    .hint{ font-size:12px; color:var(--muted); margin-top:12px; text-align:center; }
+    .arrow{ opacity:.6; }
+    footer{ margin-top:18px; text-align:center; font-size:12px; color:var(--muted); }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <!-- ここを自分の画像URLに差し替え（GitHubに画像を置いてもOK） -->
+      <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=60" alt="">
+      <div class="p">
+        <h1>Noa</h1>
+        <p class="sub">Countryside aesthetic / quiet life. Latest updates here.</p>
+      </div>
+    </section>
+
+    <nav class="links" aria-label="links">
+      <!-- 並び順：クリック率が上がりやすい順 -->
+      <a class="btn" href="https://example.com/latest" target="_blank" rel="noopener">
+        Latest update <span class="arrow">›</span>
+      </a>
+      <a class="btn" href="https://example.com/about" target="_blank" rel="noopener">
+        About me <span class="arrow">›</span>
+      </a>
+      <a class="btn" href="https://example.com/archive" target="_blank" rel="noopener">
+        Archive <span class="arrow">›</span>
+      </a>
+      <a class="btn" href="https://example.com/private" target="_blank" rel="noopener">
+        Private area <span class="arrow">›</span>
+      </a>
+    </nav>
+
+    <div class="hint">※外部サイトへ移動します</div>
+    <footer>© Noa</footer>
+  </main>
+</body>
+</html>
+<div style="text-align:center;margin:10px;">
+  <button onclick="setLang('ja')">JP</button>
+  <button onclick="setLang('en')">EN</button>
+</div>
+
+<script>
+const translations = {
+  ja: {
+    latest: "最新情報",
+    about: "プロフィール",
+    archive: "過去の投稿",
+    private: "プライベート"
+  },
+  en: {
+    latest: "Latest update",
+    about: "About me",
+    archive: "Archive",
+    private: "Private area"
+  }
+};
+
+function setLang(lang){
+  document.getElementById("btn1").innerText = translations[lang].latest;
+  document.getElementById("btn2").innerText = translations[lang].about;
+  document.getElementById("btn3").innerText = translations[lang].archive;
+  document.getElementById("btn4").innerText = translations[lang].private;
+}
+</script>
