@@ -4,41 +4,62 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Noa | links</title>
-  <meta name="description" content="Links" />
+  <meta name="description" content="Noa links" />
 
-  <!-- Google Fonts（丸っこくポップ系。変更したければここだけ差し替え） -->
+  <!-- Google Fonts（丸っこくポップ系） -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      /* ここで色をまとめて変更できる */
-      --text: #ffffff;                 /* タイトル/見出し（通常は白） */
+      /* ====== サイズ（ここを触れば一括調整） ====== */
+      --titleSize: 42px;
+
+      --snsSize: 44px;
+      --snsIconSize: 22px;
+
+      /* ====== 余白リズム（PC基準） ====== */
+      --topPad: 30px;      /* 画面上余白 */
+      --titleMb: 8px;      /* タイトル→サブ */
+      --subMb: 12px;       /* サブ→SNS */
+      --snsMb: 18px;       /* SNS→カード */
+      --cardsGap: 14px;    /* カード間 */
+      --footerMt: 16px;    /* カード→フッター */
+
+      /* 高さ微調整（+で下、-で上） */
+      --snsLift: 0px;
+      --cardsLift: -4px;
+
+      /* ====== 色 ====== */
+      --text: #ffffff;                 /* タイトル/サブ（基本白） */
       --muted: rgba(255,255,255,.82);  /* サブ */
-      --iconTint: #ffffff;             /* SNSアイコン色（PNGが白想定ならそのまま） */
-      --panelBg: rgba(255,255,255,.62);/* ボックスの半透明 */
-      --panelBorder: rgba(255,255,255,.35);
-      --shadow: 0 18px 50px rgba(0,0,0,.35);
-      --radius: 18px;
+      --panelBg: rgba(255,255,255,.52);/* カード透明度（ここが主役） */
+      --panelBorder: rgba(255,255,255,.28);
+      --shadow:
+        0 18px 50px rgba(0,0,0,.22),
+        inset 0 1px 0 rgba(255,255,255,.35);
+
+      --radius: 22px;
+
+      /* 背景の暗膜（白膜ではなく暗膜で眠さを消す） */
+      --darken: .52; /* JSで縦横に応じて微調整 */
     }
 
-    html,body{ height:100%; }
+    html, body { height: 100%; }
+
     body{
       margin:0;
       font-family: "M PLUS Rounded 1c", system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", sans-serif;
       color: var(--text);
 
-      /* 背景（時間帯切替のためJSで上書き） */
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
-
-      /* 文字を読みやすくするための暗いグラデ（白膜じゃなく暗膜） */
-      --darken: .45; /* 0〜0.7くらいで調整 */
+      transition: background-image 1s ease-in-out;
     }
 
-    /* ✅ 背景の“眠さ”を出さずに読みやすくする暗膜 */
+    /* ✅ 背景が死なず、文字が読める暗膜 */
     body::before{
       content:"";
       position:fixed;
@@ -57,7 +78,7 @@
       display:flex;
       align-items:center;
       justify-content:center;
-      padding:28px 16px 40px;
+      padding: var(--topPad) 16px 40px;
     }
 
     .container{
@@ -65,60 +86,66 @@
       text-align:center;
     }
 
-    /* 上部：タイトル/サブ/アイコン */
+    /* ====== タイトル/サブ ====== */
     .title{
-      font-weight:800;
-      font-size:42px;
+      margin:0 0 var(--titleMb);
+      font-weight:900;
+      font-size: var(--titleSize);
       letter-spacing:.02em;
-      margin:0 0 8px;
       text-shadow: 0 6px 20px rgba(0,0,0,.35);
     }
+
     .subtitle{
-      margin:0 0 14px;
-      font-weight:700;
+      margin:0 0 var(--subMb);
+      font-weight:800;
       color: var(--muted);
       text-shadow: 0 6px 20px rgba(0,0,0,.35);
     }
 
+    /* ====== SNSアイコン（枠なし / どこタップしても飛ぶ） ====== */
     .social{
       display:flex;
       gap:14px;
       justify-content:center;
       align-items:center;
-      margin:10px 0 22px;
+      margin: calc(10px + var(--snsLift)) 0 var(--snsMb);
     }
 
-    /* ✅ SNSアイコン：どこタップしても飛ぶ */
     .social a{
-      width:44px; height:44px;
-      display:grid; place-items:center;
+      width: var(--snsSize);
+      height: var(--snsSize);
+      display:grid;
+      place-items:center;
       border-radius:14px;
-      background: rgba(0,0,0,.22);
-      border: 1px solid rgba(255,255,255,.18);
-      backdrop-filter: blur(6px);
-      box-shadow: 0 10px 30px rgba(0,0,0,.25);
-      transition: transform .08s ease, filter .2s ease;
+      background: transparent;
+      border: none;
+      box-shadow: none;
       text-decoration:none;
+      transition: transform .08s ease, filter .18s ease;
     }
-    .social a:active{ transform: scale(.98); }
+    .social a:hover{ filter: brightness(1.08); }
+    .social a:active{ transform: scale(.97); }
+
     .social img{
-      width:22px; height:22px;
+      width: var(--snsIconSize);
+      height: var(--snsIconSize);
       display:block;
-      /* PNGが黒などの場合はここで白化はできない（SVGなら可）。白PNG推奨 */
-      /* filter: brightness(0) invert(1); ←黒PNGを白っぽくしたい場合はON */
+      /* 黒PNGを白っぽく見せたいならON（白PNGなら不要） */
+      filter: brightness(0) invert(1);
     }
 
-    /* ボックス（リンクカード） */
+    /* ====== カード（ボックス） ====== */
     .cards{
       display:flex;
       flex-direction:column;
-      gap:14px;
+      gap: var(--cardsGap);
       align-items:center;
+      transform: translateY(var(--cardsLift));
     }
 
-    /* ✅ ボックス全体がリンク（どこタップしても飛ぶ） */
+    /* ✅ カード全体がリンク */
     .card{
-      width:min(560px, 100%);
+      width:min(640px, 100%);
       display:flex;
       gap:14px;
       align-items:center;
@@ -126,50 +153,64 @@
       background: var(--panelBg);
       border: 1px solid var(--panelBorder);
       border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
 
-      padding:12px 14px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+
+      padding:14px 16px;
       text-decoration:none;
       color:#111;
 
-      transition: transform .08s ease, filter .2s ease;
+      transform: translateZ(0);
+      transition: transform .08s ease, filter .18s ease, background .18s ease;
     }
-    .card:hover{ filter: brightness(1.02); }
-    .card:active{ transform: scale(.992); }
 
-    /* 左：ロゴ（角を丸める） */
+    .card:hover{ filter: brightness(1.02); }
+    .card:active{
+      transform: scale(.985);
+      filter: brightness(1.03);
+    }
+
+    /* 左ロゴ（角丸） */
     .logo{
-      width:56px; height:56px;
-      border-radius:14px; /* ←アイコンの角を丸める */
+      width:58px;
+      height:58px;
+      border-radius:16px;
       object-fit:cover;
       flex:0 0 auto;
-      box-shadow: 0 10px 24px rgba(0,0,0,.20);
+      box-shadow: 0 12px 26px rgba(0,0,0,.18);
       background:#fff;
     }
 
-    /* 右：2行（タイトル + サブ） */
+    /* 右テキスト（2行） */
     .meta{
       text-align:left;
       line-height:1.1;
       display:flex;
       flex-direction:column;
       gap:6px;
-      min-width:0; /* 省略を効かせる */
+      min-width:0;
     }
+
     .meta .h{
-      font-weight:800;
+      font-weight:900;
       font-size:20px;
-      color:#ffffff;
+      color: #ffffff;
+      letter-spacing:.01em;
+
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
       max-width: 100%;
     }
+
     .meta .d{
-      font-weight:700;
+      font-weight:800;
       font-size:14px;
-      color:#ffffff;
+      color: #ffffff;
+      line-height:1.25;
+
       display:-webkit-box;
       -webkit-line-clamp:2;
       -webkit-box-orient:vertical;
@@ -177,7 +218,7 @@
       max-width: 100%;
     }
 
-    /* 小さな矢印 */
+    /* 右矢印 */
     .chev{
       margin-left:auto;
       font-weight:900;
@@ -186,19 +227,40 @@
       padding-left:10px;
     }
 
-    /* フッター */
     .foot{
-      margin-top:16px;
+      margin-top: var(--footerMt);
       font-size:12px;
       color: rgba(255,255,255,.70);
       text-shadow: 0 6px 20px rgba(0,0,0,.35);
     }
 
-    /* モバイル最適化 */
+    /* ====== スマホ最適 ====== */
     @media (max-width:420px){
-      .title{ font-size:34px; }
-      .logo{ width:52px; height:52px; }
-      .meta .h{ font-size:18px; }
+      :root{
+        --titleSize: 34px;
+
+        --snsSize: 38px;
+        --snsIconSize: 18px;
+
+        --topPad: 22px;
+        --titleMb: 6px;
+        --subMb: 10px;
+        --snsMb: 14px;
+        --cardsGap: 12px;
+        --footerMt: 14px;
+
+        --snsLift: -2px;
+        --cardsLift: -6px;
+      }
+
+      .logo{
+        width:54px;
+        height:54px;
+        border-radius:15px;
+      }
+      .meta .h{ font-size:19px; }
+      .meta .d{ font-size:13px; }
+      .card{ padding:14px 14px; }
     }
   </style>
 </head>
@@ -207,11 +269,10 @@
   <div class="wrap">
     <div class="container">
 
-      <!-- タイトル（白/変更可） -->
       <h1 class="title">のあ୨୧</h1>
       <p class="subtitle">田舎で暮らす陰キャ女子</p>
 
-      <!-- SNSアイコン（images直下のPNGを使用） -->
+      <!-- SNS（枠なし・タップで飛ぶ） -->
       <div class="social" aria-label="SNS links">
         <a href="https://x.com/noanoshita" target="_blank" rel="noopener" aria-label="X">
           <img src="images/X.png" alt="X">
@@ -224,11 +285,11 @@
         </a>
       </div>
 
-      <!-- ボックス（全体がリンク） -->
+      <!-- ボックス（どこタップしてもリンクへ） -->
       <div class="cards" aria-label="Main links">
 
         <a class="card" href="https://candfans.jp/noanoshita" target="_blank" rel="noopener">
-          <img class="logo" src="images/candfans.png" alt="candfans">
+          <img class="logo" src="images/candfans.png" alt="CandFans">
           <div class="meta">
             <div class="h">CandFans</div>
             <div class="d">活動初期からの全てがここに！</div>
@@ -237,16 +298,16 @@
         </a>
 
         <a class="card" href="https://myfans.jp/noanoshita" target="_blank" rel="noopener">
-          <img class="logo" src="images/myfans.png" alt="myfans">
+          <img class="logo" src="images/myfans.png" alt="MyFans">
           <div class="meta">
             <div class="h">MyFans</div>
-            <div class="d">みんなと内緒のSNS</div>
+            <div class="d">みんなに内緒のSNS</div>
           </div>
           <div class="chev">›</div>
         </a>
 
         <a class="card" href="https://fantia.jp/fanclubs/532786" target="_blank" rel="noopener">
-          <img class="logo" src="images/fantia.png" alt="fantia">
+          <img class="logo" src="images/fantia.png" alt="Fantia">
           <div class="meta">
             <div class="h">Fantia</div>
             <div class="d">内容は同じだよ！</div>
@@ -255,7 +316,7 @@
         </a>
 
         <a class="card" href="https://onlyfans.com/noanoshita" target="_blank" rel="noopener">
-          <img class="logo" src="images/onlyfans.jpg" alt="onlyfans">
+          <img class="logo" src="images/onlyfans.jpg" alt="OnlyFans">
           <div class="meta">
             <div class="h">OnlyFans</div>
             <div class="d">いっぱい見てね</div>
@@ -270,8 +331,8 @@
   </div>
 
   <script>
-    // ✅ 背景画像（時間帯切替）
-    // ここも images 配下に置くなら images/xxx.jpg にする
+    // 背景（時間帯切替）
+    // /images に morning.jpg evening.jpg night.jpg がある前提
     const BG = {
       morning: "images/morning.jpg",
       evening: "images/evening.jpg",
@@ -285,15 +346,15 @@
       return BG.night;
     }
 
-    // ✅ 縦画像のときだけ暗膜を強める（縦がうるさくなりやすい対策）
+    // 縦画像のとき暗膜を少し強くする
     function applyDarkenByAspect(imgUrl){
       const img = new Image();
       img.onload = () => {
         const portrait = img.naturalHeight > img.naturalWidth;
-        document.body.style.setProperty('--darken', portrait ? '.55' : '.40');
+        document.body.style.setProperty('--darken', portrait ? '.58' : '.50');
       };
       img.onerror = () => {
-        document.body.style.setProperty('--darken', '.48');
+        document.body.style.setProperty('--darken', '.52');
       };
       img.src = imgUrl;
     }
@@ -305,6 +366,8 @@
     }
 
     setBG();
+    // ページ開きっぱなしでも時間帯が変わるようにしたいなら（任意）
+    // setInterval(setBG, 10 * 60 * 1000);
   </script>
 </body>
 </html>
