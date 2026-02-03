@@ -1,162 +1,166 @@
 <!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Noa | links</title>
-  <meta name="description" content="Links" />
-  <style>
-    :root{
-      --card:#ffffff; --text:#222; --muted:#666;
-      --btn:#e3d9cf; --btnText:#222;
-      --shadow: 0 10px 30px rgba(0,0,0,.12);
-      --radius:18px;
-    }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Noa | links</title>
 
-    /* ✅ 背景：画像を時間帯で差し替えるので色bgは使わない */
-    body{
-      margin:0;
-      font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;
-      color:var(--text);
+<style>
+:root{
+  --card:#ffffff;
+  --text:#222;
+  --muted:#666;
+  --btn:#e3d9cf;
+  --btnText:#222;
+  --radius:18px;
+  --shadow:0 10px 30px rgba(0,0,0,.15);
+}
 
-      background-size:cover;
-      background-position:center;
-      background-attachment:fixed;
-      transition: background-image 1s ease-in-out;
-    }
+/* 背景設定 */
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans JP",sans-serif;
+  color:var(--text);
 
-    /* ✅ 読みやすさ用の白い薄膜（不要なら消してOK） */
-    body::before{
-      content:"";
-      position:fixed;
-      inset:0;
-      background:rgba(255,255,255,.55);
-      z-index:-1;
-    }
+  background-size:cover;
+  background-position:center;
+  background-attachment:fixed;
+  transition:background-image 1s ease-in-out;
+}
 
-    .wrap{ max-width:520px; margin:0 auto; padding:22px 16px 40px; }
+/* 可読性オーバーレイ */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:rgba(255,255,255,.55);
+  z-index:-1;
+}
 
-    .hero{
-      background:var(--card);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      overflow:hidden;
-      margin-top:8px;
-      backdrop-filter: blur(2px);
-    }
-    .hero img{ width:100%; height:220px; object-fit:cover; display:block; }
-    .hero .p{ padding:14px 16px 16px; }
+.wrap{
+  max-width:520px;
+  margin:auto;
+  padding:22px 16px 40px;
+}
 
-    h1{ font-size:20px; margin:0 0 6px; letter-spacing:.02em; }
-    .sub{ margin:0; color:var(--muted); font-size:13px; line-height:1.5; }
+.hero{
+  background:var(--card);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
 
-    .links{ margin-top:14px; display:flex; flex-direction:column; gap:10px; }
+.hero img{
+  width:100%;
+  height:220px;
+  object-fit:cover;
+}
 
-    a.btn{
-      display:flex; align-items:center; justify-content:space-between;
-      padding:14px 16px;
-      border-radius:14px;
-      text-decoration:none;
-      background:var(--btn);
-      color:var(--btnText);
-      font-weight:600;
-      box-shadow: 0 8px 20px rgba(0,0,0,.10);
-      transition: transform .08s ease, filter .2s ease;
-    }
-    a.btn:hover{ filter:brightness(.98); }
-    a.btn:active{ transform: scale(.99); }
+.hero .p{padding:14px;}
 
-    .hint{ font-size:12px; color:var(--muted); margin-top:12px; text-align:center; }
-    .arrow{ opacity:.6; }
+h1{margin:0 0 6px;font-size:20px;}
+.sub{margin:0;color:var(--muted);font-size:13px;}
 
-    .lang{
-      display:flex; justify-content:center; gap:10px;
-      margin:12px 0 0;
-    }
-    .lang button{
-      padding:8px 12px;
-      border-radius:10px;
-      border:1px solid rgba(0,0,0,.12);
-      background:rgba(255,255,255,.75);
-      cursor:pointer;
-      font-weight:600;
-    }
-    .lang button:active{ transform:scale(.99); }
+.links{
+  margin-top:14px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
 
-    footer{ margin-top:18px; text-align:center; font-size:12px; color:var(--muted); }
-  </style>
+.btn{
+  display:flex;
+  justify-content:space-between;
+  padding:14px 16px;
+  border-radius:14px;
+  text-decoration:none;
+  background:var(--btn);
+  color:var(--btnText);
+  font-weight:600;
+}
+
+.lang{
+  text-align:center;
+  margin-top:10px;
+}
+
+.lang button{
+  padding:8px 12px;
+  border-radius:10px;
+  border:none;
+  cursor:pointer;
+}
+
+footer{
+  text-align:center;
+  margin-top:15px;
+  font-size:12px;
+  color:var(--muted);
+}
+</style>
 </head>
 
 <body>
-  <main class="wrap">
-    <section class="hero">
-      <!-- ✅ 上のヒーロー画像は別でOK（今まで通り） -->
-      <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=60" alt="">
-      <div class="p">
-        <h1>Noa</h1>
-        <p class="sub">Countryside aesthetic / quiet life. Latest updates here.</p>
-      </div>
-    </section>
 
-    <nav class="links" aria-label="links">
-      <a class="btn" href="https://example.com/latest" target="_blank" rel="noopener">
-        <span id="btn1">Latest update</span> <span class="arrow">›</span>
-      </a>
-      <a class="btn" href="https://example.com/about" target="_blank" rel="noopener">
-        <span id="btn2">About me</span> <span class="arrow">›</span>
-      </a>
-      <a class="btn" href="https://example.com/archive" target="_blank" rel="noopener">
-        <span id="btn3">Archive</span> <span class="arrow">›</span>
-      </a>
-      <a class="btn" href="https://example.com/private" target="_blank" rel="noopener">
-        <span id="btn4">Private area</span> <span class="arrow">›</span>
-      </a>
-    </nav>
+<main class="wrap">
 
-    <!-- ✅ 言語切替ボタン（HTMLの中に入れるのが正解） -->
-    <div class="lang">
-      <button type="button" onclick="setLang('ja')">JP</button>
-      <button type="button" onclick="setLang('en')">EN</button>
-    </div>
+<section class="hero">
+<img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=60">
+<div class="p">
+<h1>Noa</h1>
+<p class="sub">Countryside aesthetic / quiet life</p>
+</div>
+</section>
 
-    <div class="hint">※外部サイトへ移動します</div>
-    <footer>© Noa</footer>
-  </main>
+<nav class="links">
+<a class="btn" href="#"><span id="btn1">Latest update</span> ›</a>
+<a class="btn" href="#"><span id="btn2">About me</span> ›</a>
+<a class="btn" href="#"><span id="btn3">Archive</span> ›</a>
+<a class="btn" href="#"><span id="btn4">Private area</span> ›</a>
+</nav>
+
+<div class="lang">
+<button onclick="setLang('ja')">JP</button>
+<button onclick="setLang('en')">EN</button>
+</div>
+
+<footer>© Noa</footer>
+
+</main>
 
 <script>
-  const BG = {
-    morning: "images/morning.jpg",
-    evening: "images/evening.jpg",
-    night: "images/night.jpg"
-  };
+/* ✅ 背景画像パス（あなたの構成用）*/
+const BG={
+  morning:"images/morning.jpg",
+  evening:"images/evening.jpg",
+  night:"images/night.jpg"
+};
 
-  function setBackgroundByTime(){
-    const hour = new Date().getHours();
-    let bg = BG.night;
+function setBG(){
+  const h=new Date().getHours();
+  let img=BG.night;
 
-    if(hour >= 5 && hour < 16) bg = BG.morning;
-    else if(hour >= 16 && hour < 19) bg = BG.evening;
+  if(h>=5 && h<16) img=BG.morning;
+  else if(h>=16 && h<19) img=BG.evening;
 
-    document.body.style.backgroundImage = `url('${bg}?v=${Date.now()}')`;
-  }
+  document.body.style.backgroundImage=`url('${img}')`;
+}
 
-  setBackgroundByTime();
+setBG();
 
-  // 翻訳（ボタンがあるなら）
-  const translations = {
-    ja: { latest:"最新情報", about:"プロフィール", archive:"過去の投稿", private:"プライベート" },
-    en: { latest:"Latest update", about:"About me", archive:"Archive", private:"Private area" }
-  };
+/* 翻訳 */
+const t={
+ja:{latest:"最新情報",about:"プロフィール",archive:"過去の投稿",private:"プライベート"},
+en:{latest:"Latest update",about:"About me",archive:"Archive",private:"Private area"}
+};
 
-  function setLang(lang){
-    document.getElementById("btn1").innerText = translations[lang].latest;
-    document.getElementById("btn2").innerText = translations[lang].about;
-    document.getElementById("btn3").innerText = translations[lang].archive;
-    document.getElementById("btn4").innerText = translations[lang].private;
-    document.documentElement.lang = lang;
-  }
-
-  setLang('en');
+function setLang(l){
+  btn1.innerText=t[l].latest;
+  btn2.innerText=t[l].about;
+  btn3.innerText=t[l].archive;
+  btn4.innerText=t[l].private;
+}
 </script>
+
 </body>
 </html>
