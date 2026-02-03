@@ -13,45 +13,142 @@
 
   <style>
     :root{
-      /* ====== サイズ（ここを触れば一括調整） ====== */
-      --titleSize: 38px;
+      /* =========================================================
+         ここだけ触ればOK：PCの一括設定
+      ========================================================= */
 
+      /* --- Layout / Width --- */
+      --containerMax: 760px;  /* 全体の最大幅 */
+      --cardMax: 640px;       /* ★ボックス（カード）最大幅：ここで幅変更 */
+
+      /* --- Page Padding --- */
+      --padTop: 30px;         /* 画面上余白 */
+      --padSide: 16px;        /* 左右余白 */
+      --padBottom: 40px;      /* 下余白 */
+
+      /* --- Typography --- */
+      --fontFamily: "M PLUS Rounded 1c", system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", sans-serif;
+      --titleSize: 38px;
+      --titleWeight: 900;
+      --subtitleSize: 18px;
+      --subtitleWeight: 800;
+
+      /* --- Text Colors --- */
+      --titleColor: #ffffff;
+      --subtitleColor: rgba(255,255,255,.82);
+      --footerColor: rgba(255,255,255,.70);
+
+      /* --- Text Shadow --- */
+      --textShadow: 0 6px 20px rgba(0,0,0,.35);
+
+      /* --- Spacing Rhythm --- */
+      --gapTitleToSub: 4px;       /* タイトル→サブ */
+      --gapSubToSns: 4px;         /* サブ→SNS（中央寄せ調整の要） */
+      --gapSnsToCards: 18px;      /* SNS→カード */
+      --gapCards: 14px;           /* カード間 */
+      --gapCardsToFooter: 16px;   /* カード→フッター */
+
+      /* --- Fine Position (px) --- */
+      --snsLift: 0px;        /* +でSNS全体を下げる */
+      --cardsLift: -4px;     /* +でカード全体を下げる */
+
+      /* --- SNS Sizes --- */
       --snsSize: 88px;
       --snsIconSize: 40px;
+      --snsGap: 14px;
+      --snsRadius: 14px;
+      --snsHoverBright: 1.25;  /* hoverの明るさ */
+      --snsActiveScale: .97;
 
-      /* ====== 余白リズム（PC基準） ====== */
-      --topPad: 30px;      /* 画面上余白 */
-      --titleMb: 4px;      /* タイトル→サブ */
-      --subMb: 4px;       /* サブ→SNS */
-      --snsMb: 18px;       /* SNS→カード */
-      --cardsGap: 14px;    /* カード間 */
-      --footerMt: 16px;    /* カード→フッター */
+      /* --- Card Style --- */
+      --cardRadius: 22px;
+      --cardPadY: 14px;
+      --cardPadX: 16px;
+      --cardInnerGap: 14px;
 
-      /* 高さ微調整（+で下、-で上） */
-      --snsLift: 0px;
-      --cardsLift: -4px;
+      --cardBg: rgba(255,255,255,.40);   /* ★透明度ここ */
+      --cardBorder: rgba(255,255,255,.28);
+      --cardBlur: 14px;
 
-      /* ====== 色 ====== */
-      --text: #ffffff;                 /* タイトル/サブ（基本白） */
-      --muted: rgba(255,255,255,.82);  /* サブ */
-      --panelBg: rgba(255,255,255,.40);/* カード透明度（ここが主役） */
-      --panelBorder: rgba(255,255,255,.28);
-      --shadow:
-        0 18px 50px rgba(0,0,0,.22),
-        inset 0 1px 0 rgba(255,255,255,.35);
+      --cardShadow1: 0 18px 50px rgba(0,0,0,.22);
+      --cardShadow2: inset 0 1px 0 rgba(255,255,255,.35);
 
-      --radius: 22px;
+      --cardHoverBright: 1.02;
+      --cardActiveScale: .985;
+      --cardActiveBright: 1.03;
 
-      /* 背景の暗膜（白膜ではなく暗膜で眠さを消す） */
+      /* --- Logo (left image) --- */
+      --logoSize: 58px;
+      --logoRadius: 16px;
+      --logoShadow: 0 12px 26px rgba(0,0,0,.18);
+
+      /* --- Card Text --- */
+      --cardTitleSize: 20px;
+      --cardTitleWeight: 900;
+      --cardTitleColor: #ffffff;
+
+      --cardDescSize: 14px;
+      --cardDescWeight: 800;
+      --cardDescColor: #ffffff;
+      --cardDescLineHeight: 1.25;
+      --cardDescClamp: 2;
+
+      /* --- Chevron --- */
+      --chevSize: 22px;
+      --chevColor: rgba(0,0,0,.35);
+      --chevPadLeft: 10px;
+
+      /* --- Background Overlay (darken) --- */
       --darken: .52; /* JSで縦横に応じて微調整 */
+      --darkenRadW: 1200px;
+      --darkenRadH: 700px;
+      --darkenRadX: 50%;
+      --darkenRadY: 25%;
+      --darkenStartDelta: .15;
+      --darkenEndDelta: .10;
+
+      /* ========================================================= */
+    }
+
+    /* =========================================================
+       スマホはここだけ触ればOK（変数差し替え）
+    ========================================================= */
+    @media (max-width:420px){
+      :root{
+        --titleSize: 30px;
+        --subtitleSize: 16px;
+
+        --snsSize: 72px;
+        --snsIconSize: 34px;
+
+        --padTop: 22px;
+        --gapTitleToSub: 6px;
+        --gapSubToSns: 6px;
+        --gapSnsToCards: 14px;
+        --gapCards: 12px;
+        --gapCardsToFooter: 14px;
+
+        --snsLift: 6px;
+        --cardsLift: -6px;
+
+        --cardMax: 640px; /* スマホ側で狭めたいなら 600px とかに */
+        --cardPadY: 14px;
+        --cardPadX: 14px;
+
+        --logoSize: 54px;
+        --logoRadius: 15px;
+
+        --cardTitleSize: 19px;
+        --cardDescSize: 13px;
+      }
     }
 
     html, body { height: 100%; }
 
     body{
       margin:0;
-      font-family: "M PLUS Rounded 1c", system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", sans-serif;
-      color: var(--text);
+      font-family: var(--fontFamily);
+      color: var(--titleColor);
 
       background-size: cover;
       background-position: center;
@@ -65,10 +162,11 @@
       position:fixed;
       inset:0;
       background:
-        radial-gradient(1200px 700px at 50% 25%,
-          rgba(0,0,0, calc(var(--darken) - .15)) 0%,
+        radial-gradient(
+          var(--darkenRadW) var(--darkenRadH) at var(--darkenRadX) var(--darkenRadY),
+          rgba(0,0,0, calc(var(--darken) - var(--darkenStartDelta))) 0%,
           rgba(0,0,0, var(--darken)) 55%,
-          rgba(0,0,0, calc(var(--darken) + .10)) 100%
+          rgba(0,0,0, calc(var(--darken) + var(--darkenEndDelta))) 100%
         );
       z-index:-1;
     }
@@ -78,39 +176,42 @@
       display:flex;
       align-items:center;
       justify-content:center;
-      padding: var(--topPad) 16px 40px;
+      padding: var(--padTop) var(--padSide) var(--padBottom);
     }
 
     .container{
-      width:min(760px, 100%);
+      width: min(var(--containerMax), 100%);
       text-align:center;
     }
 
     /* ====== タイトル/サブ ====== */
     .title{
-      margin:0 0 var(--titleMb);
-      font-weight:900;
+      margin: 0 0 var(--gapTitleToSub);
+      font-weight: var(--titleWeight);
       font-size: var(--titleSize);
-      letter-spacing:.02em;
-      text-shadow: 0 6px 20px rgba(0,0,0,.35);
+      letter-spacing: .02em;
+      color: var(--titleColor);
+      text-shadow: var(--textShadow);
     }
 
     .subtitle{
-      margin:0 0 var(--subMb);
-      font-weight:800;
-      font-size:18px;
-      color: var(--muted);
-      text-shadow: 0 6px 20px rgba(0,0,0,.35);
+      margin: 0 0 var(--gapSubToSns);
+      font-weight: var(--subtitleWeight);
+      font-size: var(--subtitleSize);
+      color: var(--subtitleColor);
+      text-shadow: var(--textShadow);
     }
 
-    /* ====== SNSアイコン（枠なし / どこタップしても飛ぶ） ====== */
+    /* ====== SNS ====== */
     .social{
       display:flex;
-      gap:14px;
-      margin-top: 4px;
+      gap: var(--snsGap);
       justify-content:center;
       align-items:center;
-      margin: calc(10px + var(--snsLift)) 0 var(--snsMb);
+
+      /* サブ→SNS距離を上の margin-bottom で統一したので、
+         ここはSNS→カードの距離だけ担当 */
+      margin: calc(var(--snsLift)) 0 var(--gapSnsToCards);
     }
 
     .social a{
@@ -118,15 +219,15 @@
       height: var(--snsSize);
       display:grid;
       place-items:center;
-      border-radius:14px;
+      border-radius: var(--snsRadius);
       background: transparent;
       border: none;
       box-shadow: none;
       text-decoration:none;
       transition: transform .08s ease, filter .18s ease;
     }
-    .social a:hover{ filter: brightness(1.25); }
-    .social a:active{ transform: scale(.97); }
+    .social a:hover{ filter: brightness(var(--snsHoverBright)); }
+    .social a:active{ transform: scale(var(--snsActiveScale)); }
 
     .social img{
       width: var(--snsIconSize);
@@ -136,56 +237,53 @@
       filter: brightness(0) invert(1);
     }
 
-    /* ====== カード（ボックス） ====== */
+    /* ====== カード ====== */
     .cards{
       display:flex;
       flex-direction:column;
-      gap: var(--cardsGap);
+      gap: var(--gapCards);
       align-items:center;
       transform: translateY(var(--cardsLift));
     }
 
-    /* ✅ カード全体がリンク */
     .card{
-      width:min(640px, 100%);
+      width: min(var(--cardMax), 100%);  /* ★幅は変数で管理 */
       display:flex;
-      gap:14px;
+      gap: var(--cardInnerGap);
       align-items:center;
 
-      background: var(--panelBg);
-      border: 1px solid var(--panelBorder);
-      border-radius: var(--radius);
+      background: var(--cardBg);
+      border: 1px solid var(--cardBorder);
+      border-radius: var(--cardRadius);
 
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      box-shadow: var(--cardShadow1), var(--cardShadow2);
+      backdrop-filter: blur(var(--cardBlur));
+      -webkit-backdrop-filter: blur(var(--cardBlur));
 
-      padding:14px 16px;
+      padding: var(--cardPadY) var(--cardPadX);
       text-decoration:none;
-      color:#111;
+      color: inherit;
 
       transform: translateZ(0);
       transition: transform .08s ease, filter .18s ease, background .18s ease;
     }
 
-    .card:hover{ filter: brightness(1.02); }
+    .card:hover{ filter: brightness(var(--cardHoverBright)); }
     .card:active{
-      transform: scale(.985);
-      filter: brightness(1.03);
+      transform: scale(var(--cardActiveScale));
+      filter: brightness(var(--cardActiveBright));
     }
 
-    /* 左ロゴ（角丸） */
     .logo{
-      width:58px;
-      height:58px;
-      border-radius:16px;
+      width: var(--logoSize);
+      height: var(--logoSize);
+      border-radius: var(--logoRadius);
       object-fit:cover;
       flex:0 0 auto;
-      box-shadow: 0 12px 26px rgba(0,0,0,.18);
+      box-shadow: var(--logoShadow);
       background:#fff;
     }
 
-    /* 右テキスト（2行） */
     .meta{
       text-align:left;
       line-height:1.1;
@@ -196,9 +294,9 @@
     }
 
     .meta .h{
-      font-weight:900;
-      font-size:20px;
-      color: #ffffff;
+      font-weight: var(--cardTitleWeight);
+      font-size: var(--cardTitleSize);
+      color: var(--cardTitleColor);
       letter-spacing:.01em;
 
       white-space:nowrap;
@@ -208,61 +306,31 @@
     }
 
     .meta .d{
-      font-weight:800;
-      font-size:14px;
-      color: #ffffff;
-      line-height:1.25;
+      font-weight: var(--cardDescWeight);
+      font-size: var(--cardDescSize);
+      color: var(--cardDescColor);
+      line-height: var(--cardDescLineHeight);
 
       display:-webkit-box;
-      -webkit-line-clamp:2;
+      -webkit-line-clamp: var(--cardDescClamp);
       -webkit-box-orient:vertical;
       overflow:hidden;
       max-width: 100%;
     }
 
-    /* 右矢印 */
     .chev{
       margin-left:auto;
       font-weight:900;
-      color: rgba(0,0,0,.35);
-      font-size:22px;
-      padding-left:10px;
+      color: var(--chevColor);
+      font-size: var(--chevSize);
+      padding-left: var(--chevPadLeft);
     }
 
     .foot{
-      margin-top: var(--footerMt);
+      margin-top: var(--gapCardsToFooter);
       font-size:12px;
-      color: rgba(255,255,255,.70);
-      text-shadow: 0 6px 20px rgba(0,0,0,.35);
-    }
-
-    /* ====== スマホ最適 ====== */
-    @media (max-width:420px){
-      :root{
-        --titleSize: 30px;
-
-        --snsSize: 33px;
-        --snsIconSize: 18px;
-
-        --topPad: 22px;
-        --titleMb: 6px;
-        --subMb: 10px;
-        --snsMb: 14px;
-        --cardsGap: 12px;
-        --footerMt: 14px;
-
-        --snsLift: 6px;
-        --cardsLift: -6px;
-      }
-
-      .logo{
-        width:54px;
-        height:54px;
-        border-radius:15px;
-      }
-      .meta .h{ font-size:19px; }
-      .meta .d{ font-size:13px; }
-      .card{ padding:14px 14px; }
+      color: var(--footerColor);
+      text-shadow: var(--textShadow);
     }
   </style>
 </head>
@@ -274,7 +342,6 @@
       <h1 class="title">のあ୨୧</h1>
       <p class="subtitle">田舎で暮らす陰キャ女子</p>
 
-      <!-- SNS（枠なし・タップで飛ぶ） -->
       <div class="social" aria-label="SNS links">
         <a href="https://x.com/noanoshita" target="_blank" rel="noopener" aria-label="X">
           <img src="images/X.png" alt="X">
@@ -287,9 +354,7 @@
         </a>
       </div>
 
-      <!-- ボックス（どこタップしてもリンクへ） -->
       <div class="cards" aria-label="Main links">
-
         <a class="card" href="https://candfans.jp/noanoshita" target="_blank" rel="noopener">
           <img class="logo" src="images/candfans.png" alt="CandFans">
           <div class="meta">
@@ -325,7 +390,6 @@
           </div>
           <div class="chev">›</div>
         </a>
-
       </div>
 
       <div class="foot">© Noa</div>
@@ -334,7 +398,6 @@
 
   <script>
     // 背景（時間帯切替）
-    // /images に morning.jpg evening.jpg night.jpg がある前提
     const BG = {
       morning: "images/morning.jpg",
       evening: "images/evening.jpg",
@@ -368,7 +431,6 @@
     }
 
     setBG();
-    // ページ開きっぱなしでも時間帯が変わるようにしたいなら（任意）
     // setInterval(setBG, 10 * 60 * 1000);
   </script>
 </body>
