@@ -123,52 +123,40 @@
     <footer>© Noa</footer>
   </main>
 
-  <script>
-    // ✅ 画像パス：今は「リポジトリ直下」にある前提
-    // imagesフォルダに入れたら "images/morning.jpg" のように変える
-    const BG = {
-      morning: "morning.jpg",
-      evening: "evening.jpg",
-      night: "night.jpg"
-    };
+<script>
+  const BG = {
+    morning: "images/morning.jpg",
+    evening: "images/evening.jpg",
+    night: "images/night.jpg"
+  };
 
-    function setBackgroundByTime(){
-      const hour = new Date().getHours();
-      let bg = "";
+  function setBackgroundByTime(){
+    const hour = new Date().getHours();
+    let bg = BG.night;
 
-      // 朝〜昼：5:00〜15:59
-      if(hour >= 5 && hour < 16){
-        bg = BG.morning; "images/morning.jpg",
-      }
-      // 夕：16:00〜18:59
-      else if(hour >= 16 && hour < 19){
-        bg = BG.evening: "images/evening.jpg",
-      }
-      // 夜：19:00〜4:59
-      else{
-        bg = BG.night: "images/night.jpg"
-      }
+    if(hour >= 5 && hour < 16) bg = BG.morning;
+    else if(hour >= 16 && hour < 19) bg = BG.evening;
 
-      document.body.style.backgroundImage = `url('${bg}')`;
-    }
+    document.body.style.backgroundImage = `url('${bg}?v=${Date.now()}')`;
+  }
 
-    const translations = {
-      ja: { latest:"最新情報", about:"プロフィール", archive:"過去の投稿", private:"プライベート" },
-      en: { latest:"Latest update", about:"About me", archive:"Archive", private:"Private area" }
-    };
+  setBackgroundByTime();
 
-    function setLang(lang){
-      document.getElementById("btn1").innerText = translations[lang].latest;
-      document.getElementById("btn2").innerText = translations[lang].about;
-      document.getElementById("btn3").innerText = translations[lang].archive;
-      document.getElementById("btn4").innerText = translations[lang].private;
-      document.documentElement.lang = lang;
-    }
+  // 翻訳（ボタンがあるなら）
+  const translations = {
+    ja: { latest:"最新情報", about:"プロフィール", archive:"過去の投稿", private:"プライベート" },
+    en: { latest:"Latest update", about:"About me", archive:"Archive", private:"Private area" }
+  };
 
-    // 初期化
-    setBackgroundByTime();
-    // 言語は初期英語（日本語にしたいなら 'ja' に変える）
-    setLang('ja');
-  </script>
+  function setLang(lang){
+    document.getElementById("btn1").innerText = translations[lang].latest;
+    document.getElementById("btn2").innerText = translations[lang].about;
+    document.getElementById("btn3").innerText = translations[lang].archive;
+    document.getElementById("btn4").innerText = translations[lang].private;
+    document.documentElement.lang = lang;
+  }
+
+  setLang('en');
+</script>
 </body>
 </html>
