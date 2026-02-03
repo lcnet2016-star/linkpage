@@ -205,14 +205,16 @@
     /* ====== SNS ====== */
     .social{
       display:flex;
-      gap: var(--snsGap);
       justify-content:center;
       align-items:center;
 
-      /* サブ→SNS距離を上の margin-bottom で統一したので、
-         ここはSNS→カードの距離だけ担当 */
-      margin: calc(var(--snsLift)) 0 var(--gapSnsToCards);
+      gap: var(--snsGap);
+
+      width: max-content;
+      margin-left:auto;
+      margin-right:auto;
     }
+
 
     .social a{
       width: var(--snsSize);
