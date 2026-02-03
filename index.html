@@ -1,194 +1,310 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Noa | links</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Noa | links</title>
+  <meta name="description" content="Links" />
 
-<style>
-:root{
-  --card:#ffffff;
-  --text:#222;
-  --muted:#666;
-  --btn:#e3d9cf;
-  --btnText:#222;
-  --radius:18px;
-  --shadow:0 10px 30px rgba(0,0,0,.15);
-}
+  <!-- Google Fonts（丸っこくポップ系。変更したければここだけ差し替え） -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
 
-/* 背景設定 */
-body{
-  margin:0;
-  font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans JP",sans-serif;
-  color:var(--text);
+  <style>
+    :root{
+      /* ここで色をまとめて変更できる */
+      --text: #ffffff;                 /* タイトル/見出し（通常は白） */
+      --muted: rgba(255,255,255,.82);  /* サブ */
+      --iconTint: #ffffff;             /* SNSアイコン色（PNGが白想定ならそのまま） */
+      --panelBg: rgba(255,255,255,.62);/* ボックスの半透明 */
+      --panelBorder: rgba(255,255,255,.35);
+      --shadow: 0 18px 50px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
 
-  background-size:cover;
-  background-position:center;
-  background-attachment:fixed;
-  transition: background-image 1s ease-in-out;
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: "M PLUS Rounded 1c", system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", sans-serif;
+      color: var(--text);
 
-  /* ✅ 白い膜の濃さ（JSが0〜0.65で切り替える） */
-  --overlay: 0;
-}
+      /* 背景（時間帯切替のためJSで上書き） */
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
 
-/* ✅ 白い膜：濃さを --overlay で制御 */
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  background:rgba(255,255,255,var(--overlay));
-  z-index:-1;
-}
+      /* 文字を読みやすくするための暗いグラデ（白膜じゃなく暗膜） */
+      --darken: .45; /* 0〜0.7くらいで調整 */
+    }
 
-.wrap{
-  max-width:520px;
-  margin:auto;
-  padding:22px 16px 40px;
-}
+    /* ✅ 背景の“眠さ”を出さずに読みやすくする暗膜 */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background:
+        radial-gradient(1200px 700px at 50% 25%,
+          rgba(0,0,0, calc(var(--darken) - .15)) 0%,
+          rgba(0,0,0, var(--darken)) 55%,
+          rgba(0,0,0, calc(var(--darken) + .10)) 100%
+        );
+      z-index:-1;
+    }
 
-.hero{
-  background:var(--card);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  overflow:hidden;
-}
+    .wrap{
+      min-height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:28px 16px 40px;
+    }
 
-.hero img{
-  width:100%;
-  height:220px;
-  object-fit:cover;
-}
+    .container{
+      width:min(760px, 100%);
+      text-align:center;
+    }
 
-.hero .p{padding:14px;}
+    /* 上部：タイトル/サブ/アイコン */
+    .title{
+      font-weight:800;
+      font-size:42px;
+      letter-spacing:.02em;
+      margin:0 0 8px;
+      text-shadow: 0 6px 20px rgba(0,0,0,.35);
+    }
+    .subtitle{
+      margin:0 0 14px;
+      font-weight:700;
+      color: var(--muted);
+      text-shadow: 0 6px 20px rgba(0,0,0,.35);
+    }
 
-h1{margin:0 0 6px;font-size:20px;}
-.sub{margin:0;color:var(--muted);font-size:13px;}
+    .social{
+      display:flex;
+      gap:14px;
+      justify-content:center;
+      align-items:center;
+      margin:10px 0 22px;
+    }
 
-.links{
-  margin-top:14px;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
+    /* ✅ SNSアイコン：どこタップしても飛ぶ */
+    .social a{
+      width:44px; height:44px;
+      display:grid; place-items:center;
+      border-radius:14px;
+      background: rgba(0,0,0,.22);
+      border: 1px solid rgba(255,255,255,.18);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+      transition: transform .08s ease, filter .2s ease;
+      text-decoration:none;
+    }
+    .social a:active{ transform: scale(.98); }
+    .social img{
+      width:22px; height:22px;
+      display:block;
+      /* PNGが黒などの場合はここで白化はできない（SVGなら可）。白PNG推奨 */
+      /* filter: brightness(0) invert(1); ←黒PNGを白っぽくしたい場合はON */
+    }
 
-.btn{
-  display:flex;
-  justify-content:space-between;
-  padding:14px 16px;
-  border-radius:14px;
-  text-decoration:none;
-  background:var(--btn);
-  color:var(--btnText);
-  font-weight:600;
-}
+    /* ボックス（リンクカード） */
+    .cards{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      align-items:center;
+    }
 
-.lang{
-  text-align:center;
-  margin-top:10px;
-}
+    /* ✅ ボックス全体がリンク（どこタップしても飛ぶ） */
+    .card{
+      width:min(560px, 100%);
+      display:flex;
+      gap:14px;
+      align-items:center;
 
-.lang button{
-  padding:8px 12px;
-  border-radius:10px;
-  border:none;
-  cursor:pointer;
-}
+      background: var(--panelBg);
+      border: 1px solid var(--panelBorder);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
 
-footer{
-  text-align:center;
-  margin-top:15px;
-  font-size:12px;
-  color:var(--muted);
-}
-</style>
+      padding:12px 14px;
+      text-decoration:none;
+      color:#111;
+
+      transition: transform .08s ease, filter .2s ease;
+    }
+    .card:hover{ filter: brightness(1.02); }
+    .card:active{ transform: scale(.992); }
+
+    /* 左：ロゴ（角を丸める） */
+    .logo{
+      width:56px; height:56px;
+      border-radius:14px; /* ←アイコンの角を丸める */
+      object-fit:cover;
+      flex:0 0 auto;
+      box-shadow: 0 10px 24px rgba(0,0,0,.20);
+      background:#fff;
+    }
+
+    /* 右：2行（タイトル + サブ） */
+    .meta{
+      text-align:left;
+      line-height:1.1;
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width:0; /* 省略を効かせる */
+    }
+    .meta .h{
+      font-weight:800;
+      font-size:20px;
+      color:#0f0f0f;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width: 100%;
+    }
+    .meta .d{
+      font-weight:700;
+      font-size:14px;
+      color: rgba(20,20,20,.80);
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+      max-width: 100%;
+    }
+
+    /* 小さな矢印 */
+    .chev{
+      margin-left:auto;
+      font-weight:900;
+      color: rgba(0,0,0,.35);
+      font-size:22px;
+      padding-left:10px;
+    }
+
+    /* フッター */
+    .foot{
+      margin-top:16px;
+      font-size:12px;
+      color: rgba(255,255,255,.70);
+      text-shadow: 0 6px 20px rgba(0,0,0,.35);
+    }
+
+    /* モバイル最適化 */
+    @media (max-width:420px){
+      .title{ font-size:34px; }
+      .logo{ width:52px; height:52px; }
+      .meta .h{ font-size:18px; }
+    }
+  </style>
 </head>
 
 <body>
+  <div class="wrap">
+    <div class="container">
 
-<main class="wrap">
+      <!-- タイトル（白/変更可） -->
+      <h1 class="title">のあ୨୧</h1>
+      <p class="subtitle">田舎で暮らす陰キャ女子</p>
 
-<section class="hero">
-<img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=60">
-<div class="p">
-<h1>Noa</h1>
-<p class="sub">Countryside aesthetic / quiet life</p>
-</div>
-</section>
+      <!-- SNSアイコン（images直下のPNGを使用） -->
+      <div class="social" aria-label="SNS links">
+        <a href="https://x.com/noanoshita" target="_blank" rel="noopener" aria-label="X">
+          <img src="images/X.png" alt="X">
+        </a>
+        <a href="https://www.instagram.com/noanoshita/" target="_blank" rel="noopener" aria-label="Instagram">
+          <img src="images/instagram.png" alt="Instagram">
+        </a>
+        <a href="https://www.youtube.com/@challengenoa" target="_blank" rel="noopener" aria-label="YouTube">
+          <img src="images/Youtube.png" alt="YouTube">
+        </a>
+      </div>
 
-<nav class="links">
-<a class="btn" href="#"><span id="btn1">Latest update</span> ›</a>
-<a class="btn" href="#"><span id="btn2">About me</span> ›</a>
-<a class="btn" href="#"><span id="btn3">Archive</span> ›</a>
-<a class="btn" href="#"><span id="btn4">Private area</span> ›</a>
-</nav>
+      <!-- ボックス（全体がリンク） -->
+      <div class="cards" aria-label="Main links">
 
-<div class="lang">
-<button onclick="setLang('ja')">JP</button>
-<button onclick="setLang('en')">EN</button>
-</div>
+        <a class="card" href="https://candfans.jp/noanoshita" target="_blank" rel="noopener">
+          <img class="logo" src="images/candfans.png" alt="candfans">
+          <div class="meta">
+            <div class="h">CandFans</div>
+            <div class="d">活動初期からの全てがここに！</div>
+          </div>
+          <div class="chev">›</div>
+        </a>
 
-<footer>© Noa</footer>
+        <a class="card" href="https://myfans.jp/noanoshita" target="_blank" rel="noopener">
+          <img class="logo" src="images/myfans.png" alt="myfans">
+          <div class="meta">
+            <div class="h">MyFans</div>
+            <div class="d">みんなと内緒のSNS</div>
+          </div>
+          <div class="chev">›</div>
+        </a>
 
-</main>
+        <a class="card" href="https://fantia.jp/fanclubs/532786" target="_blank" rel="noopener">
+          <img class="logo" src="images/fantia.png" alt="fantia">
+          <div class="meta">
+            <div class="h">Fantia</div>
+            <div class="d">内容は同じだよ！</div>
+          </div>
+          <div class="chev">›</div>
+        </a>
 
-<script>
-  const BG = {
-    morning: "images/morning.jpg",
-    evening: "images/evening.jpg",
-    night: "images/night.jpg"
-  };
+        <a class="card" href="https://onlyfans.com/noanoshita" target="_blank" rel="noopener">
+          <img class="logo" src="images/onlyfans.jpg" alt="onlyfans">
+          <div class="meta">
+            <div class="h">OnlyFans</div>
+            <div class="d">いっぱい見てね</div>
+          </div>
+          <div class="chev">›</div>
+        </a>
 
-  function pickBgByTime(){
-    const h = new Date().getHours();
-    if(h >= 5 && h < 16) return BG.morning;
-    if(h >= 16 && h < 19) return BG.evening;
-    return BG.night;
-  }
+      </div>
 
-  // ✅ 画像の縦横を判定して、白い膜の濃さを切り替える
-  function applyOverlayByAspect(imgUrl){
-    const img = new Image();
-    img.onload = () => {
-      const portrait = img.naturalHeight > img.naturalWidth;
+      <div class="foot">© Noa</div>
+    </div>
+  </div>
 
-      // 横画像：膜なし（背景くっきり）
-      // 縦画像：膜あり（余白や視認性を確保）
-      document.body.style.setProperty('--overlay', portrait ? '0.55' : '0.00');
+  <script>
+    // ✅ 背景画像（時間帯切替）
+    // ここも images 配下に置くなら images/xxx.jpg にする
+    const BG = {
+      morning: "images/morning.jpg",
+      evening: "images/evening.jpg",
+      night: "images/night.jpg"
     };
-    img.onerror = () => {
-      // 読めない時は保険で薄めに
-      document.body.style.setProperty('--overlay', '0.25');
-    };
-    img.src = imgUrl;
-  }
 
-  function setBG(){
-    const imgUrl = pickBgByTime();
-    document.body.style.backgroundImage = `url('${imgUrl}')`;
-    applyOverlayByAspect(imgUrl);
-  }
+    function pickBgByTime(){
+      const h = new Date().getHours();
+      if(h >= 5 && h < 16) return BG.morning;
+      if(h >= 16 && h < 19) return BG.evening;
+      return BG.night;
+    }
 
-  setBG();
+    // ✅ 縦画像のときだけ暗膜を強める（縦がうるさくなりやすい対策）
+    function applyDarkenByAspect(imgUrl){
+      const img = new Image();
+      img.onload = () => {
+        const portrait = img.naturalHeight > img.naturalWidth;
+        document.body.style.setProperty('--darken', portrait ? '.55' : '.40');
+      };
+      img.onerror = () => {
+        document.body.style.setProperty('--darken', '.48');
+      };
+      img.src = imgUrl;
+    }
 
-  // もし日跨ぎでページ開きっぱなしでも切り替えたいなら（任意）
-  // setInterval(setBG, 10 * 60 * 1000);
+    function setBG(){
+      const imgUrl = pickBgByTime();
+      document.body.style.backgroundImage = `url('${imgUrl}')`;
+      applyDarkenByAspect(imgUrl);
+    }
 
-  // --- 言語切替（あなたの既存） ---
-  const translations = {
-    ja: { latest:"最新情報", about:"プロフィール", archive:"過去の投稿", private:"プライベート" },
-    en: { latest:"Latest update", about:"About me", archive:"Archive", private:"Private area" }
-  };
-
-  function setLang(lang){
-    document.getElementById("btn1").innerText = translations[lang].latest;
-    document.getElementById("btn2").innerText = translations[lang].about;
-    document.getElementById("btn3").innerText = translations[lang].archive;
-    document.getElementById("btn4").innerText = translations[lang].private;
-    document.documentElement.lang = lang;
-  }
-
-  setLang('ja');
-</script>
-
+    setBG();
+  </script>
 </body>
 </html>
