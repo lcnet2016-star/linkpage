@@ -18,13 +18,13 @@
       ========================================================= */
 
       /* --- Layout / Width --- */
-      --containerMax: 760px;  /* 全体の最大幅 */
-      --cardMax: 560px;       /* ★ボックス（カード）最大幅：ここで幅変更 */
+      --containerMax: 760px;
+      --cardMax: 560px;       /* ★ボックス横幅（狭くしたいならここ） */
 
       /* --- Page Padding --- */
-      --padTop: 30px;         /* 画面上余白 */
-      --padSide: 16px;        /* 左右余白 */
-      --padBottom: 40px;      /* 下余白 */
+      --padTop: 30px;
+      --padSide: 16px;
+      --padBottom: 40px;
 
       /* --- Typography --- */
       --fontFamily: "M PLUS Rounded 1c", system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", sans-serif;
@@ -42,22 +42,22 @@
       --textShadow: 0 6px 20px rgba(0,0,0,.35);
 
       /* --- Spacing Rhythm --- */
-      --gapTitleToSub: 4px;       /* タイトル→サブ */
-      --gapSubToSns: 4px;         /* サブ→SNS（中央寄せ調整の要） */
-      --gapSnsToCards: 18px;      /* SNS→カード */
-      --gapCards: 14px;           /* カード間 */
-      --gapCardsToFooter: 16px;   /* カード→フッター */
+      --gapTitleToSub: 4px;
+      --gapSubToSns: 4px;
+      --gapSnsToCards: 18px;
+      --gapCards: 14px;
+      --gapCardsToFooter: 16px;
 
-      /* --- Fine Position (px) --- */
-      --snsLift: 0px;        /* +でSNS全体を下げる */
-      --cardsLift: -4px;     /* +でカード全体を下げる */
+      /* --- Fine Position --- */
+      --snsLift: 0px;
+      --cardsLift: -4px;
 
       /* --- SNS Sizes --- */
       --snsSize: 88px;
       --snsIconSize: 40px;
-      --snsGap: 7px;
+      --snsGap: 5px;
       --snsRadius: 14px;
-      --snsHoverBright: 1.25;  /* hoverの明るさ */
+      --snsHoverBright: 1.25;
       --snsActiveScale: .97;
 
       /* --- Card Style --- */
@@ -66,7 +66,7 @@
       --cardPadX: 16px;
       --cardInnerGap: 14px;
 
-      --cardBg: rgba(255,255,255,.20);   /* ★透明度ここ */
+      --cardBg: rgba(255,255,255,.25);
       --cardBorder: rgba(255,255,255,.28);
       --cardBlur: 14px;
 
@@ -77,7 +77,7 @@
       --cardActiveScale: .985;
       --cardActiveBright: 1.03;
 
-      /* --- Logo (left image) --- */
+      /* --- Logo --- */
       --logoSize: 58px;
       --logoRadius: 16px;
       --logoShadow: 0 12px 26px rgba(0,0,0,.18);
@@ -98,8 +98,11 @@
       --chevColor: rgba(0,0,0,.35);
       --chevPadLeft: 10px;
 
-      /* --- Background Overlay (darken) --- */
-      --darken: .52; /* JSで縦横に応じて微調整 */
+      /* --- Footer --- */
+      --footerSize: 12px;
+
+      /* --- Background Overlay --- */
+      --darken: .52;
       --darkenRadW: 1200px;
       --darkenRadH: 700px;
       --darkenRadX: 50%;
@@ -107,12 +110,19 @@
       --darkenStartDelta: .15;
       --darkenEndDelta: .10;
 
-      /* ========================================================= */
+      /* --- Language Switch --- */
+      --langGap: 10px;
+      --langMt: 14px;
+      --langBtnH: 34px;
+      --langBtnPx: 14px;
+      --langBtnRadius: 12px;
+      --langBtnBg: rgba(255,255,255,.25);
+      --langBtnBorder: rgba(255,255,255,.28);
+      --langBtnText: rgba(255,255,255,.92);
+      --langBtnBgActive: rgba(255,255,255,.40);
+      --langBtnTextActive: rgba(255,255,255,1);
     }
 
-    /* =========================================================
-       スマホはここだけ触ればOK（変数差し替え）
-    ========================================================= */
     @media (max-width:420px){
       :root{
         --titleSize: 30px;
@@ -131,7 +141,8 @@
         --snsLift: 6px;
         --cardsLift: -6px;
 
-        --cardMax: 80%; /* スマホ側で狭めたいなら 600px とかに */
+        --cardMax: 92%;     /* スマホは％で調整すると強い */
+
         --cardPadY: 14px;
         --cardPadX: 14px;
 
@@ -139,7 +150,10 @@
         --logoRadius: 15px;
 
         --cardTitleSize: 19px;
-        --cardDescSize: 15px;
+        --cardDescSize: 13px;
+
+        --langBtnH: 32px;
+        --langBtnPx: 12px;
       }
     }
 
@@ -149,14 +163,12 @@
       margin:0;
       font-family: var(--fontFamily);
       color: var(--titleColor);
-
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
       transition: background-image 1s ease-in-out;
     }
 
-    /* ✅ 背景が死なず、文字が読める暗膜 */
     body::before{
       content:"";
       position:fixed;
@@ -184,7 +196,6 @@
       text-align:center;
     }
 
-    /* ====== タイトル/サブ ====== */
     .title{
       margin: 0 0 var(--gapTitleToSub);
       font-weight: var(--titleWeight);
@@ -202,19 +213,13 @@
       text-shadow: var(--textShadow);
     }
 
-    /* ====== SNS ====== */
     .social{
       display:flex;
+      gap: var(--snsGap);
       justify-content:center;
       align-items:center;
-
-      gap: var(--snsGap);
-
-      width: max-content;
-      margin-left:auto;
-      margin-right:auto;
+      margin: calc(var(--snsLift)) 0 var(--gapSnsToCards);
     }
-
 
     .social a{
       width: var(--snsSize);
@@ -235,11 +240,9 @@
       width: var(--snsIconSize);
       height: var(--snsIconSize);
       display:block;
-      /* 黒PNGを白っぽく見せたいならON（白PNGなら不要） */
       filter: brightness(0) invert(1);
     }
 
-    /* ====== カード ====== */
     .cards{
       display:flex;
       flex-direction:column;
@@ -249,7 +252,7 @@
     }
 
     .card{
-      width: min(var(--cardMax), 100%);  /* ★幅は変数で管理 */
+      width: min(var(--cardMax), 100%);
       display:flex;
       gap: var(--cardInnerGap);
       align-items:center;
@@ -300,7 +303,6 @@
       font-size: var(--cardTitleSize);
       color: var(--cardTitleColor);
       letter-spacing:.01em;
-
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
@@ -328,9 +330,40 @@
       padding-left: var(--chevPadLeft);
     }
 
+    /* ====== 言語切替 ====== */
+    .lang{
+      margin-top: var(--langMt);
+      display:flex;
+      justify-content:center;
+      gap: var(--langGap);
+    }
+
+    .lang button{
+      height: var(--langBtnH);
+      padding: 0 var(--langBtnPx);
+      border-radius: var(--langBtnRadius);
+      background: var(--langBtnBg);
+      border: 1px solid var(--langBtnBorder);
+      color: var(--langBtnText);
+      font-weight: 900;
+      font-family: var(--fontFamily);
+      cursor:pointer;
+      text-shadow: var(--textShadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: filter .18s ease, transform .08s ease, background .18s ease, color .18s ease;
+    }
+    .lang button:hover{ filter: brightness(1.08); }
+    .lang button:active{ transform: scale(.98); }
+
+    .lang button.is-active{
+      background: var(--langBtnBgActive);
+      color: var(--langBtnTextActive);
+    }
+
     .foot{
       margin-top: var(--gapCardsToFooter);
-      font-size:12px;
+      font-size: var(--footerSize);
       color: var(--footerColor);
       text-shadow: var(--textShadow);
     }
@@ -341,8 +374,8 @@
   <div class="wrap">
     <div class="container">
 
-      <h1 class="title">のあ୨୧</h1>
-      <p class="subtitle">田舎で暮らす陰キャ女子</p>
+      <h1 class="title" id="tTitle">のあ୨୧</h1>
+      <p class="subtitle" id="tSub">田舎で暮らす陰キャ女子</p>
 
       <div class="social" aria-label="SNS links">
         <a href="https://x.com/noanoshita" target="_blank" rel="noopener" aria-label="X">
@@ -360,8 +393,8 @@
         <a class="card" href="https://candfans.jp/noanoshita" target="_blank" rel="noopener">
           <img class="logo" src="images/candfans.png" alt="CandFans">
           <div class="meta">
-            <div class="h">CandFans</div>
-            <div class="d">活動初期からの全てがここに！</div>
+            <div class="h" id="tCard1H">CandFans</div>
+            <div class="d" id="tCard1D">活動初期からの全てがここに！</div>
           </div>
           <div class="chev">›</div>
         </a>
@@ -369,8 +402,8 @@
         <a class="card" href="https://myfans.jp/noanoshita" target="_blank" rel="noopener">
           <img class="logo" src="images/myfans.png" alt="MyFans">
           <div class="meta">
-            <div class="h">MyFans</div>
-            <div class="d">みんなに内緒のSNS</div>
+            <div class="h" id="tCard2H">MyFans</div>
+            <div class="d" id="tCard2D">みんなに内緒のSNS</div>
           </div>
           <div class="chev">›</div>
         </a>
@@ -378,8 +411,8 @@
         <a class="card" href="https://fantia.jp/fanclubs/532786" target="_blank" rel="noopener">
           <img class="logo" src="images/fantia.png" alt="Fantia">
           <div class="meta">
-            <div class="h">Fantia</div>
-            <div class="d">内容は同じだよ！</div>
+            <div class="h" id="tCard3H">Fantia</div>
+            <div class="d" id="tCard3D">内容は同じだよ！</div>
           </div>
           <div class="chev">›</div>
         </a>
@@ -387,11 +420,17 @@
         <a class="card" href="https://onlyfans.com/noanoshita" target="_blank" rel="noopener">
           <img class="logo" src="images/onlyfans.jpg" alt="OnlyFans">
           <div class="meta">
-            <div class="h">OnlyFans</div>
-            <div class="d">いっぱい見てね</div>
+            <div class="h" id="tCard4H">OnlyFans</div>
+            <div class="d" id="tCard4D">いっぱい見てね</div>
           </div>
           <div class="chev">›</div>
         </a>
+      </div>
+
+      <!-- ✅ 言語切替（JP/EN） -->
+      <div class="lang" aria-label="Language switch">
+        <button id="btnJP" type="button" onclick="setLang('ja')">JP</button>
+        <button id="btnEN" type="button" onclick="setLang('en')">EN</button>
       </div>
 
       <div class="foot">© Noa</div>
@@ -399,7 +438,9 @@
   </div>
 
   <script>
+    // =========================
     // 背景（時間帯切替）
+    // =========================
     const BG = {
       morning: "images/morning.jpg",
       evening: "images/evening.jpg",
@@ -413,7 +454,6 @@
       return BG.night;
     }
 
-    // 縦画像のとき暗膜を少し強くする
     function applyDarkenByAspect(imgUrl){
       const img = new Image();
       img.onload = () => {
@@ -433,7 +473,73 @@
     }
 
     setBG();
-    // setInterval(setBG, 10 * 60 * 1000);
+
+    // =========================
+    // 言語切替（初期は日本語）
+    // =========================
+    const I18N = {
+      ja: {
+        htmlLang: "ja",
+        title: "のあ୨୧",
+        sub: "田舎で暮らす陰キャ女子",
+        c1h: "CandFans",
+        c1d: "活動初期からの全てがここに！",
+        c2h: "MyFans",
+        c2d: "みんなに内緒のSNS",
+        c3h: "Fantia",
+        c3d: "内容は同じだよ！",
+        c4h: "OnlyFans",
+        c4d: "いっぱい見てね"
+      },
+      en: {
+        htmlLang: "en",
+        title: "Noa",
+        sub: "Quiet countryside girl",
+        c1h: "CandFans",
+        c1d: "Everything since the beginning is here!",
+        c2h: "MyFans",
+        c2d: "A secret SNS just for us",
+        c3h: "Fantia",
+        c3d: "Same content here too!",
+        c4h: "OnlyFans",
+        c4d: "Come see more"
+      }
+    };
+
+    function setLang(lang){
+      const t = I18N[lang] || I18N.ja;
+
+      document.documentElement.lang = t.htmlLang;
+
+      document.getElementById("tTitle").textContent = t.title;
+      document.getElementById("tSub").textContent = t.sub;
+
+      document.getElementById("tCard1H").textContent = t.c1h;
+      document.getElementById("tCard1D").textContent = t.c1d;
+
+      document.getElementById("tCard2H").textContent = t.c2h;
+      document.getElementById("tCard2D").textContent = t.c2d;
+
+      document.getElementById("tCard3H").textContent = t.c3h;
+      document.getElementById("tCard3D").textContent = t.c3d;
+
+      document.getElementById("tCard4H").textContent = t.c4h;
+      document.getElementById("tCard4D").textContent = t.c4d;
+
+      // ボタン見た目
+      document.getElementById("btnJP").classList.toggle("is-active", lang === "ja");
+      document.getElementById("btnEN").classList.toggle("is-active", lang === "en");
+
+      // 記憶
+      try { localStorage.setItem("lang", lang); } catch(e) {}
+    }
+
+    // 初期：日本語（保存があれば優先）
+    const saved = (() => {
+      try { return localStorage.getItem("lang"); } catch(e) { return null; }
+    })();
+
+    setLang(saved === "en" ? "en" : "ja");
   </script>
 </body>
 </html>
