@@ -25,7 +25,19 @@ body{
   background-size:cover;
   background-position:center;
   background-attachment:fixed;
-  transition:background-image 1s ease-in-out;
+  transition: background-image 1s ease-in-out;
+
+  /* ✅ 白い膜の濃さ（JSが0〜0.65で切り替える） */
+  --overlay: 0;
+}
+
+/* ✅ 白い膜：濃さを --overlay で制御 */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:rgba(255,255,255,var(--overlay));
+  z-index:-1;
 }
 
 /* 可読性オーバーレイ */
@@ -129,37 +141,62 @@ footer{
 </main>
 
 <script>
-/* ✅ 背景画像パス（あなたの構成用）*/
-const BG={
-  morning:"images/morning.jpg",
-  evening:"images/evening.jpg",
-  night:"images/night.jpg"
-};
+  const BG = {
+    morning: "images/morning.jpg",
+    evening: "images/evening.jpg",
+    night: "images/night.jpg"
+  };
 
-function setBG(){
-  const h=new Date().getHours();
-  let img=BG.night;
+  function pickBgByTime(){
+    const h = new Date().getHours();
+    if(h >= 5 && h < 16) return BG.morning;
+    if(h >= 16 && h < 19) return BG.evening;
+    return BG.night;
+  }
 
-  if(h>=5 && h<16) img=BG.morning;
-  else if(h>=16 && h<19) img=BG.evening;
+  // ✅ 画像の縦横を判定して、白い膜の濃さを切り替える
+  function applyOverlayByAspect(imgUrl){
+    const img = new Image();
+    img.onload = () => {
+      const portrait = img.naturalHeight > img.naturalWidth;
 
-  document.body.style.backgroundImage=`url('${img}')`;
-}
+      // 横画像：膜なし（背景くっきり）
+      // 縦画像：膜あり（余白や視認性を確保）
+      document.body.style.setProperty('--overlay', portrait ? '0.55' : '0.00');
+    };
+    img.onerror = () => {
+      // 読めない時は保険で薄めに
+      document.body.style.setProperty('--overlay', '0.25');
+    };
+    img.src = imgUrl;
+  }
 
-setBG();
+  function setBG(){
+    const imgUrl = pickBgByTime();
+    document.body.style.backgroundImage = `url('${imgUrl}')`;
+    applyOverlayByAspect(imgUrl);
+  }
 
-/* 翻訳 */
-const t={
-ja:{latest:"最新情報",about:"プロフィール",archive:"過去の投稿",private:"プライベート"},
-en:{latest:"Latest update",about:"About me",archive:"Archive",private:"Private area"}
-};
+  setBG();
 
-function setLang(l){
-  btn1.innerText=t[l].latest;
-  btn2.innerText=t[l].about;
-  btn3.innerText=t[l].archive;
-  btn4.innerText=t[l].private;
-}
+  // もし日跨ぎでページ開きっぱなしでも切り替えたいなら（任意）
+  // setInterval(setBG, 10 * 60 * 1000);
+
+  // --- 言語切替（あなたの既存） ---
+  const translations = {
+    ja: { latest:"最新情報", about:"プロフィール", archive:"過去の投稿", private:"プライベート" },
+    en: { latest:"Latest update", about:"About me", archive:"Archive", private:"Private area" }
+  };
+
+  function setLang(lang){
+    document.getElementById("btn1").innerText = translations[lang].latest;
+    document.getElementById("btn2").innerText = translations[lang].about;
+    document.getElementById("btn3").innerText = translations[lang].archive;
+    document.getElementById("btn4").innerText = translations[lang].private;
+    document.documentElement.lang = lang;
+  }
+
+  setLang('ja');
 </script>
 
 </body>
