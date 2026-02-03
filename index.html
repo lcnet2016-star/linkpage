@@ -7,41 +7,90 @@
   <meta name="description" content="Links" />
   <style>
     :root{
-      --bg:#f5f2ee; --card:#ffffff; --text:#222; --muted:#666;
-      --btn:#e3d9cf; --btnText:#222; --shadow: 0 10px 30px rgba(0,0,0,.08);
+      --card:#ffffff; --text:#222; --muted:#666;
+      --btn:#e3d9cf; --btnText:#222;
+      --shadow: 0 10px 30px rgba(0,0,0,.12);
       --radius:18px;
     }
+
+    /* ✅ 背景：画像を時間帯で差し替えるので色bgは使わない */
     body{
-      margin:0; font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;
-      background:var(--bg); color:var(--text);
+      margin:0;
+      font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;
+      color:var(--text);
+
+      background-size:cover;
+      background-position:center;
+      background-attachment:fixed;
+      transition: background-image 1s ease-in-out;
     }
+
+    /* ✅ 読みやすさ用の白い薄膜（不要なら消してOK） */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background:rgba(255,255,255,.55);
+      z-index:-1;
+    }
+
     .wrap{ max-width:520px; margin:0 auto; padding:22px 16px 40px; }
+
     .hero{
-      background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow);
-      overflow:hidden; margin-top:8px;
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      margin-top:8px;
+      backdrop-filter: blur(2px);
     }
     .hero img{ width:100%; height:220px; object-fit:cover; display:block; }
     .hero .p{ padding:14px 16px 16px; }
+
     h1{ font-size:20px; margin:0 0 6px; letter-spacing:.02em; }
     .sub{ margin:0; color:var(--muted); font-size:13px; line-height:1.5; }
+
     .links{ margin-top:14px; display:flex; flex-direction:column; gap:10px; }
+
     a.btn{
       display:flex; align-items:center; justify-content:space-between;
-      padding:14px 16px; border-radius:14px; text-decoration:none;
-      background:var(--btn); color:var(--btnText); font-weight:600;
-      box-shadow: 0 8px 20px rgba(0,0,0,.06);
+      padding:14px 16px;
+      border-radius:14px;
+      text-decoration:none;
+      background:var(--btn);
+      color:var(--btnText);
+      font-weight:600;
+      box-shadow: 0 8px 20px rgba(0,0,0,.10);
       transition: transform .08s ease, filter .2s ease;
     }
+    a.btn:hover{ filter:brightness(.98); }
     a.btn:active{ transform: scale(.99); }
+
     .hint{ font-size:12px; color:var(--muted); margin-top:12px; text-align:center; }
     .arrow{ opacity:.6; }
+
+    .lang{
+      display:flex; justify-content:center; gap:10px;
+      margin:12px 0 0;
+    }
+    .lang button{
+      padding:8px 12px;
+      border-radius:10px;
+      border:1px solid rgba(0,0,0,.12);
+      background:rgba(255,255,255,.75);
+      cursor:pointer;
+      font-weight:600;
+    }
+    .lang button:active{ transform:scale(.99); }
+
     footer{ margin-top:18px; text-align:center; font-size:12px; color:var(--muted); }
   </style>
 </head>
+
 <body>
   <main class="wrap">
     <section class="hero">
-      <!-- ここを自分の画像URLに差し替え（GitHubに画像を置いてもOK） -->
+      <!-- ✅ 上のヒーロー画像は別でOK（今まで通り） -->
       <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=60" alt="">
       <div class="p">
         <h1>Noa</h1>
@@ -50,51 +99,76 @@
     </section>
 
     <nav class="links" aria-label="links">
-      <!-- 並び順：クリック率が上がりやすい順 -->
       <a class="btn" href="https://example.com/latest" target="_blank" rel="noopener">
-        Latest update <span class="arrow">›</span>
+        <span id="btn1">Latest update</span> <span class="arrow">›</span>
       </a>
       <a class="btn" href="https://example.com/about" target="_blank" rel="noopener">
-        About me <span class="arrow">›</span>
+        <span id="btn2">About me</span> <span class="arrow">›</span>
       </a>
       <a class="btn" href="https://example.com/archive" target="_blank" rel="noopener">
-        Archive <span class="arrow">›</span>
+        <span id="btn3">Archive</span> <span class="arrow">›</span>
       </a>
       <a class="btn" href="https://example.com/private" target="_blank" rel="noopener">
-        Private area <span class="arrow">›</span>
+        <span id="btn4">Private area</span> <span class="arrow">›</span>
       </a>
     </nav>
+
+    <!-- ✅ 言語切替ボタン（HTMLの中に入れるのが正解） -->
+    <div class="lang">
+      <button type="button" onclick="setLang('ja')">JP</button>
+      <button type="button" onclick="setLang('en')">EN</button>
+    </div>
 
     <div class="hint">※外部サイトへ移動します</div>
     <footer>© Noa</footer>
   </main>
+
+  <script>
+    // ✅ 画像パス：今は「リポジトリ直下」にある前提
+    // imagesフォルダに入れたら "images/morning.jpg" のように変える
+    const BG = {
+      morning: "morning.jpg",
+      evening: "evening.jpg",
+      night: "night.jpg"
+    };
+
+    function setBackgroundByTime(){
+      const hour = new Date().getHours();
+      let bg = "";
+
+      // 朝〜昼：5:00〜15:59
+      if(hour >= 5 && hour < 16){
+        bg = BG.morning;
+      }
+      // 夕：16:00〜18:59
+      else if(hour >= 16 && hour < 19){
+        bg = BG.evening;
+      }
+      // 夜：19:00〜4:59
+      else{
+        bg = BG.night;
+      }
+
+      document.body.style.backgroundImage = `url('${bg}')`;
+    }
+
+    const translations = {
+      ja: { latest:"最新情報", about:"プロフィール", archive:"過去の投稿", private:"プライベート" },
+      en: { latest:"Latest update", about:"About me", archive:"Archive", private:"Private area" }
+    };
+
+    function setLang(lang){
+      document.getElementById("btn1").innerText = translations[lang].latest;
+      document.getElementById("btn2").innerText = translations[lang].about;
+      document.getElementById("btn3").innerText = translations[lang].archive;
+      document.getElementById("btn4").innerText = translations[lang].private;
+      document.documentElement.lang = lang;
+    }
+
+    // 初期化
+    setBackgroundByTime();
+    // 言語は初期英語（日本語にしたいなら 'ja' に変える）
+    setLang('ja');
+  </script>
 </body>
 </html>
-<div style="text-align:center;margin:10px;">
-  <button onclick="setLang('ja')">JP</button>
-  <button onclick="setLang('en')">EN</button>
-</div>
-
-<script>
-const translations = {
-  ja: {
-    latest: "最新情報",
-    about: "プロフィール",
-    archive: "過去の投稿",
-    private: "プライベート"
-  },
-  en: {
-    latest: "Latest update",
-    about: "About me",
-    archive: "Archive",
-    private: "Private area"
-  }
-};
-
-function setLang(lang){
-  document.getElementById("btn1").innerText = translations[lang].latest;
-  document.getElementById("btn2").innerText = translations[lang].about;
-  document.getElementById("btn3").innerText = translations[lang].archive;
-  document.getElementById("btn4").innerText = translations[lang].private;
-}
-</script>
