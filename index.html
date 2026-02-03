@@ -14,14 +14,14 @@
   <style>
     :root{
       /* ====== サイズ（ここを触れば一括調整） ====== */
-      --titleSize: 42px;
+      --titleSize: 38px;
 
       --snsSize: 88px;
-      --snsIconSize: 44px;
+      --snsIconSize: 40px;
 
       /* ====== 余白リズム（PC基準） ====== */
       --topPad: 30px;      /* 画面上余白 */
-      --titleMb: 8px;      /* タイトル→サブ */
+      --titleMb: 4px;      /* タイトル→サブ */
       --subMb: 4px;       /* サブ→SNS */
       --snsMb: 18px;       /* SNS→カード */
       --cardsGap: 14px;    /* カード間 */
@@ -98,7 +98,7 @@
     .subtitle{
       margin:0 0 var(--subMb);
       font-weight:800;
-      font-size:21px;
+      font-size:18px;
       color: var(--muted);
       text-shadow: 0 6px 20px rgba(0,0,0,.35);
     }
@@ -107,6 +107,7 @@
     .social{
       display:flex;
       gap:14px;
+      margin-top: 4px;
       justify-content:center;
       align-items:center;
       margin: calc(10px + var(--snsLift)) 0 var(--snsMb);
@@ -238,9 +239,9 @@
     /* ====== スマホ最適 ====== */
     @media (max-width:420px){
       :root{
-        --titleSize: 34px;
+        --titleSize: 30px;
 
-        --snsSize: 38px;
+        --snsSize: 33px;
         --snsIconSize: 18px;
 
         --topPad: 22px;
