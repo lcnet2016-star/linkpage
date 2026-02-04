@@ -167,7 +167,7 @@
       color: var(--titleColor);
       background-size: var(--bgSize, cover);
       background-repeat: var(--bgRepeat, no-repeat);
-      background-color: var(--bgFill, #000); /* contain時の余白色 */
+      background-color: var(--bgFill, '#fff0ebff'); /* contain時の余白色 */
       background-position: center;
       background-attachment: fixed;
       transition: background-image 1s ease-in-out;
@@ -473,7 +473,7 @@
         // 縦＝contain（全体表示）＋余白は暗色で埋める
         document.body.style.setProperty('--bgSize', portrait ? 'contain' : 'cover');
         document.body.style.setProperty('--bgRepeat', portrait ? 'no-repeat' : 'no-repeat');
-        document.body.style.setProperty('--bgFill', portrait ? '#000' : '#000');
+        document.body.style.setProperty('--bgFill', portrait ? '#fff0ebff' : '#000');
     
         // contain時は中央寄せが重要
         document.body.style.backgroundPosition = 'center';
