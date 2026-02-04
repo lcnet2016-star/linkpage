@@ -165,7 +165,9 @@
       margin:0;
       font-family: var(--fontFamily);
       color: var(--titleColor);
-      background-size: cover;
+      background-size: var(--bgSize, cover);
+      background-repeat: var(--bgRepeat, no-repeat);
+      background-color: var(--bgFill, #000); /* contain時の余白色 */
       background-position: center;
       background-attachment: fixed;
       transition: background-image 1s ease-in-out;
@@ -210,6 +212,7 @@
 
     .subtitle{
       margin: 0 0 var(--gapSubToSns);
+      font-family:"Hachi Maru Pop", cursive;
       font-weight: var(--subtitleWeight);
       font-size: var(--subtitleSize);
       color: var(--subtitleColor);
@@ -461,19 +464,29 @@
       const img = new Image();
       img.onload = () => {
         const portrait = img.naturalHeight > img.naturalWidth;
+
+        // 暗膜（既存の思想そのまま）
         document.body.style.setProperty('--darken', portrait ? '.58' : '.50');
+    
+        // ✅ 背景の表示モード切替
+        // 横＝cover（迫力）
+        // 縦＝contain（全体表示）＋余白は暗色で埋める
+        document.body.style.setProperty('--bgSize', portrait ? 'contain' : 'cover');
+        document.body.style.setProperty('--bgRepeat', portrait ? 'no-repeat' : 'no-repeat');
+        document.body.style.setProperty('--bgFill', portrait ? '#000' : '#000');
+    
+        // contain時は中央寄せが重要
+        document.body.style.backgroundPosition = 'center';
       };
       img.onerror = () => {
         document.body.style.setProperty('--darken', '.52');
+        document.body.style.setProperty('--bgSize', 'cover');
+        document.body.style.setProperty('--bgRepeat', 'no-repeat');
+        document.body.style.setProperty('--bgFill', '#000');
       };
       img.src = imgUrl;
     }
 
-    function setBG(){
-      const imgUrl = pickBgByTime();
-      document.body.style.backgroundImage = `url('${imgUrl}')`;
-      applyDarkenByAspect(imgUrl);
-    }
 
     setBG();
 
