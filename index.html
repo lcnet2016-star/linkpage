@@ -6,6 +6,7 @@
   <title>Noa | entry</title>
   <meta name="description" content="Noa entry page" />
 
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&display=swap" rel="stylesheet">
@@ -40,6 +41,18 @@
 
       --footerColor:rgba(255,255,255,.78);
       --footerSize:12px;
+
+      /* language switch */
+      --langGap:10px;
+      --langMt:14px;
+      --langBtnH:34px;
+      --langBtnPx:14px;
+      --langBtnRadius:12px;
+      --langBtnBg:rgba(255,255,255,.25);
+      --langBtnBorder:rgba(255,255,255,.28);
+      --langBtnText:rgba(255,255,255,.92);
+      --langBtnBgActive:rgba(255,255,255,.40);
+      --langBtnTextActive:rgba(255,255,255,1);
     }
 
     @media (max-width:420px){
@@ -48,6 +61,8 @@
         --titleSize:30px; --subtitleSize:16px;
         --snsSize:72px; --snsIconSize:34px;
         --cardMax:92%;
+        --langBtnH:32px;
+        --langBtnPx:12px;
       }
     }
 
@@ -157,6 +172,34 @@
     }
     .chev{font-weight:900; opacity:.5; font-size:22px}
 
+    .lang{
+      margin-top: var(--langMt);
+      display:flex;
+      justify-content:center;
+      gap: var(--langGap);
+    }
+    .lang button{
+      height: var(--langBtnH);
+      padding: 0 var(--langBtnPx);
+      border-radius: var(--langBtnRadius);
+      background: var(--langBtnBg);
+      border: 1px solid var(--langBtnBorder);
+      color: var(--langBtnText);
+      font-weight: 900;
+      font-family: var(--fontFamily);
+      cursor:pointer;
+      text-shadow: var(--textShadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: filter .18s ease, transform .08s ease, background .18s ease, color .18s ease;
+    }
+    .lang button:hover{ filter: brightness(1.08); }
+    .lang button:active{ transform: scale(.98); }
+    .lang button.is-active{
+      background: var(--langBtnBgActive);
+      color: var(--langBtnTextActive);
+    }
+
     .foot{
       margin-top:14px;
       font-size:var(--footerSize);
@@ -169,8 +212,8 @@
 <body>
   <div class="wrap">
     <div class="container">
-      <h1 class="title">のあ୨୧</h1>
-      <p class="subtitle">田舎で暮らす陰キャ女子</p>
+      <h1 class="title" id="tTitle">のあ୨୧</h1>
+      <p class="subtitle" id="tSub">田舎で暮らす陰キャ女子</p>
 
       <div class="social" aria-label="SNS links">
         <a href="https://x.com/noanoshita" target="_blank" rel="noopener" aria-label="X">
@@ -184,22 +227,29 @@
         </a>
       </div>
 
-      <!-- ✅ 入口の1ボックス -->
+      <!-- 入口の1ボックス -->
       <a class="card" href="verify/" aria-label="Age verification">
         <div>
-          <div class="h">ここには載せられないもの</div>
-          <div class="d">18歳以上の方のみ</div>
+          <div class="h" id="tGateH">ここには載せられないもの</div>
+          <div class="d" id="tGateD">18歳以上の方のみ</div>
         </div>
         <div class="chev">›</div>
       </a>
+
+      <!-- 言語切替 -->
+      <div class="lang" aria-label="Language switch">
+        <button id="btnJP" type="button" onclick="setLang('ja')">JP</button>
+        <button id="btnEN" type="button" onclick="setLang('en')">EN</button>
+      </div>
 
       <div class="foot">© Noa</div>
     </div>
   </div>
 
   <script>
+    // ===== 背景画像（morning.jpg -> mornig.png） =====
     const BG = {
-      morning: "images/morning.jpg",
+      morning: "images/mornig.png",
       evening: "images/evening.jpg",
       night: "images/night.jpg"
     };
@@ -232,8 +282,47 @@
       document.body.style.backgroundImage = `url('${imgUrl}')`;
       applyBgModeByAspect(imgUrl);
     }
-
     setBG();
+
+    // ===== 言語（全ページ共通：localStorage） =====
+    const I18N = {
+      ja: {
+        htmlLang:"ja",
+        title:"のあ୨୧",
+        sub:"田舎で暮らす陰キャ女子",
+        gateH:"ここには載せられないもの",
+        gateD:"18歳以上の方のみ"
+      },
+      en: {
+        htmlLang:"en",
+        title:"Noa",
+        sub:"Quiet countryside girl",
+        gateH:"Content not listed here",
+        gateD:"18+ only"
+      }
+    };
+
+    function setLang(lang){
+      const t = I18N[lang] || I18N.ja;
+      document.documentElement.lang = t.htmlLang;
+
+      document.getElementById("tTitle").textContent = t.title;
+      document.getElementById("tSub").textContent = t.sub;
+      document.getElementById("tGateH").textContent = t.gateH;
+      document.getElementById("tGateD").textContent = t.gateD;
+
+      document.getElementById("btnJP").classList.toggle("is-active", lang === "ja");
+      document.getElementById("btnEN").classList.toggle("is-active", lang === "en");
+
+      try { localStorage.setItem("lang", lang); } catch(e) {}
+    }
+
+    // 初期言語（保存優先、なければ日本語）
+    (function initLang(){
+      let saved = "ja";
+      try { saved = localStorage.getItem("lang") || "ja"; } catch(e) {}
+      setLang(saved === "en" ? "en" : "ja");
+    })();
   </script>
 </body>
 </html>
