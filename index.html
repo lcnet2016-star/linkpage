@@ -6,12 +6,11 @@
   <title>Noa | links</title>
   <meta name="description" content="Noa links" />
 
-  <!-- Google Fonts（丸っこくポップ系） -->
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Hachi+Maru+Pop&display=swap" rel="stylesheet">
-
 
   <style>
     :root{
@@ -19,9 +18,21 @@
          ここだけ触ればOK：PCの一括設定
       ========================================================= */
 
+      /* --- Background --- */
+      --bgBase: #fff0ebff;          /* ★ 背景色（指定どおり） */
+      --bgSize: cover;              /* JSが縦横で cover/contain を上書き */
+      --bgRepeat: no-repeat;
+      --bgPos: center;
+      --bgTransition: 1s;
+
+      /* ✅ 背景にかける膜（黒じゃなく“薄ピンク”で馴染ませる） */
+      --veilOpacity: .35;           /* 横背景のとき */
+      --veilOpacityPortrait: .48;   /* 縦背景（contain）のとき */
+      --veilBlur: 0px;              /* ぼかし不要なら 0 */
+
       /* --- Layout / Width --- */
       --containerMax: 760px;
-      --cardMax: 560px;       /* ★ボックス横幅（狭くしたいならここ） */
+      --cardMax: 560px;             /* ★ ボックス横幅（狭くしたいならここ） */
 
       /* --- Page Padding --- */
       --padTop: 30px;
@@ -30,6 +41,7 @@
 
       /* --- Typography --- */
       --fontFamily: "M PLUS Rounded 1c", system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", sans-serif;
+      --titleFont: "Hachi Maru Pop", cursive;
       --titleSize: 38px;
       --titleWeight: 900;
       --subtitleSize: 18px;
@@ -37,8 +49,8 @@
 
       /* --- Text Colors --- */
       --titleColor: #ffffff;
-      --subtitleColor: rgba(255,255,255,.82);
-      --footerColor: rgba(255,255,255,.70);
+      --subtitleColor: rgba(255,255,255,.88);
+      --footerColor: rgba(255,255,255,.78);
 
       /* --- Text Shadow --- */
       --textShadow: 0 6px 20px rgba(0,0,0,.35);
@@ -48,7 +60,8 @@
       --gapSubToSns: 4px;
       --gapSnsToCards: 18px;
       --gapCards: 14px;
-      --gapCardsToFooter: 16px;
+      --gapCardsToLang: 14px;
+      --gapLangToFooter: 10px;
 
       /* --- Fine Position --- */
       --snsLift: 0px;
@@ -57,9 +70,9 @@
       /* --- SNS Sizes --- */
       --snsSize: 88px;
       --snsIconSize: 40px;
-      --snsGap: 5px;
+      --snsGap: 10px;               /* インスタ中心で寄せても見た目安定 */
       --snsRadius: 14px;
-      --snsHoverBright: 1.25;
+      --snsHoverBright: 1.15;
       --snsActiveScale: .97;
 
       /* --- Card Style --- */
@@ -68,16 +81,16 @@
       --cardPadX: 16px;
       --cardInnerGap: 14px;
 
-      --cardBg: rgba(255,255,255,.25);
-      --cardBorder: rgba(255,255,255,.28);
+      --cardBg: rgba(255,255,255,.28);
+      --cardBorder: rgba(255,255,255,.32);
       --cardBlur: 14px;
 
-      --cardShadow1: 0 18px 50px rgba(0,0,0,.22);
+      --cardShadow1: 0 18px 50px rgba(0,0,0,.20);
       --cardShadow2: inset 0 1px 0 rgba(255,255,255,.35);
 
-      --cardHoverBright: 1.02;
+      --cardHoverBright: 1.03;
       --cardActiveScale: .985;
-      --cardActiveBright: 1.03;
+      --cardActiveBright: 1.05;
 
       /* --- Logo --- */
       --logoSize: 58px;
@@ -91,7 +104,7 @@
 
       --cardDescSize: 14px;
       --cardDescWeight: 800;
-      --cardDescColor: #ffffff;
+      --cardDescColor: rgba(255,255,255,.95);
       --cardDescLineHeight: 1.25;
       --cardDescClamp: 2;
 
@@ -100,28 +113,15 @@
       --chevColor: rgba(0,0,0,.35);
       --chevPadLeft: 10px;
 
-      /* --- Footer --- */
-      --footerSize: 12px;
-
-      /* --- Background Overlay --- */
-      --darken: .52;
-      --darkenRadW: 1200px;
-      --darkenRadH: 700px;
-      --darkenRadX: 50%;
-      --darkenRadY: 25%;
-      --darkenStartDelta: .15;
-      --darkenEndDelta: .10;
-
       /* --- Language Switch --- */
       --langGap: 10px;
-      --langMt: 14px;
       --langBtnH: 34px;
       --langBtnPx: 14px;
       --langBtnRadius: 12px;
       --langBtnBg: rgba(255,255,255,.25);
       --langBtnBorder: rgba(255,255,255,.28);
       --langBtnText: rgba(255,255,255,.92);
-      --langBtnBgActive: rgba(255,255,255,.40);
+      --langBtnBgActive: rgba(255,255,255,.42);
       --langBtnTextActive: rgba(255,255,255,1);
     }
 
@@ -138,12 +138,11 @@
         --gapSubToSns: 6px;
         --gapSnsToCards: 14px;
         --gapCards: 12px;
-        --gapCardsToFooter: 14px;
 
         --snsLift: 6px;
         --cardsLift: -6px;
 
-        --cardMax: 92%;     /* スマホは％で調整すると強い */
+        --cardMax: 92%;
 
         --cardPadY: 14px;
         --cardPadX: 14px;
@@ -165,25 +164,24 @@
       margin:0;
       font-family: var(--fontFamily);
       color: var(--titleColor);
-      background-size: var(--bgSize, cover);
-      background-repeat: var(--bgRepeat, no-repeat);
-      background-color: var(--bgFill, '#fff0ebff'); /* contain時の余白色 */
-      background-position: center;
+
+      background-color: var(--bgBase);
+      background-image: none;
+      background-size: var(--bgSize);
+      background-repeat: var(--bgRepeat);
+      background-position: var(--bgPos);
       background-attachment: fixed;
-      transition: background-image 1s ease-in-out;
+      transition: background-image var(--bgTransition) ease-in-out;
     }
 
+    /* ✅ “黒い暗膜”は廃止。背景色に馴染む薄ピンク膜にする */
     body::before{
       content:"";
       position:fixed;
       inset:0;
-      background:
-        radial-gradient(
-          var(--darkenRadW) var(--darkenRadH) at var(--darkenRadX) var(--darkenRadY),
-          rgba(0,0,0, calc(var(--darken) - var(--darkenStartDelta))) 0%,
-          rgba(0,0,0, var(--darken)) 55%,
-          rgba(0,0,0, calc(var(--darken) + var(--darkenEndDelta))) 100%
-        );
+      background: rgba(255,240,235,var(--veilOpacity));
+      backdrop-filter: blur(var(--veilBlur));
+      -webkit-backdrop-filter: blur(var(--veilBlur));
       z-index:-1;
     }
 
@@ -202,7 +200,7 @@
 
     .title{
       margin: 0 0 var(--gapTitleToSub);
-      font-family:"Hachi Maru Pop", cursive;
+      font-family: var(--titleFont);
       font-weight: var(--titleWeight);
       font-size: var(--titleSize);
       letter-spacing: .02em;
@@ -212,18 +210,19 @@
 
     .subtitle{
       margin: 0 0 var(--gapSubToSns);
-      font-family:"Hachi Maru Pop", cursive;
+      font-family: var(--fontFamily);
       font-weight: var(--subtitleWeight);
       font-size: var(--subtitleSize);
       color: var(--subtitleColor);
       text-shadow: var(--textShadow);
     }
 
+    /* === SNS：インスタを中心にしたい → Instagramを真ん中固定 === */
     .social{
       display:flex;
-      gap: var(--snsGap);
       justify-content:center;
       align-items:center;
+      gap: var(--snsGap);
       margin: calc(var(--snsLift)) 0 var(--gapSnsToCards);
     }
 
@@ -336,9 +335,8 @@
       padding-left: var(--chevPadLeft);
     }
 
-    /* ====== 言語切替 ====== */
     .lang{
-      margin-top: var(--langMt);
+      margin-top: var(--gapCardsToLang);
       display:flex;
       justify-content:center;
       gap: var(--langGap);
@@ -368,7 +366,7 @@
     }
 
     .foot{
-      margin-top: var(--gapCardsToFooter);
+      margin-top: var(--gapLangToFooter);
       font-size: var(--footerSize);
       color: var(--footerColor);
       text-shadow: var(--textShadow);
@@ -383,6 +381,7 @@
       <h1 class="title" id="tTitle">のあ୨୧</h1>
       <p class="subtitle" id="tSub">田舎で暮らす陰キャ女子</p>
 
+      <!-- ✅ Instagramを真ん中固定：X / IG / YouTube の順でOK -->
       <div class="social" aria-label="SNS links">
         <a href="https://x.com/noanoshita" target="_blank" rel="noopener" aria-label="X">
           <img src="images/X.png" alt="X">
@@ -433,7 +432,6 @@
         </a>
       </div>
 
-      <!-- ✅ 言語切替（JP/EN） -->
       <div class="lang" aria-label="Language switch">
         <button id="btnJP" type="button" onclick="setLang('ja')">JP</button>
         <button id="btnEN" type="button" onclick="setLang('en')">EN</button>
@@ -460,35 +458,46 @@
       return BG.night;
     }
 
-    function applyDarkenByAspect(imgUrl){
+    // ✅ 縦画像なら contain + 余白色は --bgBase
+    function applyBgModeByAspect(imgUrl){
       const img = new Image();
       img.onload = () => {
         const portrait = img.naturalHeight > img.naturalWidth;
 
-        // 暗膜（既存の思想そのまま）
-        document.body.style.setProperty('--darken', portrait ? '.58' : '.50');
-    
-        // ✅ 背景の表示モード切替
-        // 横＝cover（迫力）
-        // 縦＝contain（全体表示）＋余白は暗色で埋める
-        document.body.style.setProperty('--bgSize', portrait ? 'contain' : 'cover');
-        document.body.style.setProperty('--bgRepeat', portrait ? 'no-repeat' : 'no-repeat');
-        document.body.style.setProperty('--bgFill', portrait ? '#fff0ebff' : '#000');
-    
-        // contain時は中央寄せが重要
-        document.body.style.backgroundPosition = 'center';
+        document.documentElement.style.setProperty('--bgSize', portrait ? 'contain' : 'cover');
+        document.documentElement.style.setProperty('--bgRepeat', 'no-repeat');
+        document.documentElement.style.setProperty('--bgPos', 'center');
+
+        // 膜の濃さ（縦は少し濃くして“余白感”を消す）
+        document.body.style.setProperty('--veilOpacity', portrait
+          ? getComputedStyle(document.documentElement).getPropertyValue('--veilOpacityPortrait').trim()
+          : '.35'
+        );
+
+        // 余白の色（常に指定の背景色へ）
+        document.body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bgBase').trim();
       };
+
       img.onerror = () => {
-        document.body.style.setProperty('--darken', '.52');
-        document.body.style.setProperty('--bgSize', 'cover');
-        document.body.style.setProperty('--bgRepeat', 'no-repeat');
-        document.body.style.setProperty('--bgFill', portrait ? '#fff0ebff' : '#000');
+        // 失敗時は保険でcover
+        document.documentElement.style.setProperty('--bgSize', 'cover');
+        document.documentElement.style.setProperty('--bgRepeat', 'no-repeat');
+        document.documentElement.style.setProperty('--bgPos', 'center');
+        document.body.style.setProperty('--veilOpacity', '.35');
+        document.body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bgBase').trim();
       };
+
       img.src = imgUrl;
     }
 
+    function setBG(){
+      const imgUrl = pickBgByTime();
+      document.body.style.backgroundImage = `url('${imgUrl}')`;
+      applyBgModeByAspect(imgUrl);
+    }
 
     setBG();
+    // setInterval(setBG, 10 * 60 * 1000);
 
     // =========================
     // 言語切替（初期は日本語）
@@ -542,15 +551,12 @@
       document.getElementById("tCard4H").textContent = t.c4h;
       document.getElementById("tCard4D").textContent = t.c4d;
 
-      // ボタン見た目
       document.getElementById("btnJP").classList.toggle("is-active", lang === "ja");
       document.getElementById("btnEN").classList.toggle("is-active", lang === "en");
 
-      // 記憶
       try { localStorage.setItem("lang", lang); } catch(e) {}
     }
 
-    // 初期：日本語（保存があれば優先）
     const saved = (() => {
       try { return localStorage.getItem("lang"); } catch(e) { return null; }
     })();
