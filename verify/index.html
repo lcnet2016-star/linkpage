@@ -3,110 +3,217 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Age check</title>
-  <meta name="robots" content="noindex" />
+  <title>Noa | verify</title>
+  <meta name="description" content="Age verification" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Hachi+Maru+Pop&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --bg:#fff0ebff;
-      --panel:rgba(255,255,255,.78);
-      --border:rgba(0,0,0,.08);
-      --shadow:0 18px 50px rgba(0,0,0,.12);
-      --radius:18px;
+      --bgBase:#fff0ebff;
+      --veilOpacity:.30;
+      --fontFamily:"M PLUS Rounded 1c", system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", sans-serif;
+      --titleFont:"Hachi Maru Pop", cursive;
 
-      --text:#222;
-      --muted:#666;
+      --containerMax:760px;
+      --padTop:30px; --padSide:16px; --padBottom:40px;
 
-      --btnH:44px;
-      --btnRadius:12px;
+      --titleSize:34px;
+      --text:#fff;
+      --textShadow:0 6px 20px rgba(0,0,0,.35);
+
+      --panelMax:560px;
+      --panelBg:rgba(255,255,255,.26);
+      --panelBorder:rgba(255,255,255,.32);
+      --panelRadius:22px;
+      --panelPadY:18px; --panelPadX:18px;
+      --panelShadow:0 18px 50px rgba(0,0,0,.20), inset 0 1px 0 rgba(255,255,255,.35);
+
+      --btnH:46px;
+      --btnRadius:14px;
+      --btnGap:10px;
+      --btnBg:rgba(255,255,255,.30);
+      --btnBorder:rgba(255,255,255,.35);
+      --btnText:#fff;
+
+      --muted:rgba(255,255,255,.88);
+      --footerColor:rgba(255,255,255,.78);
+      --footerSize:12px;
+    }
+
+    @media (max-width:420px){
+      :root{
+        --padTop:22px;
+        --titleSize:28px;
+        --panelMax:92%;
+      }
     }
 
     html,body{height:100%}
     body{
       margin:0;
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      font-family:var(--fontFamily);
+      color:var(--text);
+      background-color:var(--bgBase);
+      background-attachment:fixed;
+    }
+    body::before{
+      content:"";
+      position:fixed; inset:0;
+      background:rgba(255,240,235,var(--veilOpacity));
+      z-index:-1;
+    }
+
+    .wrap{
+      min-height:100%;
       display:flex;
       align-items:center;
       justify-content:center;
-      padding:24px 16px;
+      padding:var(--padTop) var(--padSide) var(--padBottom);
+      text-align:center;
+    }
+    .container{width:min(var(--containerMax),100%)}
+
+    .title{
+      margin:0 0 14px;
+      font-family:var(--titleFont);
+      font-size:var(--titleSize);
+      font-weight:900;
+      text-shadow:var(--textShadow);
     }
 
-    .box{
-      width:min(520px,100%);
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding:18px 16px;
-      text-align:center;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+    .panel{
+      width:min(var(--panelMax),100%);
+      margin:0 auto;
+      background:var(--panelBg);
+      border:1px solid var(--panelBorder);
+      border-radius:var(--panelRadius);
+      box-shadow:var(--panelShadow);
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
+      padding:var(--panelPadY) var(--panelPadX);
     }
-    h1{margin:0 0 8px; font-size:18px}
-    p{margin:0 0 16px; color:var(--muted); font-weight:700; line-height:1.5}
+
+    .msg{
+      margin:0 0 14px;
+      font-weight:900;
+      font-size:18px;
+      text-shadow:var(--textShadow);
+    }
+    .desc{
+      margin:0 0 18px;
+      color:var(--muted);
+      font-weight:800;
+      line-height:1.4;
+      text-shadow:var(--textShadow);
+    }
 
     .btns{
       display:flex;
-      gap:10px;
-      justify-content:center;
-      flex-wrap:wrap;
+      flex-direction:column;
+      gap:var(--btnGap);
     }
-    button{
+
+    .btn{
       height:var(--btnH);
-      padding:0 16px;
       border-radius:var(--btnRadius);
-      border:1px solid var(--border);
-      background:#fff;
+      background:var(--btnBg);
+      border:1px solid var(--btnBorder);
+      color:var(--btnText);
       font-weight:900;
+      font-size:16px;
+      font-family:var(--fontFamily);
       cursor:pointer;
+      text-shadow:var(--textShadow);
+      transition:transform .08s ease, filter .18s ease;
     }
-    button.primary{
-      background:#111;
-      color:#fff;
-      border-color:#111;
-    }
-    .small{
-      margin-top:12px;
-      font-size:12px;
-      color:var(--muted);
-      font-weight:700;
+    .btn:hover{filter:brightness(1.06)}
+    .btn:active{transform:scale(.985)}
+
+    .foot{
+      margin-top:14px;
+      font-size:var(--footerSize);
+      color:var(--footerColor);
+      text-shadow:var(--textShadow);
     }
   </style>
 </head>
+
 <body>
-  <div class="box">
-    <h1>年齢確認</h1>
-    <p>この先は18歳以上の方のみ閲覧できます。あなたは18歳以上ですか？</p>
+  <div class="wrap">
+    <div class="container">
+      <h1 class="title" id="tTitle">年齢確認</h1>
 
-    <div class="btns">
-      <button class="primary" id="yesBtn" type="button">はい（18歳以上）</button>
-      <button id="noBtn" type="button">いいえ</button>
+      <div class="panel">
+        <p class="msg" id="tMsg">あなたは18歳以上ですか？</p>
+        <p class="desc" id="tDesc">成人向けコンテンツを含む可能性があります。18歳未満の方は入れません。</p>
+
+        <div class="btns">
+          <button class="btn" type="button" id="btnYes" onclick="goYes()">はい（18歳以上）</button>
+          <button class="btn" type="button" id="btnNo" onclick="goNo()">いいえ（戻る）</button>
+        </div>
+      </div>
+
+      <div class="foot">© Noa</div>
     </div>
-
-    <div class="small">※「はい」を押すとリンクまとめページへ移動します。</div>
   </div>
 
   <script>
-    const LINKS_URL = "../links/"; // リンクまとめの場所
-    const ENTRY_URL = "../";       // 入口
-
-    // 既にOK済みならスキップ（いらなければこのifブロックを消す）
-    try{
-      if(localStorage.getItem("age_ok") === "1"){
-        location.replace(LINKS_URL);
+    // ===== 言語（localStorageで全ページ連動） =====
+    const I18N = {
+      ja: {
+        htmlLang:"ja",
+        title:"年齢確認",
+        msg:"あなたは18歳以上ですか？",
+        desc:"成人向けコンテンツを含む可能性があります。18歳未満の方は入れません。",
+        yes:"はい（18歳以上）",
+        no:"いいえ（戻る）"
+      },
+      en: {
+        htmlLang:"en",
+        title:"Age Check",
+        msg:"Are you 18 or older?",
+        desc:"This page may contain adult content. Minors are not allowed.",
+        yes:"Yes (I am 18+)",
+        no:"No (Go back)"
       }
-    }catch(e){}
+    };
 
-    document.getElementById("yesBtn").addEventListener("click", () => {
-      try{ localStorage.setItem("age_ok","1"); }catch(e){}
-      location.href = LINKS_URL;
-    });
+    function getLang(){
+      try { return localStorage.getItem("lang") || "ja"; } catch(e) { return "ja"; }
+    }
 
-    document.getElementById("noBtn").addEventListener("click", () => {
-      location.href = ENTRY_URL;
-    });
+    function setLang(lang){
+      const t = I18N[lang] || I18N.ja;
+      document.documentElement.lang = t.htmlLang;
+
+      document.getElementById("tTitle").textContent = t.title;
+      document.getElementById("tMsg").textContent = t.msg;
+      document.getElementById("tDesc").textContent = t.desc;
+      document.getElementById("btnYes").textContent = t.yes;
+      document.getElementById("btnNo").textContent = t.no;
+    }
+
+    // 初期適用
+    (function init(){
+      const lang = getLang();
+      setLang(lang === "en" ? "en" : "ja");
+    })();
+
+    // YES → linksへ
+    function goYes(){
+      // ここで通過フラグを保存（形だけでも持っておく）
+      try { sessionStorage.setItem("age_ok", "1"); } catch(e) {}
+      window.location.href = "../links/";
+    }
+
+    // NO → 入口へ
+    function goNo(){
+      window.location.href = "../";
+    }
   </script>
 </body>
 </html>
