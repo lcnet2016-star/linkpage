@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Noa | links</title>
+  <meta name="description" content="Noa links" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Hachi+Maru+Pop&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      /* =========================================================
+         ここだけ触ればOK：PCの一括設定
+      ========================================================= */
+
+      /* --- Background --- */
+      --bgBase: #fff0ebff;          /* ★ 背景色（指定どおり） */
+      --bgSize: cover;              /* JSが縦横で cover/contain を上書き */
+      --bgRepeat: no-repeat;
+      --bgPos: center;
+      --bgTransition: 1s;
+
+      /* ✅ 背景にかける膜（黒じゃなく“薄ピンク”で馴染ませる） */
+      --veilOpacity: .35;           /* 横背景のとき */
+      --veilOpacityPortrait: .48;   /* 縦背景（contain）のとき */
+      --veilBlur: 0px;              /* ぼかし不要なら 0 */
+
+      /* --- Layout / Width --- */
+      --containerMax: 760px;
+      --cardMax: 560px;             /* ★ ボックス横幅（狭くしたいならここ） */
+
+      /* --- Page Padding --- */
+      --padTop: 30px;
+      --padSide: 16px;
+      --padBottom: 40px;
+
+      /* --- Typography --- */
+      --fontFamily: "M PLUS Rounded 1c", system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", sans-serif;
+      --titleFont: "Hachi Maru Pop", cursive;
+      --titleSize: 38px;
+      --titleWeight: 900;
+      --subtitleSize: 18px;
+      --subtitleWeight: 800;
+
+      /* --- Text Colors --- */
+      --titleColor: #ffffff;
+      --subtitleColor: rgba(255,255,255,.88);
+      --footerColor: rgba(255,255,255,.78);
+
+      /* --- Text Shadow --- */
+      --textShadow: 0 6px 20px rgba(0,0,0,.35);
+
+      /* --- Spacing Rhythm --- */
+      --gapTitleToSub: 4px;
+      --gapSubToSns: 4px;
+      --gapSnsToCards: 18px;
+      --gapCards: 14px;
+      --gapCardsToLang: 14px;
+      --gapLangToFooter: 10px;
+
+      /* --- Fine Position --- */
+      --snsLift: 0px;
+      --cardsLift: -4px;
+
+      /* --- SNS Sizes --- */
+      --snsSize: 88px;
+      --snsIconSize: 40px;
+      --snsGap: 10px;               /* インスタ中心で寄せても見た目安定 */
+      --snsRadius: 14px;
+      --snsHoverBright: 1.15;
+      --snsActiveScale: .97;
+
+      /* --- Card Style --- */
+      --cardRadius: 22px;
+      --cardPadY: 14px;
+      --cardPadX: 16px;
+      --cardInnerGap: 14px;
+
+      --cardBg: rgba(255,255,255,.28);
+      --cardBorder: rgba(255,255,255,.32);
+      --cardBlur: 14px;
+
+      --cardShadow1: 0 18px 50px rgba(0,0,0,.20);
+      --cardShadow2: inset 0 1px 0 rgba(255,255,255,.35);
+
+      --cardHoverBright: 1.03;
+      --cardActiveScale: .985;
+      --cardActiveBright: 1.05;
+
+      /* --- Logo --- */
+      --logoSize: 58px;
+      --logoRadius: 16px;
+      --logoShadow: 0 12px 26px rgba(0,0,0,.18);
+
+      /* --- Card Text --- */
+      --cardTitleSize: 20px;
+      --cardTitleWeight: 900;
+      --cardTitleColor: #ffffff;
+
+      --cardDescSize: 14px;
+      --cardDescWeight: 800;
+      --cardDescColor: rgba(255,255,255,.95);
+      --cardDescLineHeight: 1.25;
+      --cardDescClamp: 2;
+
+      /* --- Chevron --- */
+      --chevSize: 22px;
+      --chevColor: rgba(0,0,0,.35);
+      --chevPadLeft: 10px;
+
+      /* --- Language Switch --- */
+      --langGap: 10px;
+      --langBtnH: 34px;
+      --langBtnPx: 14px;
+      --langBtnRadius: 12px;
+      --langBtnBg: rgba(255,255,255,.25);
+      --langBtnBorder: rgba(255,255,255,.28);
+      --langBtnText: rgba(255,255,255,.92);
+      --langBtnBgActive: rgba(255,255,255,.42);
+      --langBtnTextActive: rgba(255,255,255,1);
+    }
+
+    @media (max-width:420px){
+      :root{
+        --titleSize: 30px;
+        --subtitleSize: 16px;
+
+        --snsSize: 72px;
+        --snsIconSize: 34px;
+
+        --padTop: 22px;
+        --gapTitleToSub: 6px;
+        --gapSubToSns: 6px;
+        --gapSnsToCards: 14px;
+        --gapCards: 12px;
+
+        --snsLift: 6px;
+        --cardsLift: -6px;
+
+        --cardMax: 92%;
+
+        --cardPadY: 14px;
+        --cardPadX: 14px;
+
+        --logoSize: 54px;
+        --logoRadius: 15px;
+
+        --cardTitleSize: 19px;
+        --cardDescSize: 13px;
+
+        --langBtnH: 32px;
+        --langBtnPx: 12px;
+      }
+    }
+
+    html, body { height: 100%; }
+
+    body{
+      margin:0;
+      font-family: var(--fontFamily);
+      color: var(--titleColor);
+
+      background-color: var(--bgBase);
+      background-image: none;
+      background-size: var(--bgSize);
+      background-repeat: var(--bgRepeat);
+      background-position: var(--bgPos);
+      background-attachment: fixed;
+      transition: background-image var(--bgTransition) ease-in-out;
+    }
+
+    /* ✅ “黒い暗膜”は廃止。背景色に馴染む薄ピンク膜にする */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background: rgba(255,240,235,var(--veilOpacity));
+      backdrop-filter: blur(var(--veilBlur));
+      -webkit-backdrop-filter: blur(var(--veilBlur));
+      z-index:-1;
+    }
+
+    .wrap{
+      min-height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: var(--padTop) var(--padSide) var(--padBottom);
+    }
+
+    .container{
+      width: min(var(--containerMax), 100%);
+      text-align:center;
+    }
+
+    .title{
+      margin: 0 0 var(--gapTitleToSub);
+      font-family: var(--titleFont);
+      font-weight: var(--titleWeight);
+      font-size: var(--titleSize);
+      letter-spacing: .02em;
+      color: var(--titleColor);
+      text-shadow: var(--textShadow);
+    }
+
+    .subtitle{
+      margin: 0 0 var(--gapSubToSns);
+      font-family: var(--fontFamily);
+      font-weight: var(--subtitleWeight);
+      font-size: var(--subtitleSize);
+      color: var(--subtitleColor);
+      text-shadow: var(--textShadow);
+    }
+
+    /* === SNS：インスタを中心にしたい → Instagramを真ん中固定 === */
+    .social{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap: var(--snsGap);
+      margin: calc(var(--snsLift)) 0 var(--gapSnsToCards);
+    }
+
+    .social a{
+      width: var(--snsSize);
+      height: var(--snsSize);
+      display:grid;
+      place-items:center;
+      border-radius: var(--snsRadius);
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      text-decoration:none;
+      transition: transform .08s ease, filter .18s ease;
+    }
+    .social a:hover{ filter: brightness(var(--snsHoverBright)); }
+    .social a:active{ transform: scale(var(--snsActiveScale)); }
+
+    .social img{
+      width: var(--snsIconSize);
+      height: var(--snsIconSize);
+      display:block;
+      filter: brightness(0) invert(1);
+    }
+
+    .cards{
+      display:flex;
+      flex-direction:column;
+      gap: var(--gapCards);
+      align-items:center;
+      transform: translateY(var(--cardsLift));
+    }
+
+    .card{
+      width: min(var(--cardMax), 100%);
+      display:flex;
+      gap: var(--cardInnerGap);
+      align-items:center;
+
+      background: var(--cardBg);
+      border: 1px solid var(--cardBorder);
+      border-radius: var(--cardRadius);
+
+      box-shadow: var(--cardShadow1), var(--cardShadow2);
+      backdrop-filter: blur(var(--cardBlur));
+      -webkit-backdrop-filter: blur(var(--cardBlur));
+
+      padding: var(--cardPadY) var(--cardPadX);
+      text-decoration:none;
+      color: inherit;
+
+      transform: translateZ(0);
+      transition: transform .08s ease, filter .18s ease, background .18s ease;
+    }
+
+    .card:hover{ filter: brightness(var(--cardHoverBright)); }
+    .card:active{
+      transform: scale(var(--cardActiveScale));
+      filter: brightness(var(--cardActiveBright));
+    }
+
+    .logo{
+      width: var(--logoSize);
+      height: var(--logoSize);
+      border-radius: var(--logoRadius);
+      object-fit:cover;
+      flex:0 0 auto;
+      box-shadow: var(--logoShadow);
+      background:#fff;
+    }
+
+    .meta{
+      text-align:left;
+      line-height:1.1;
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width:0;
+    }
+
+    .meta .h{
+      font-weight: var(--cardTitleWeight);
+      font-size: var(--cardTitleSize);
+      color: var(--cardTitleColor);
+      letter-spacing:.01em;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width: 100%;
+    }
+
+    .meta .d{
+      font-weight: var(--cardDescWeight);
+      font-size: var(--cardDescSize);
+      color: var(--cardDescColor);
+      line-height: var(--cardDescLineHeight);
+
+      display:-webkit-box;
+      -webkit-line-clamp: var(--cardDescClamp);
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+      max-width: 100%;
+    }
+
+    .chev{
+      margin-left:auto;
+      font-weight:900;
+      color: var(--chevColor);
+      font-size: var(--chevSize);
+      padding-left: var(--chevPadLeft);
+    }
+
+    .lang{
+      margin-top: var(--gapCardsToLang);
+      display:flex;
+      justify-content:center;
+      gap: var(--langGap);
+    }
+
+    .lang button{
+      height: var(--langBtnH);
+      padding: 0 var(--langBtnPx);
+      border-radius: var(--langBtnRadius);
+      background: var(--langBtnBg);
+      border: 1px solid var(--langBtnBorder);
+      color: var(--langBtnText);
+      font-weight: 900;
+      font-family: var(--fontFamily);
+      cursor:pointer;
+      text-shadow: var(--textShadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: filter .18s ease, transform .08s ease, background .18s ease, color .18s ease;
+    }
+    .lang button:hover{ filter: brightness(1.08); }
+    .lang button:active{ transform: scale(.98); }
+
+    .lang button.is-active{
+      background: var(--langBtnBgActive);
+      color: var(--langBtnTextActive);
+    }
+
+    .foot{
+      margin-top: var(--gapLangToFooter);
+      font-size: var(--footerSize);
+      color: var(--footerColor);
+      text-shadow: var(--textShadow);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="container">
+
+      <h1 class="title" id="tTitle">のあ୨୧</h1>
+      <p class="subtitle" id="tSub">田舎で暮らす陰キャ女子</p>
+
+      <!-- ✅ Instagramを真ん中固定：X / IG / YouTube の順でOK -->
+      <div class="social" aria-label="SNS links">
+        <a href="https://x.com/noanoshita" target="_blank" rel="noopener" aria-label="X">
+          <img src="images/X.png" alt="X">
+        </a>
+        <a href="https://www.instagram.com/noanoshita/" target="_blank" rel="noopener" aria-label="Instagram">
+          <img src="images/instagram.png" alt="Instagram">
+        </a>
+        <a href="https://www.youtube.com/@challengenoa" target="_blank" rel="noopener" aria-label="YouTube">
+          <img src="images/Youtube.png" alt="YouTube">
+        </a>
+      </div>
+
+      <div class="cards" aria-label="Main links">
+        <a class="card" href="https://candfans.jp/noanoshita" target="_blank" rel="noopener">
+          <img class="logo" src="images/candfans.png" alt="CandFans">
+          <div class="meta">
+            <div class="h" id="tCard1H">CandFans</div>
+            <div class="d" id="tCard1D">活動初期からの全てがここに！</div>
+          </div>
+          <div class="chev">›</div>
+        </a>
+
+        <a class="card" href="https://myfans.jp/noanoshita" target="_blank" rel="noopener">
+          <img class="logo" src="images/myfans.png" alt="MyFans">
+          <div class="meta">
+            <div class="h" id="tCard2H">MyFans</div>
+            <div class="d" id="tCard2D">みんなに内緒のSNS</div>
+          </div>
+          <div class="chev">›</div>
+        </a>
+
+        <a class="card" href="https://fantia.jp/fanclubs/532786" target="_blank" rel="noopener">
+          <img class="logo" src="images/fantia.png" alt="Fantia">
+          <div class="meta">
+            <div class="h" id="tCard3H">Fantia</div>
+            <div class="d" id="tCard3D">内容は同じだよ！</div>
+          </div>
+          <div class="chev">›</div>
+        </a>
+
+        <a class="card" href="https://onlyfans.com/noanoshita" target="_blank" rel="noopener">
+          <img class="logo" src="images/onlyfans.jpg" alt="OnlyFans">
+          <div class="meta">
+            <div class="h" id="tCard4H">OnlyFans</div>
+            <div class="d" id="tCard4D">いっぱい見てね</div>
+          </div>
+          <div class="chev">›</div>
+        </a>
+      </div>
+
+      <div class="lang" aria-label="Language switch">
+        <button id="btnJP" type="button" onclick="setLang('ja')">JP</button>
+        <button id="btnEN" type="button" onclick="setLang('en')">EN</button>
+      </div>
+
+      <div class="foot">© Noa</div>
+    </div>
+  </div>
+
+  <script>
+    // =========================
+    // 背景（時間帯切替）
+    // =========================
+    const BG = {
+      morning: "images/morning.jpg",
+      evening: "images/evening.jpg",
+      night: "images/night.jpg"
+    };
+
+    function pickBgByTime(){
+      const h = new Date().getHours();
+      if(h >= 5 && h < 16) return BG.morning;
+      if(h >= 16 && h < 19) return BG.evening;
+      return BG.night;
+    }
+
+    // ✅ 縦画像なら contain + 余白色は --bgBase
+    function applyBgModeByAspect(imgUrl){
+      const img = new Image();
+      img.onload = () => {
+        const portrait = img.naturalHeight > img.naturalWidth;
+
+        document.documentElement.style.setProperty('--bgSize', portrait ? 'contain' : 'cover');
+        document.documentElement.style.setProperty('--bgRepeat', 'no-repeat');
+        document.documentElement.style.setProperty('--bgPos', 'center');
+
+        // 膜の濃さ（縦は少し濃くして“余白感”を消す）
+        document.body.style.setProperty('--veilOpacity', portrait
+          ? getComputedStyle(document.documentElement).getPropertyValue('--veilOpacityPortrait').trim()
+          : '.35'
+        );
+
+        // 余白の色（常に指定の背景色へ）
+        document.body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bgBase').trim();
+      };
+
+      img.onerror = () => {
+        // 失敗時は保険でcover
+        document.documentElement.style.setProperty('--bgSize', 'cover');
+        document.documentElement.style.setProperty('--bgRepeat', 'no-repeat');
+        document.documentElement.style.setProperty('--bgPos', 'center');
+        document.body.style.setProperty('--veilOpacity', '.35');
+        document.body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bgBase').trim();
+      };
+
+      img.src = imgUrl;
+    }
+
+    function setBG(){
+      const imgUrl = pickBgByTime();
+      document.body.style.backgroundImage = `url('${imgUrl}')`;
+      applyBgModeByAspect(imgUrl);
+    }
+
+    setBG();
+    // setInterval(setBG, 10 * 60 * 1000);
+
+    // =========================
+    // 言語切替（初期は日本語）
+    // =========================
+    const I18N = {
+      ja: {
+        htmlLang: "ja",
+        title: "のあ୨୧",
+        sub: "田舎で暮らす陰キャ女子",
+        c1h: "CandFans",
+        c1d: "活動初期からの全てがここに！",
+        c2h: "MyFans",
+        c2d: "みんなに内緒のSNS",
+        c3h: "Fantia",
+        c3d: "内容は同じだよ！",
+        c4h: "OnlyFans",
+        c4d: "いっぱい見てね"
+      },
+      en: {
+        htmlLang: "en",
+        title: "Noa",
+        sub: "Quiet countryside girl",
+        c1h: "CandFans",
+        c1d: "Everything since the beginning is here!",
+        c2h: "MyFans",
+        c2d: "A secret SNS just for us",
+        c3h: "Fantia",
+        c3d: "Same content here too!",
+        c4h: "OnlyFans",
+        c4d: "Come see more"
+      }
+    };
+
+    function setLang(lang){
+      const t = I18N[lang] || I18N.ja;
+
+      document.documentElement.lang = t.htmlLang;
+
+      document.getElementById("tTitle").textContent = t.title;
+      document.getElementById("tSub").textContent = t.sub;
+
+      document.getElementById("tCard1H").textContent = t.c1h;
+      document.getElementById("tCard1D").textContent = t.c1d;
+
+      document.getElementById("tCard2H").textContent = t.c2h;
+      document.getElementById("tCard2D").textContent = t.c2d;
+
+      document.getElementById("tCard3H").textContent = t.c3h;
+      document.getElementById("tCard3D").textContent = t.c3d;
+
+      document.getElementById("tCard4H").textContent = t.c4h;
+      document.getElementById("tCard4D").textContent = t.c4d;
+
+      document.getElementById("btnJP").classList.toggle("is-active", lang === "ja");
+      document.getElementById("btnEN").classList.toggle("is-active", lang === "en");
+
+      try { localStorage.setItem("lang", lang); } catch(e) {}
+    }
+
+    const saved = (() => {
+      try { return localStorage.getItem("lang"); } catch(e) { return null; }
+    })();
+
+    setLang(saved === "en" ? "en" : "ja");
+  </script>
+</body>
+</html>
