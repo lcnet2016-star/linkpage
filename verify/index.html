@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Age check</title>
+  <meta name="robots" content="noindex" />
+
+  <style>
+    :root{
+      --bg:#fff0ebff;
+      --panel:rgba(255,255,255,.78);
+      --border:rgba(0,0,0,.08);
+      --shadow:0 18px 50px rgba(0,0,0,.12);
+      --radius:18px;
+
+      --text:#222;
+      --muted:#666;
+
+      --btnH:44px;
+      --btnRadius:12px;
+    }
+
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px 16px;
+    }
+
+    .box{
+      width:min(520px,100%);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:18px 16px;
+      text-align:center;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    h1{margin:0 0 8px; font-size:18px}
+    p{margin:0 0 16px; color:var(--muted); font-weight:700; line-height:1.5}
+
+    .btns{
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+    button{
+      height:var(--btnH);
+      padding:0 16px;
+      border-radius:var(--btnRadius);
+      border:1px solid var(--border);
+      background:#fff;
+      font-weight:900;
+      cursor:pointer;
+    }
+    button.primary{
+      background:#111;
+      color:#fff;
+      border-color:#111;
+    }
+    .small{
+      margin-top:12px;
+      font-size:12px;
+      color:var(--muted);
+      font-weight:700;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>年齢確認</h1>
+    <p>この先は18歳以上の方のみ閲覧できます。あなたは18歳以上ですか？</p>
+
+    <div class="btns">
+      <button class="primary" id="yesBtn" type="button">はい（18歳以上）</button>
+      <button id="noBtn" type="button">いいえ</button>
+    </div>
+
+    <div class="small">※「はい」を押すとリンクまとめページへ移動します。</div>
+  </div>
+
+  <script>
+    const LINKS_URL = "../links/"; // リンクまとめの場所
+    const ENTRY_URL = "../";       // 入口
+
+    // 既にOK済みならスキップ（いらなければこのifブロックを消す）
+    try{
+      if(localStorage.getItem("age_ok") === "1"){
+        location.replace(LINKS_URL);
+      }
+    }catch(e){}
+
+    document.getElementById("yesBtn").addEventListener("click", () => {
+      try{ localStorage.setItem("age_ok","1"); }catch(e){}
+      location.href = LINKS_URL;
+    });
+
+    document.getElementById("noBtn").addEventListener("click", () => {
+      location.href = ENTRY_URL;
+    });
+  </script>
+</body>
+</html>
