@@ -1,1 +1,400 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CandFans | Sale</title>
+  <meta name="robots" content="noindex,nofollow" />
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VSEFPGK0YZ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VSEFPGK0YZ');
+  </script>
+
+  <!-- Fonts（Noaと統一） -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Hachi+Maru+Pop&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      /* ===== Noa背景設定 ===== */
+      --bgBase:#fff0ebff;
+      --bgSize:cover; --bgRepeat:no-repeat; --bgPos:center; --bgTransition:1s;
+      --veilOpacity:.30; --veilOpacityPortrait:.42;
+
+      --fontFamily:"M PLUS Rounded 1c", system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", sans-serif;
+      --titleFont:"Hachi Maru Pop", cursive;
+
+      --textShadow:0 6px 20px rgba(0,0,0,.35);
+
+      /* ===== Sale UI ===== */
+      --panel:rgba(255,255,255,.28);
+      --panelBorder:rgba(255,255,255,.32);
+      --text:#fff;
+      --muted:rgba(255,255,255,.88);
+      --brand:#A67189;
+      --radius:22px;
+      --shadow:0 18px 50px rgba(0,0,0,.20), inset 0 1px 0 rgba(255,255,255,.35);
+      --max:760px;
+    }
+
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--fontFamily);
+      color:var(--text);
+
+      background-color:var(--bgBase);
+      background-image:none;
+      background-size:var(--bgSize);
+      background-repeat:var(--bgRepeat);
+      background-position:var(--bgPos);
+      background-attachment:fixed;
+      transition:background-image var(--bgTransition) ease-in-out;
+    }
+    body::before{
+      content:"";
+      position:fixed; inset:0;
+      background:rgba(255,240,235,var(--veilOpacity));
+      z-index:-1;
+    }
+
+    .wrap{
+      min-height:100%;
+      display:flex;
+      justify-content:center;
+      padding:22px 16px 40px;
+      text-align:left;
+    }
+    .container{width:min(var(--max),100%)}
+
+    .panel{
+      background:var(--panel);
+      border:1px solid var(--panelBorder);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
+      padding:18px 18px 16px;
+      margin-bottom:14px;
+    }
+
+    .badge{
+      display:inline-block;
+      font-weight:900;
+      letter-spacing:.02em;
+      background:rgba(166,113,137,.18);
+      color:#fff;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      text-shadow:var(--textShadow);
+      margin-bottom:10px;
+    }
+
+    h1{
+      margin:0 0 6px;
+      font-size:22px;
+      line-height:1.25;
+      text-shadow:var(--textShadow);
+    }
+    .sub{
+      margin:0 0 12px;
+      color:var(--muted);
+      font-weight:800;
+      font-size:14px;
+      text-shadow:var(--textShadow);
+    }
+    .count{
+      margin:0 0 12px;
+      font-weight:900;
+      color:#fff;
+      text-shadow:var(--textShadow);
+      font-size:14px;
+    }
+
+    .cta{display:flex; gap:10px; flex-wrap:wrap;}
+    .btn{
+      appearance:none; border:0; cursor:pointer; text-decoration:none;
+      padding:12px 14px; border-radius:14px; font-weight:900;
+      display:inline-flex; align-items:center; justify-content:center;
+      min-width:160px;
+      text-shadow:var(--textShadow);
+    }
+    .btn-primary{background:var(--brand); color:#fff;}
+    .btn-ghost{background:rgba(166,113,137,.14); color:#fff; border:1px solid rgba(255,255,255,.22);}
+
+    .k{font-weight:900; margin:0 0 10px; font-size:16px; text-shadow:var(--textShadow);}
+    ul{margin:0; padding-left:18px; color:var(--muted); font-weight:800}
+    li{margin:6px 0}
+
+    .grid{
+      display:grid; grid-template-columns:1fr; gap:12px;
+    }
+    @media(min-width:680px){
+      .grid{grid-template-columns:1fr 1fr 1fr;}
+    }
+
+    .card{
+      background:rgba(255,255,255,.22);
+      border:1px solid rgba(255,255,255,.28);
+      border-radius:18px;
+      overflow:hidden;
+      box-shadow:0 10px 22px rgba(0,0,0,.12);
+      display:flex; flex-direction:column;
+    }
+    .thumb{
+      aspect-ratio:4/5;
+      background:#eee;
+      display:block;
+      width:100%;
+      object-fit:cover;
+      cursor:zoom-in;
+    }
+    .meta{padding:10px 10px 12px;}
+    .title{font-weight:900; margin:0 0 10px; font-size:14px; color:#fff; text-shadow:var(--textShadow);}
+    .mini{display:flex; gap:8px; flex-wrap:wrap;}
+    .mini a{flex:1; min-width:120px;}
+
+    .foot{color:rgba(255,255,255,.78); font-size:12px; text-align:center; margin-top:10px; text-shadow:var(--textShadow);}
+
+    /* ===== Modal ===== */
+    .modal{
+      position:fixed; inset:0;
+      background:rgba(0,0,0,.62);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:9999;
+    }
+    .modal.is-open{display:flex;}
+    .modalBox{
+      width:min(520px, 96vw);
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.22);
+      border-radius:18px;
+      box-shadow:0 18px 50px rgba(0,0,0,.35);
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
+      overflow:hidden;
+    }
+    .modalImg{width:100%; height:auto; display:block; cursor:zoom-out;}
+    .modalBar{
+      display:flex; justify-content:space-between; align-items:center;
+      padding:10px 12px;
+      color:#fff; font-weight:900;
+      text-shadow:var(--textShadow);
+    }
+    .xbtn{
+      appearance:none; border:0; cursor:pointer;
+      background:rgba(255,255,255,.16);
+      color:#fff; font-weight:900;
+      border-radius:12px;
+      padding:8px 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="container">
+
+      <div class="panel">
+        <div class="badge">期間限定 / セール中</div>
+        <h1>いま買うなら CandFans が一番おすすめ</h1>
+        <p class="sub">迷ったら「人気3本」から。合わなければ他のFCも見れます。</p>
+        <p class="count" id="countdown" style="display:none;"></p>
+
+        <div class="cta">
+          <!-- あなたの導線URLに置換 -->
+          <a class="btn btn-primary"
+             href="https://candfans.jp/（あなたのURL）?utm_source=site&utm_medium=lp&utm_campaign=cf_sale&utm_content=hero"
+             target="_blank" rel="noopener">セール会場へ</a>
+
+          <a class="btn btn-ghost"
+             href="/links/?utm_source=site&utm_medium=lp&utm_campaign=cf_sale&utm_content=alt_links">他のリンクも見る</a>
+        </div>
+      </div>
+
+      <div class="panel">
+        <p class="k">ここがポイント</p>
+        <ul>
+          <li>セールで<strong>今だけ</strong>お得</li>
+          <li>人気作から入れるから失敗しにくい</li>
+          <li>気に入ったらまとめて追える</li>
+        </ul>
+      </div>
+
+      <div class="panel">
+        <p class="k">よく売れた3本（まずここ）</p>
+        <div class="grid" id="cf_grid"></div>
+      </div>
+
+      <div class="panel">
+        <p class="k">迷う人へ</p>
+        <div class="cta">
+          <a class="btn btn-primary"
+             href="https://candfans.jp/（あなたのプランURL）?utm_source=site&utm_medium=lp&utm_campaign=cf_sale&utm_content=plan"
+             target="_blank" rel="noopener">まとめて見る</a>
+
+          <a class="btn btn-ghost"
+             href="/links/?utm_source=site&utm_medium=lp&utm_campaign=cf_sale&utm_content=footer_links">リンク一覧へ</a>
+        </div>
+        <div class="foot">© Noa</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modalBox">
+      <div class="modalBar">
+        <div id="modalTitle">Preview</div>
+        <button class="xbtn" id="modalClose" type="button">閉じる</button>
+      </div>
+      <img class="modalImg" id="modalImg" alt="">
+    </div>
+  </div>
+
+  <script>
+    // ===== 背景画像（recommend配下想定なので ../images/） =====
+    const BG = {
+      morning: "../images/morning.png",
+      evening: "../images/evening.jpg",
+      night: "../images/night.jpg"
+    };
+    function pickBgByTime(){
+      const h = new Date().getHours();
+      if(h >= 5 && h < 16) return BG.morning;
+      if(h >= 16 && h < 19) return BG.evening;
+      return BG.night;
+    }
+    function applyBgModeByAspect(imgUrl){
+      const img = new Image();
+      img.onload = () => {
+        const portrait = img.naturalHeight > img.naturalWidth;
+        document.documentElement.style.setProperty('--bgSize', portrait ? 'contain' : 'cover');
+        document.body.style.setProperty('--veilOpacity', portrait
+          ? getComputedStyle(document.documentElement).getPropertyValue('--veilOpacityPortrait').trim()
+          : '.30');
+        document.body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bgBase').trim();
+      };
+      img.onerror = () => {
+        document.documentElement.style.setProperty('--bgSize', 'cover');
+        document.body.style.setProperty('--veilOpacity', '.30');
+        document.body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bgBase').trim();
+      };
+      img.src = imgUrl;
+    }
+    function setBG(){
+      const imgUrl = pickBgByTime();
+      document.body.style.backgroundImage = `url('${imgUrl}')`;
+      applyBgModeByAspect(imgUrl);
+    }
+    setBG();
+
+    // ===== API =====
+    const API_URL = "https://script.google.com/macros/s/AKfycbyiEZwbd0Djh5cQy6Ae63wVQG7QH-eyfpMbuWIDIdhp50M3DbjUtgPEEhJn4yIxQZ6w/exec";
+
+    // ===== Countdown =====
+    function startCountdown(iso){
+      const el = document.getElementById("countdown");
+      if(!el || !iso) return;
+
+      const end = new Date(iso);
+      if (isNaN(end.getTime())) return;
+
+      el.style.display = "block";
+
+      const tick = () => {
+        const now = new Date();
+        let ms = end - now;
+        if (ms <= 0){
+          el.textContent = "セールは終了しました";
+          return;
+        }
+        const d = Math.floor(ms / 86400000); ms -= d*86400000;
+        const h = Math.floor(ms / 3600000);  ms -= h*3600000;
+        const m = Math.floor(ms / 60000);
+        el.textContent = `セール終了まで：残り ${d}日 ${h}時間 ${m}分`;
+        setTimeout(tick, 1000);
+      };
+      tick();
+    }
+
+    // ===== Modal =====
+    const modal = document.getElementById("modal");
+    const modalImg = document.getElementById("modalImg");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalClose = document.getElementById("modalClose");
+
+    function openModal(src, title){
+      modalTitle.textContent = title || "Preview";
+      modalImg.src = src;
+      modal.classList.add("is-open");
+      modal.setAttribute("aria-hidden", "false");
+    }
+    function closeModal(){
+      modal.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
+      modalImg.src = "";
+    }
+    modalClose.addEventListener("click", closeModal);
+    modal.addEventListener("click", (e)=>{ if(e.target === modal) closeModal(); });
+    modalImg.addEventListener("click", closeModal);
+    document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeModal(); });
+
+    // ===== Render 3 cards from other_bn =====
+    function renderCards(list){
+      const el = document.getElementById("cf_grid");
+      el.innerHTML = (list || []).slice(0,3).map((v,i)=>`
+        <div class="card">
+          <img class="thumb"
+               src="${v.thumb_url}"
+               alt=""
+               data-modal-src="${v.thumb_url}"
+               data-modal-title="人気${i+1}：${escapeHtml(v.title)}">
+          <div class="meta">
+            <p class="title">人気${i+1}：${escapeHtml(v.title)}</p>
+            <div class="mini">
+              <a class="btn btn-primary"
+                 href="${v.url}?utm_source=site&utm_medium=lp&utm_campaign=cf_sale&utm_content=top${i+1}"
+                 target="_blank" rel="noopener">この1本を見る</a>
+            </div>
+          </div>
+        </div>
+      `).join("");
+
+      // modal bind
+      el.querySelectorAll(".thumb").forEach(img=>{
+        img.addEventListener("click", ()=>{
+          openModal(img.dataset.modalSrc, img.dataset.modalTitle);
+        });
+      });
+    }
+
+    function escapeHtml(s){
+      return String(s ?? "").replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m]));
+    }
+
+    async function init(){
+      const res = await fetch(API_URL + "?t=" + Date.now(), { cache: "no-store" });
+      const data = await res.json();
+      if (data.error) return;
+
+      startCountdown(data.saleEndsAt);      // ← ここで残り表示
+      renderCards(data.other_bn);           // ← ここでCandFans人気3本
+    }
+    init();
+  </script>
+</body>
+</html>
 
