@@ -15,7 +15,6 @@
   <title>Noa | entry</title>
   <meta name="description" content="Noa entry page" />
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&display=swap" rel="stylesheet">
@@ -40,13 +39,17 @@
       --snsSize:88px; --snsIconSize:40px; --snsGap:10px; --snsRadius:14px;
 
       --cardMax:560px;
-      --cardBg:rgba(255,255,255,.28);
-      --cardBorder:rgba(255,255,255,.32);
+      --cardBg:rgba(255,255,255,.25);
+      --cardBorder:rgba(255,255,255,.28);
       --cardRadius:22px;
       --cardPadY:16px; --cardPadX:18px;
       --cardShadow:0 18px 50px rgba(0,0,0,.20), inset 0 1px 0 rgba(255,255,255,.35);
+
+      --logoSize:58px; --logoRadius:16px;
+
       --cardTitleSize:20px; --cardDescSize:14px;
       --cardText:#fff;
+      --chevOpacity:.5;
 
       --footerColor:rgba(255,255,255,.78);
       --footerSize:12px;
@@ -144,7 +147,12 @@
       filter:brightness(0) invert(1);
     }
 
-    .stack{display:flex; flex-direction:column; gap:12px;}
+    .cards{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      align-items:center;
+    }
 
     .card{
       width:min(var(--cardMax),100%);
@@ -169,19 +177,20 @@
     .card:hover{filter:brightness(1.03)}
     .card:active{transform:scale(.985)}
 
-    .card .h{
-      font-weight:900;
-      font-size:var(--cardTitleSize);
-      text-align:left;
+    .logo{
+      width:var(--logoSize);
+      height:var(--logoSize);
+      border-radius:var(--logoRadius);
+      object-fit:cover;
+      background:#fff;
+      flex:0 0 auto;
     }
-    .card .d{
-      margin-top:4px;
-      font-weight:800;
-      font-size:var(--cardDescSize);
-      opacity:.95;
-      text-align:left;
-    }
-    .chev{font-weight:900; opacity:.5; font-size:22px}
+
+    .meta{ text-align:left; min-width:0; flex:1; }
+    .h{ font-weight:900; font-size:var(--cardTitleSize); }
+    .d{ margin-top:4px; font-weight:800; font-size:var(--cardDescSize); opacity:.95; }
+
+    .chev{ font-weight:900; opacity:var(--chevOpacity); font-size:22px }
 
     .lang{
       margin-top: var(--langMt);
@@ -228,46 +237,46 @@
 
       <div class="social" aria-label="SNS links">
         <a href="https://x.com/noanoshita" target="_blank" rel="noopener" aria-label="X">
-          <img src="images/X.png" alt="X">
+          <img src="../images/X.png" alt="X">
         </a>
         <a href="https://www.instagram.com/noanoshita/" target="_blank" rel="noopener" aria-label="Instagram">
-          <img src="images/instagram.png" alt="Instagram">
+          <img src="../images/instagram.png" alt="Instagram">
         </a>
         <a href="https://www.youtube.com/@challengenoa" target="_blank" rel="noopener" aria-label="YouTube">
-          <img src="images/Youtube.png" alt="YouTube">
+          <img src="../images/Youtube.png" alt="YouTube">
         </a>
       </div>
 
-      <!-- 3つの入口 -->
-      <div class="stack" aria-label="Entry buttons">
-
-        <a class="card" href="https://candfans.example.com/" target="_blank" rel="noopener" aria-label="CandFans">
-          <div>
-            <div class="h" id="tCandH">初めての人</div>
-            <div class="d" id="tCandD">メイン：最新・おすすめはこちら</div>
+      <!-- 3つの入口（カード画像は png 指定） -->
+      <div class="cards" aria-label="Entry links">
+        <a class="card" href="newbee/" aria-label="Newbee entry">
+          <img class="logo" src="../images/newbee_icon.png" alt="Newbee">
+          <div class="meta">
+            <div class="h" id="c1h">はじめての人</div>
+            <div class="d" id="c1d">おすすめから最短で見つける</div>
           </div>
           <div class="chev">›</div>
         </a>
 
-        <a class="card" href="https://myfans.example.com/" target="_blank" rel="noopener" aria-label="MyFans">
-          <div>
-            <div class="h" id="tMyH">セール・限定</div>
-            <div class="d" id="tMyD">サブ：別プラン／バックナンバー</div>
+        <a class="card" href="fans/" aria-label="Fans entry">
+          <img class="logo" src="../images/fans_icon.png" alt="Fans">
+          <div class="meta">
+            <div class="h" id="c2h">ファンの人</div>
+            <div class="d" id="c2d">今週の更新・限定案内</div>
           </div>
           <div class="chev">›</div>
         </a>
 
-        <a class="card" href="recommend/" aria-label="Recommended videos">
-          <div>
-            <div class="h" id="tRecH">他サイトを見る</div>
-            <div class="d" id="tRecD">今週のおすすめ・最新更新</div>
+        <a class="card" href="links/" aria-label="All links">
+          <img class="logo" src="../images/link_icon.png" alt="Links">
+          <div class="meta">
+            <div class="h" id="c3h">リンク集</div>
+            <div class="d" id="c3d">全部まとめて見る</div>
           </div>
           <div class="chev">›</div>
         </a>
-
       </div>
 
-      <!-- 言語切替 -->
       <div class="lang" aria-label="Language switch">
         <button id="btnJP" type="button" onclick="setLang('ja')">JP</button>
         <button id="btnEN" type="button" onclick="setLang('en')">EN</button>
@@ -278,7 +287,7 @@
   </div>
 
   <script>
-    // ===== 背景画像 =====
+    // ===== 背景画像（entry配下なので ../images/） =====
     const BG = {
       morning: "../images/morning.png",
       evening: "../images/evening.jpg",
@@ -315,29 +324,23 @@
     }
     setBG();
 
-    // ===== 言語（localStorage） =====
+    // ===== 言語（全ページ連動） =====
     const I18N = {
       ja: {
         htmlLang:"ja",
         title:"のあ୨୧",
         sub:"田舎で暮らす陰キャ女子",
-        candH:"CandFans",
-        candD:"メイン：最新・おすすめはこちら",
-        myH:"MyFans",
-        myD:"サブ：別プラン／バックナンバー",
-        recH:"おすすめを見る",
-        recD:"今週のおすすめ・最新更新"
+        c1h:"はじめての人", c1d:"おすすめから最短で見つける",
+        c2h:"ファンの人",   c2d:"今週の更新・限定案内",
+        c3h:"リンク集",     c3d:"全部まとめて見る"
       },
       en: {
         htmlLang:"en",
         title:"Noa",
         sub:"Quiet countryside girl",
-        candH:"CandFans",
-        candD:"Main: newest + picks",
-        myH:"MyFans",
-        myD:"Alt plans / archive",
-        recH:"See recommendations",
-        recD:"Weekly picks + updates"
+        c1h:"New here",   c1d:"Start with curated picks",
+        c2h:"For fans",   c2d:"Weekly updates / notices",
+        c3h:"All links",  c3d:"See everything"
       }
     };
 
@@ -348,12 +351,12 @@
       document.getElementById("tTitle").textContent = t.title;
       document.getElementById("tSub").textContent = t.sub;
 
-      document.getElementById("tCandH").textContent = t.candH;
-      document.getElementById("tCandD").textContent = t.candD;
-      document.getElementById("tMyH").textContent = t.myH;
-      document.getElementById("tMyD").textContent = t.myD;
-      document.getElementById("tRecH").textContent = t.recH;
-      document.getElementById("tRecD").textContent = t.recD;
+      document.getElementById("c1h").textContent = t.c1h;
+      document.getElementById("c1d").textContent = t.c1d;
+      document.getElementById("c2h").textContent = t.c2h;
+      document.getElementById("c2d").textContent = t.c2d;
+      document.getElementById("c3h").textContent = t.c3h;
+      document.getElementById("c3d").textContent = t.c3d;
 
       document.getElementById("btnJP").classList.toggle("is-active", lang === "ja");
       document.getElementById("btnEN").classList.toggle("is-active", lang === "en");
