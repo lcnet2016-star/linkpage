@@ -144,6 +144,8 @@
       filter:brightness(0) invert(1);
     }
 
+    .stack{display:flex; flex-direction:column; gap:12px;}
+
     .card{
       width:min(var(--cardMax),100%);
       margin:0 auto;
@@ -236,14 +238,34 @@
         </a>
       </div>
 
-      <!-- 入口の1ボックス -->
-      <a class="card" href="verify/" aria-label="Age verification">
-        <div>
-          <div class="h" id="tGateH">ここには載せられないもの</div>
-          <div class="d" id="tGateD">18歳以上の方のみ</div>
-        </div>
-        <div class="chev">›</div>
-      </a>
+      <!-- 3つの入口 -->
+      <div class="stack" aria-label="Entry buttons">
+
+        <a class="card" href="https://candfans.example.com/" target="_blank" rel="noopener" aria-label="CandFans">
+          <div>
+            <div class="h" id="tCandH">CandFans</div>
+            <div class="d" id="tCandD">メイン：最新・おすすめはこちら</div>
+          </div>
+          <div class="chev">›</div>
+        </a>
+
+        <a class="card" href="https://myfans.example.com/" target="_blank" rel="noopener" aria-label="MyFans">
+          <div>
+            <div class="h" id="tMyH">MyFans</div>
+            <div class="d" id="tMyD">サブ：別プラン／バックナンバー</div>
+          </div>
+          <div class="chev">›</div>
+        </a>
+
+        <a class="card" href="recommend/" aria-label="Recommended videos">
+          <div>
+            <div class="h" id="tRecH">おすすめを見る</div>
+            <div class="d" id="tRecD">今週のおすすめ・最新更新</div>
+          </div>
+          <div class="chev">›</div>
+        </a>
+
+      </div>
 
       <!-- 言語切替 -->
       <div class="lang" aria-label="Language switch">
@@ -256,7 +278,7 @@
   </div>
 
   <script>
-    // ===== 背景画像（morning.jpg -> mornig.png） =====
+    // ===== 背景画像 =====
     const BG = {
       morning: "../images/morning.png",
       evening: "../images/evening.jpg",
@@ -293,21 +315,29 @@
     }
     setBG();
 
-    // ===== 言語（全ページ共通：localStorage） =====
+    // ===== 言語（localStorage） =====
     const I18N = {
       ja: {
         htmlLang:"ja",
         title:"のあ୨୧",
         sub:"田舎で暮らす陰キャ女子",
-        gateH:"ここには載せられないもの",
-        gateD:"18歳以上の方のみ"
+        candH:"CandFans",
+        candD:"メイン：最新・おすすめはこちら",
+        myH:"MyFans",
+        myD:"サブ：別プラン／バックナンバー",
+        recH:"おすすめを見る",
+        recD:"今週のおすすめ・最新更新"
       },
       en: {
         htmlLang:"en",
         title:"Noa",
         sub:"Quiet countryside girl",
-        gateH:"Content not listed here",
-        gateD:"18+ only"
+        candH:"CandFans",
+        candD:"Main: newest + picks",
+        myH:"MyFans",
+        myD:"Alt plans / archive",
+        recH:"See recommendations",
+        recD:"Weekly picks + updates"
       }
     };
 
@@ -317,8 +347,13 @@
 
       document.getElementById("tTitle").textContent = t.title;
       document.getElementById("tSub").textContent = t.sub;
-      document.getElementById("tGateH").textContent = t.gateH;
-      document.getElementById("tGateD").textContent = t.gateD;
+
+      document.getElementById("tCandH").textContent = t.candH;
+      document.getElementById("tCandD").textContent = t.candD;
+      document.getElementById("tMyH").textContent = t.myH;
+      document.getElementById("tMyD").textContent = t.myD;
+      document.getElementById("tRecH").textContent = t.recH;
+      document.getElementById("tRecD").textContent = t.recD;
 
       document.getElementById("btnJP").classList.toggle("is-active", lang === "ja");
       document.getElementById("btnEN").classList.toggle("is-active", lang === "en");
@@ -326,7 +361,6 @@
       try { localStorage.setItem("lang", lang); } catch(e) {}
     }
 
-    // 初期言語（保存優先、なければ日本語）
     (function initLang(){
       let saved = "ja";
       try { saved = localStorage.getItem("lang") || "ja"; } catch(e) {}
