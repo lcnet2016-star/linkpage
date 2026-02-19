@@ -122,8 +122,9 @@
 
     /* ===== section ===== */
     .section{
-      width:min(var(--cardMax),100%);
-      margin:0 auto 16px;
+      /* 760pxまで、ただしスマホでも左右に余白が残る */
+      width: min(var(--cardMax), calc(100% - 16px));
+      margin: 0 auto 16px;
       background:var(--cardBg);
       border:1px solid var(--cardBorder);
       border-radius:var(--cardRadius);
@@ -141,14 +142,29 @@
       text-align:left;
     }
 
-    /* ===== grid ===== */
+    /* ===== grid PC/横向きは3列 ===== */
     .grid{
       display:grid;
       gap:14px;
+      grid-template-columns: repeat(3, 1fr);
     }
-    @media(min-width:680px){
-      .grid{grid-template-columns:1fr 1fr 1fr;}
+
+    
+    /* スマホ縦：2列（幅が狭い時だけ） */
+    @media (max-width: 680px) and (orientation: portrait){
+      grid-template-columns: repeat(2, 1fr);}
     }
+        /* さらに狭い端末だけは1列に落とす（任意） */
+    @media (max-width: 360px){
+      .grid{
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 680px) and (orientation: portrait){
+    .btn{ padding:9px; }
+    .vtitle{ font-size:13px; }
+    }
+
 
     .vcard{
       background:rgba(255,255,255,.20);
