@@ -1,180 +1,472 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Noa | Links</title>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VSEFPGK0YZ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VSEFPGK0YZ');
+  </script>
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-VSEFPGK0YZ"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-VSEFPGK0YZ');
-</script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Noa | links</title>
+  <meta name="description" content="Noa links" />
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Hachi+Maru+Pop&display=swap" rel="stylesheet">
 
-<style>
-:root{
---bgBase:#fff0ebff;
---bgSize:cover;
---veilOpacity:.30;
---fontFamily:"M PLUS Rounded 1c", sans-serif;
---brand:#A67189;
---radius:22px;
-}
+  <style>
+    :root{
+      --bgBase:#fff0ebff;
+      --bgSize:cover; --bgRepeat:no-repeat; --bgPos:center; --bgTransition:1s;
+      --veilOpacity:.30; --veilOpacityPortrait:.42;
 
-body{
-margin:0;
-font-family:var(--fontFamily);
-background:var(--bgBase);
-background-size:var(--bgSize);
-background-attachment:fixed;
-color:#fff;
-}
+      --fontFamily:"M PLUS Rounded 1c", system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", sans-serif;
+      --titleFont:"Hachi Maru Pop", cursive;
 
-.wrap{
-max-width:760px;
-margin:auto;
-padding:20px 16px 60px;
-}
+      --containerMax:760px;
+      --padTop:30px; --padSide:16px; --padBottom:40px;
 
-.section{
-background:rgba(255,255,255,.25);
-border-radius:var(--radius);
-padding:18px;
-backdrop-filter:blur(14px);
-margin-bottom:16px;
-}
+      --titleSize:38px; --subtitleSize:18px;
+      --titleColor:#fff; --subtitleColor:rgba(255,255,255,.9);
+      --textShadow:0 6px 20px rgba(0,0,0,.35);
 
-.grid{
-display:grid;
-gap:14px;
-}
-@media(min-width:680px){
-.grid{grid-template-columns:1fr 1fr 1fr;}
-}
+      --snsSize:88px; --snsIconSize:40px; --snsGap:10px; --snsRadius:14px;
 
-.card{
-background:rgba(255,255,255,.25);
-border-radius:18px;
-overflow:hidden;
-}
+      --cardMax:760px;
+      --cardBg:rgba(255,255,255,.25);
+      --cardBorder:rgba(255,255,255,.28);
+      --cardRadius:22px;
+      --cardShadow:0 18px 50px rgba(0,0,0,.20), inset 0 1px 0 rgba(255,255,255,.35);
 
-.thumb{
-width:100%;
-aspect-ratio:4/5;
-object-fit:cover;
-}
+      --sectionPad:18px;
 
-.meta{
-padding:10px;
-}
+      --brand:#A67189;
 
-.title{
-font-weight:900;
-font-size:14px;
-margin-bottom:10px;
-}
+      --footerColor:rgba(255,255,255,.78);
+      --footerSize:12px;
 
-.btn{
-display:block;
-text-align:center;
-padding:10px;
-border-radius:14px;
-font-weight:900;
-text-decoration:none;
-margin-bottom:8px;
-}
+      /* language switch */
+      --langGap:10px;
+      --langMt:14px;
+      --langBtnH:34px;
+      --langBtnPx:14px;
+      --langBtnRadius:12px;
+      --langBtnBg:rgba(255,255,255,.25);
+      --langBtnBorder:rgba(255,255,255,.28);
+      --langBtnText:rgba(255,255,255,.92);
+      --langBtnBgActive:rgba(255,255,255,.40);
+      --langBtnTextActive:rgba(255,255,255,1);
+    }
 
-.btn-main{
-background:var(--brand);
-color:#fff;
-}
+    @media (max-width:420px){
+      :root{
+        --padTop:22px;
+        --titleSize:30px; --subtitleSize:16px;
+        --snsSize:72px; --snsIconSize:34px;
+        --langBtnH:32px;
+        --langBtnPx:12px;
+        --sectionPad:16px;
+      }
+    }
 
-.btn-sub{
-background:rgba(166,113,137,.25);
-color:#fff;
-}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--fontFamily);
+      color:var(--titleColor);
 
-.icon-row{
-display:flex;
-justify-content:center;
-gap:14px;
-margin-top:16px;
-flex-wrap:wrap;
-}
+      background-color:var(--bgBase);
+      background-image:none;
+      background-size:var(--bgSize);
+      background-repeat:var(--bgRepeat);
+      background-position:var(--bgPos);
+      background-attachment:fixed;
+      transition:background-image var(--bgTransition) ease-in-out;
+    }
+    body::before{
+      content:"";
+      position:fixed; inset:0;
+      background:rgba(255,240,235,var(--veilOpacity));
+      z-index:-1;
+    }
 
-.icon-row img{
-height:42px;
-}
+    .wrap{
+      min-height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:var(--padTop) var(--padSide) var(--padBottom);
+      text-align:center;
+    }
+    .container{width:min(var(--containerMax),100%)}
 
-.sns-row{
-display:flex;
-justify-content:center;
-gap:18px;
-margin-top:26px;
-}
+    .title{
+      margin:0 0 6px;
+      font-family:var(--titleFont);
+      font-size:var(--titleSize);
+      font-weight:900;
+      text-shadow:var(--textShadow);
+    }
+    .subtitle{
+      margin:0 0 10px;
+      font-size:var(--subtitleSize);
+      font-weight:800;
+      color:var(--subtitleColor);
+      text-shadow:var(--textShadow);
+    }
 
-.sns-row img{
-height:36px;
-}
-</style>
+    /* ===== section (今すぐ見る / 月額で全部見る) ===== */
+    .section{
+      width:min(var(--cardMax),100%);
+      margin:0 auto 16px;
+      background:var(--cardBg);
+      border:1px solid var(--cardBorder);
+      border-radius:var(--cardRadius);
+      box-shadow:var(--cardShadow);
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
+      padding:var(--sectionPad);
+      text-align:left;
+    }
+    .section h2{
+      margin:0 0 12px;
+      font-size:18px;
+      font-weight:900;
+      text-shadow:var(--textShadow);
+      text-align:left;
+    }
+
+    /* ===== 人気3本グリッド ===== */
+    .grid{
+      display:grid;
+      gap:14px;
+    }
+    @media(min-width:680px){
+      .grid{grid-template-columns:1fr 1fr 1fr;}
+    }
+
+    .vcard{
+      background:rgba(255,255,255,.20);
+      border:1px solid rgba(255,255,255,.22);
+      border-radius:18px;
+      overflow:hidden;
+      text-decoration:none;
+      color:#fff;
+    }
+
+    .thumb{
+      width:100%;
+      aspect-ratio:4/5;
+      object-fit:cover;
+      display:block;
+      background:rgba(255,255,255,.18);
+    }
+
+    .vmeta{ padding:10px; }
+    .vtitle{
+      font-weight:900;
+      font-size:14px;
+      line-height:1.35;
+      margin:0 0 10px;
+      text-shadow:var(--textShadow);
+      min-height: 38px;
+    }
+
+    .btn{
+      display:block;
+      text-align:center;
+      padding:10px;
+      border-radius:14px;
+      font-weight:900;
+      text-decoration:none;
+      margin-bottom:8px;
+      border:1px solid rgba(255,255,255,.18);
+    }
+    .btn-main{
+      background:var(--brand);
+      color:#fff;
+    }
+    .btn-sub{
+      background:rgba(166,113,137,.20);
+      color:#fff;
+    }
+
+    /* ===== 月額FCアイコン（等分） ===== */
+    .icon-row{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap:12px;
+      margin-top:8px;
+      align-items:stretch;
+    }
+    .fc-icon{
+      aspect-ratio: 1 / 1;
+      border-radius:16px;
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.22);
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+      text-decoration:none;
+      transition: transform .08s ease, filter .18s ease;
+    }
+    .fc-icon:hover{ filter: brightness(1.06); }
+    .fc-icon:active{ transform: scale(.985); }
+    .fc-icon img{
+      width:72%;
+      height:72%;
+      object-fit:contain;
+      display:block;
+      filter:brightness(0) invert(1); /* 白ロゴ統一。不要なら消す */
+    }
+    /* onlyfans等の写真ロゴが白反転で変なら個別に外せる */
+    .fc-icon img.no-invert{ filter:none; }
+
+    @media (max-width:420px){
+      .icon-row{ grid-template-columns: repeat(2, 1fr); }
+      .fc-icon{ border-radius:14px; }
+      .fc-icon img{ width:68%; height:68%; }
+    }
+
+    /* ===== SNS（下に移動） ===== */
+    .social{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:var(--snsGap);
+      margin:14px 0 0;
+    }
+    .social a{
+      width:var(--snsSize);
+      height:var(--snsSize);
+      display:grid;
+      place-items:center;
+      border-radius:var(--snsRadius);
+      text-decoration:none;
+      background:transparent;
+    }
+    .social img{
+      width:var(--snsIconSize);
+      height:var(--snsIconSize);
+      display:block;
+      filter:brightness(0) invert(1);
+    }
+
+    .lang{
+      margin-top: var(--langMt);
+      display:flex;
+      justify-content:center;
+      gap: var(--langGap);
+    }
+    .lang button{
+      height: var(--langBtnH);
+      padding: 0 var(--langBtnPx);
+      border-radius: var(--langBtnRadius);
+      background: var(--langBtnBg);
+      border: 1px solid var(--langBtnBorder);
+      color: var(--langBtnText);
+      font-weight: 900;
+      font-family: var(--fontFamily);
+      cursor:pointer;
+      text-shadow: var(--textShadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: filter .18s ease, transform .08s ease, background .18s ease, color .18s ease;
+    }
+    .lang button:hover{ filter: brightness(1.08); }
+    .lang button:active{ transform: scale(.98); }
+    .lang button.is-active{
+      background: var(--langBtnBgActive);
+      color: var(--langBtnTextActive);
+    }
+
+    .foot{
+      margin-top:14px;
+      font-size:var(--footerSize);
+      color:var(--footerColor);
+      text-shadow:var(--textShadow);
+      text-align:center;
+    }
+  </style>
 </head>
 
 <body>
-<div class="wrap">
+  <div class="wrap">
+    <div class="container">
+      <h1 class="title" id="tTitle">のあ୨୧</h1>
+      <p class="subtitle" id="tSub">田舎で暮らす陰キャ女子</p>
 
-<div class="section">
-<h2>🔥 今すぐ見る</h2>
-<div class="grid" id="videoGrid"></div>
-</div>
+      <!-- 🔥 今すぐ見る -->
+      <div class="section" aria-label="Watch now">
+        <h2 id="secNow">🔥 今すぐ見る</h2>
+        <div class="grid" id="videoGrid"></div>
+      </div>
 
-<div class="section">
-<h2>💎 月額で全部見る</h2>
+      <!-- 💎 月額で全部見る -->
+      <div class="section" aria-label="Subscribe monthly">
+        <h2 id="secSub">💎 月額で全部見る</h2>
 
-<div class="icon-row">
-<a href="https://candfans.jp/あなたのURL" target="_blank"><img src="../images/candfans.png"></a>
-<a href="https://myfans.jp/あなたのURL" target="_blank"><img src="../images/myfans.png"></a>
-<a href="https://fantia.jp/あなたのURL" target="_blank"><img src="../images/fantia.png"></a>
-<a href="https://onlyfans.com/あなたのURL" target="_blank"><img src="../images/onlyfans.jpg"></a>
-</div>
-</div>
+        <div class="icon-row" aria-label="Fanclub links">
+          <a class="fc-icon" href="https://candfans.jp/noanoshita" target="_blank" rel="noopener" aria-label="CandFans">
+            <img src="../images/candfans.png" alt="CandFans">
+          </a>
+          <a class="fc-icon" href="https://myfans.jp/noanoshita" target="_blank" rel="noopener" aria-label="MyFans">
+            <img src="../images/myfans.png" alt="MyFans">
+          </a>
+          <a class="fc-icon" href="https://fantia.jp/fanclubs/532786" target="_blank" rel="noopener" aria-label="Fantia">
+            <img src="../images/fantia.png" alt="Fantia">
+          </a>
+          <a class="fc-icon" href="https://onlyfans.com/noanoshita" target="_blank" rel="noopener" aria-label="OnlyFans">
+            <img class="no-invert" src="../images/onlyfans.jpg" alt="OnlyFans">
+          </a>
+        </div>
 
-<div class="sns-row">
-<a href="https://x.com/noanoshita"><img src="../images/X.png"></a>
-<a href="https://instagram.com/noanoshita"><img src="../images/instagram.png"></a>
-<a href="https://youtube.com/@challengenoa"><img src="../images/Youtube.png"></a>
-</div>
+        <!-- SNSアイコンはここ（カードの下） -->
+        <div class="social" aria-label="SNS links">
+          <a href="https://x.com/noanoshita" target="_blank" rel="noopener" aria-label="X">
+            <img src="../images/X.png" alt="X">
+          </a>
+          <a href="https://www.instagram.com/noanoshita/" target="_blank" rel="noopener" aria-label="Instagram">
+            <img src="../images/instagram.png" alt="Instagram">
+          </a>
+          <a href="https://www.youtube.com/@challengenoa" target="_blank" rel="noopener" aria-label="YouTube">
+            <img src="../images/Youtube.png" alt="YouTube">
+          </a>
+        </div>
+      </div>
 
-</div>
+      <div class="lang" aria-label="Language switch">
+        <button id="btnJP" type="button" onclick="setLang('ja')">JP</button>
+        <button id="btnEN" type="button" onclick="setLang('en')">EN</button>
+      </div>
 
-<script>
-const API_URL = "https://script.google.com/macros/s/AKfycbyiEZwbd0Djh5cQy6Ae63wVQG7QH-eyfpMbuWIDIdhp50M3DbjUtgPEEhJn4yIxQZ6w/exec";
+      <div class="foot">© Noa</div>
+    </div>
+  </div>
 
-async function loadVideos(){
-const res = await fetch(API_URL + "?t=" + Date.now());
-const data = await res.json();
+  <script>
+    // ===== 背景画像（links配下なので ../images/） =====
+    const BG = {
+      morning: "../images/morning.png",
+      evening: "../images/evening.jpg",
+      night: "../images/night.jpg"
+    };
 
-const grid = document.getElementById("videoGrid");
+    function pickBgByTime(){
+      const h = new Date().getHours();
+      if(h >= 5 && h < 16) return BG.morning;
+      if(h >= 16 && h < 19) return BG.evening;
+      return BG.night;
+    }
 
-grid.innerHTML = data.other_bn.slice(0,3).map(v => `
-<div class="card">
-<img class="thumb" src="${v.thumb_url}">
-<div class="meta">
-<div class="title">${v.title}</div>
-<a class="btn btn-main" href="${v.url}" target="_blank">この1本を見る</a>
-<a class="btn btn-sub" href="${v.candfans_url}" target="_blank">Candfansで見る</a>
-<a class="btn btn-sub" href="${v.myfans_url}" target="_blank">Myfansで見る</a>
-</div>
-</div>
-`).join("");
-}
+    function applyBgModeByAspect(imgUrl){
+      const img = new Image();
+      img.onload = () => {
+        const portrait = img.naturalHeight > img.naturalWidth;
+        document.documentElement.style.setProperty('--bgSize', portrait ? 'contain' : 'cover');
+        document.documentElement.style.setProperty('--veilOpacity', portrait ? getComputedStyle(document.documentElement).getPropertyValue('--veilOpacityPortrait').trim() : '.30');
+        document.body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bgBase').trim();
+      };
+      img.onerror = () => {
+        document.documentElement.style.setProperty('--bgSize', 'cover');
+        document.documentElement.style.setProperty('--veilOpacity', '.30');
+        document.body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bgBase').trim();
+      };
+      img.src = imgUrl;
+    }
 
-loadVideos();
-</script>
+    function setBG(){
+      const imgUrl = pickBgByTime();
+      document.body.style.backgroundImage = `url('${imgUrl}')`;  // ← ここ修正済み
+      applyBgModeByAspect(imgUrl);
+    }
+    setBG();
 
+    // ===== 人気3本（GAS JSON） =====
+    const API_URL = "https://script.google.com/macros/s/AKfycbyiEZwbd0Djh5cQy6Ae63wVQG7QH-eyfpMbuWIDIdhp50M3DbjUtgPEEhJn4yIxQZ6w/exec";
+
+    function escHtml(s){
+      return String(s ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    async function loadVideos(){
+      const grid = document.getElementById("videoGrid");
+      try{
+        const res = await fetch(API_URL + "?t=" + Date.now(), { cache: "no-store" });
+        const data = await res.json();
+
+        const list = (data?.other_bn || []).slice(0,3);
+        if(!list.length){
+          grid.innerHTML = `<div style="opacity:.9;font-weight:800;text-shadow:var(--textShadow);">準備中</div>`;
+          return;
+        }
+
+        grid.innerHTML = list.map(v => `
+          <div class="vcard">
+            <img class="thumb" src="${escHtml(v.thumb_url)}" alt="">
+            <div class="vmeta">
+              <div class="vtitle">${escHtml(v.title)}</div>
+              <a class="btn btn-main" href="${escHtml(v.url)}" target="_blank" rel="noopener">この1本を見る</a>
+              ${v.candfans_url ? `<a class="btn btn-sub" href="${escHtml(v.candfans_url)}" target="_blank" rel="noopener">CandFansで見る</a>` : ``}
+              ${v.myfans_url   ? `<a class="btn btn-sub" href="${escHtml(v.myfans_url)}" target="_blank" rel="noopener">MyFansで見る</a>` : ``}
+            </div>
+          </div>
+        `).join("");
+      }catch(e){
+        grid.innerHTML = `<div style="opacity:.9;font-weight:800;text-shadow:var(--textShadow);">読み込みに失敗しました</div>`;
+      }
+    }
+    loadVideos();
+
+    // ===== 言語（全ページ連動） =====
+    const I18N = {
+      ja: {
+        htmlLang:"ja",
+        title:"のあ୨୧",
+        sub:"田舎で暮らす陰キャ女子",
+        secNow:"🔥 今すぐ見る",
+        secSub:"💎 月額で全部見る"
+      },
+      en: {
+        htmlLang:"en",
+        title:"Noa",
+        sub:"Quiet countryside girl",
+        secNow:"🔥 Watch now",
+        secSub:"💎 Subscribe monthly"
+      }
+    };
+
+    function setLang(lang){
+      const t = I18N[lang] || I18N.ja;
+      document.documentElement.lang = t.htmlLang;
+
+      document.getElementById("tTitle").textContent = t.title;
+      document.getElementById("tSub").textContent = t.sub;
+      document.getElementById("secNow").textContent = t.secNow;
+      document.getElementById("secSub").textContent = t.secSub;
+
+      document.getElementById("btnJP").classList.toggle("is-active", lang === "ja");
+      document.getElementById("btnEN").classList.toggle("is-active", lang === "en");
+
+      try { localStorage.setItem("lang", lang); } catch(e) {}
+    }
+
+    (function initLang(){
+      let saved = "ja";
+      try { saved = localStorage.getItem("lang") || "ja"; } catch(e) {}
+      setLang(saved === "en" ? "en" : "ja");
+    })();
+  </script>
 </body>
 </html>
