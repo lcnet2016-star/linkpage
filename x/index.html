@@ -218,6 +218,7 @@
     /* ===== 月額FCボタン（4個並び） ===== */
     .fc-btns{
       display:grid;
+      gap:12px;
       gap:10px;
       margin-top:8px;
     
@@ -239,13 +240,19 @@
       }
     }
     
+    /* 月額ボタンだけ “くっついて見える” 問題を解消 */
     .fc-btn{
-      margin:0;
-      width:100%;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
+      margin:0 !important;          /* .btnのmargin-bottomを完全に殺す */
+      padding:10px 0;               /* 横paddingを減らして安定 */
+      border-radius:12px;           /* 角丸を少し小さく */
+      min-width:0;
     }
+    
+    /* グリッド内で境界線が干渉して見えるなら薄くする */
+    .fc-btn.btn-sub{
+      border-color: rgba(255,255,255,.10);
+    }
+
 
 
     /* ===== SNS（カード外：月額の直下） ===== */
