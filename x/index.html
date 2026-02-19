@@ -121,7 +121,7 @@
       text-shadow:var(--textShadow);
     }
 
-    /* ===== section (今すぐ見る / 月額で全部見る) ===== */
+    /* ===== section ===== */
     .section{
       width:min(var(--cardMax),100%);
       margin:0 auto 16px;
@@ -142,7 +142,7 @@
       text-align:left;
     }
 
-    /* ===== 人気3本グリッド ===== */
+    /* ===== grid ===== */
     .grid{
       display:grid;
       gap:14px;
@@ -156,33 +156,26 @@
       border:1px solid rgba(255,255,255,.22);
       border-radius:18px;
       overflow:hidden;
-      text-decoration:none;
       color:#fff;
     }
-        /* サムネ枠：サイズ固定（4:5） */
+
+    /* サムネ枠：固定（4:5） */
     .thumb-wrap{
       width:100%;
       aspect-ratio:4/5;
-      border-radius:16px;     /* 角丸を枠側に持たせる */
-      overflow:hidden;        /* はみ出た部分を切る */
+      border-radius:16px;
+      overflow:hidden;
       background:rgba(255,255,255,.18);
     }
-    
-    /* サムネ画像：枠に合わせてトリミング */
+
+    /* サムネ：全体表示（切らない） */
     .thumb{
       width:100%;
       height:100%;
-      object-fit:cover;       /* ここが肝：枠いっぱいにして余りは切る */
-      object-position:center; /* ど真ん中基準で切る */
+      object-fit:contain;        /* ←切らずに縮小して全体表示 */
+      object-position:center;
       display:block;
-    }
-
-    .thumb{
-      width:100%;
-      aspect-ratio:4/5;
-      object-fit:cover;
-      display:block;
-      background:rgba(255,255,255,.18);
+      background:rgba(0,0,0,.10); /* 余白が出るので薄い背景（不要なら消してOK） */
     }
 
     .vmeta{ padding:10px; }
@@ -214,7 +207,7 @@
       color:#fff;
     }
 
-    /* ===== 月額FCアイコン（等分） ===== */
+    /* ===== 月額FCアイコン（等分 / 枠なし / 角トリム） ===== */
     .icon-row{
       display:grid;
       grid-template-columns: repeat(4, 1fr);
@@ -222,42 +215,44 @@
       margin-top:8px;
       align-items:stretch;
     }
+
     .fc-icon{
       aspect-ratio: 1 / 1;
-      border-radius:16px;
-      background: rgba(255,255,255,.18);
-      border: 1px solid rgba(255,255,255,.22);
+      border-radius: var(--cardRadius); /* ←月額カードと同じトリム感 */
+      overflow:hidden;
+
       display:grid;
       place-items:center;
-      overflow:hidden;
       text-decoration:none;
+
+      background: transparent; /* 枠(背景)削除 */
+      border: none;            /* 枠線削除 */
+
       transition: transform .08s ease, filter .18s ease;
     }
     .fc-icon:hover{ filter: brightness(1.06); }
     .fc-icon:active{ transform: scale(.985); }
+
     .fc-icon img{
       width:72%;
       height:72%;
       object-fit:contain;
       display:block;
-      filter:brightness(0) invert(1); /* 白ロゴ統一。不要なら消す */
+      filter:none; /* 白反転はやめる（必要なら戻す） */
     }
-    /* onlyfans等の写真ロゴが白反転で変なら個別に外せる */
-    .fc-icon img.no-invert{ filter:none; }
 
     @media (max-width:420px){
       .icon-row{ grid-template-columns: repeat(2, 1fr); }
-      .fc-icon{ border-radius:14px; }
       .fc-icon img{ width:68%; height:68%; }
     }
 
-    /* ===== SNS（下に移動） ===== */
+    /* ===== SNS（カード外） ===== */
     .social{
       display:flex;
       justify-content:center;
       align-items:center;
       gap:var(--snsGap);
-      margin:14px 0 0;
+      margin:0 0 16px; /* 月額カードの直下に置くので下に余白 */
     }
     .social a{
       width:var(--snsSize);
@@ -319,10 +314,16 @@
       <h1 class="title" id="tTitle">のあ୨୧</h1>
       <p class="subtitle" id="tSub">田舎で暮らす陰キャ女子</p>
 
-      <!-- 🔥 今すぐ見る -->
+      <!-- 🔥 今すぐ見る（myfans_latest order 1..3） -->
       <div class="section" aria-label="Watch now">
         <h2 id="secNow">🔥 今すぐ見る</h2>
         <div class="grid" id="videoGrid"></div>
+      </div>
+
+      <!-- ⭐ 人気3本（other_bn order 1..3） -->
+      <div class="section" aria-label="Popular 3">
+        <h2 id="secPop">⭐ 人気3本</h2>
+        <div class="grid" id="popularGrid"></div>
       </div>
 
       <!-- 💎 月額で全部見る -->
@@ -340,22 +341,22 @@
             <img src="../images/fantia.png" alt="Fantia">
           </a>
           <a class="fc-icon" href="https://onlyfans.com/noanoshita" target="_blank" rel="noopener" aria-label="OnlyFans">
-            <img class="no-invert" src="../images/onlyfans.jpg" alt="OnlyFans">
+            <img src="../images/onlyfans.jpg" alt="OnlyFans">
           </a>
         </div>
+      </div>
 
-        <!-- SNSアイコンはここ（カードの下） -->
-        <div class="social" aria-label="SNS links">
-          <a href="https://x.com/noanoshita" target="_blank" rel="noopener" aria-label="X">
-            <img src="../images/X.png" alt="X">
-          </a>
-          <a href="https://www.instagram.com/noanoshita/" target="_blank" rel="noopener" aria-label="Instagram">
-            <img src="../images/instagram.png" alt="Instagram">
-          </a>
-          <a href="https://www.youtube.com/@challengenoa" target="_blank" rel="noopener" aria-label="YouTube">
-            <img src="../images/Youtube.png" alt="YouTube">
-          </a>
-        </div>
+      <!-- SNSはカード外：月額カードの下 -->
+      <div class="social" aria-label="SNS links">
+        <a href="https://x.com/noanoshita" target="_blank" rel="noopener" aria-label="X">
+          <img src="../images/X.png" alt="X">
+        </a>
+        <a href="https://www.instagram.com/noanoshita/" target="_blank" rel="noopener" aria-label="Instagram">
+          <img src="../images/instagram.png" alt="Instagram">
+        </a>
+        <a href="https://www.youtube.com/@challengenoa" target="_blank" rel="noopener" aria-label="YouTube">
+          <img src="../images/Youtube.png" alt="YouTube">
+        </a>
       </div>
 
       <div class="lang" aria-label="Language switch">
@@ -400,12 +401,12 @@
 
     function setBG(){
       const imgUrl = pickBgByTime();
-      document.body.style.backgroundImage = `url('${imgUrl}')`;  // ← ここ修正済み
+      document.body.style.backgroundImage = `url('${imgUrl}')`;
       applyBgModeByAspect(imgUrl);
     }
     setBG();
 
-    // ===== 人気3本（GAS JSON） =====
+    // ===== GAS JSON =====
     const API_URL = "https://script.google.com/macros/s/AKfycbyiEZwbd0Djh5cQy6Ae63wVQG7QH-eyfpMbuWIDIdhp50M3DbjUtgPEEhJn4yIxQZ6w/exec";
 
     function escHtml(s){
@@ -418,33 +419,62 @@
     }
 
     async function loadVideos(){
-      const grid = document.getElementById("videoGrid");
+      const nowGrid = document.getElementById("videoGrid");
+      const popGrid = document.getElementById("popularGrid");
+
+      const renderCard = (v) => `
+        <div class="vcard">
+          <div class="thumb-wrap">
+            <img class="thumb" src="${escHtml(v.thumb_url)}" alt="">
+          </div>
+          <div class="vmeta">
+            <div class="vtitle">${escHtml(v.title)}</div>
+            ${v.url_CF ? `<a class="btn btn-main" href="${escHtml(v.url_CF)}" target="_blank" rel="noopener">CandFansで見る</a>` : ``}
+            ${v.url_MY ? `<a class="btn btn-sub"  href="${escHtml(v.url_MY)}" target="_blank" rel="noopener">MyFansで見る</a>`   : ``}
+          </div>
+        </div>
+      `;
+
       try{
         const res = await fetch(API_URL + "?t=" + Date.now(), { cache: "no-store" });
         const data = await res.json();
-
-        const list = (data?.other_bn || []).slice(0,3);
-        if(!list.length){
-          grid.innerHTML = `<div style="opacity:.9;font-weight:800;text-shadow:var(--textShadow);">準備中</div>`;
-          return;
-        }
-
-        grid.innerHTML = list.map(v => `
-          <div class="vcard">
-            <div class="thumb-wrap">
-              <img class="thumb" src="${escHtml(v.thumb_url)}" alt="">
-            </div>
         
-            <div class="vmeta">
-              <div class="vtitle">${escHtml(v.title)}</div>
-        
-              ${v.candfans_url ? `<a class="btn btn-main" href="${escHtml(v.candfans_url)}" target="_blank" rel="noopener">CandFansで見る</a>` : ``}
-              ${v.myfans_url   ? `<a class="btn btn-sub"  href="${escHtml(v.myfans_url)}" target="_blank" rel="noopener">MyFansで見る</a>`   : ``}
-            </div>
-          </div>
-        `).join("");
+        console.log("RAW JSON:", data);
+        console.log("keys:", Object.keys(data || {}));
+
+
+        // GASが rows を返す想定。違う場合はここだけ合わせる
+        const rows =
+          Array.isArray(data?.rows) ? data.rows :
+          Array.isArray(data) ? data :
+          Array.isArray(data?.items) ? data.items :
+          [];
+
+        const pickTop3 = (sectionName) => rows
+          .filter(r => String(r.section) === sectionName)
+          .sort((a,b) => Number(a.order) - Number(b.order))
+          .slice(0,3)
+          .map(r => ({
+            title: r.title || "",
+            thumb_url: r.thumb_url || "",
+            url_CF: r.url_CF || "",
+            url_MY: r.url_MY || ""
+          }));
+
+        const nowList = pickTop3("myfans_latest"); // order 1..3
+        const popList = pickTop3("other_bn");      // order 1..3
+
+        nowGrid.innerHTML = nowList.length
+          ? nowList.map(renderCard).join("")
+          : `<div style="opacity:.9;font-weight:800;text-shadow:var(--textShadow);">準備中</div>`;
+
+        popGrid.innerHTML = popList.length
+          ? popList.map(renderCard).join("")
+          : `<div style="opacity:.9;font-weight:800;text-shadow:var(--textShadow);">準備中</div>`;
+
       }catch(e){
-        grid.innerHTML = `<div style="opacity:.9;font-weight:800;text-shadow:var(--textShadow);">読み込みに失敗しました</div>`;
+        nowGrid.innerHTML = `<div style="opacity:.9;font-weight:800;text-shadow:var(--textShadow);">読み込みに失敗しました</div>`;
+        popGrid.innerHTML = "";
       }
     }
     loadVideos();
@@ -456,6 +486,7 @@
         title:"のあ୨୧",
         sub:"田舎で暮らす陰キャ女子",
         secNow:"🔥 今すぐ見る",
+        secPop:"⭐ 人気3本",
         secSub:"💎 月額で全部見る"
       },
       en: {
@@ -463,6 +494,7 @@
         title:"Noa",
         sub:"Quiet countryside girl",
         secNow:"🔥 Watch now",
+        secPop:"⭐ Popular 3",
         secSub:"💎 Subscribe monthly"
       }
     };
@@ -474,6 +506,7 @@
       document.getElementById("tTitle").textContent = t.title;
       document.getElementById("tSub").textContent = t.sub;
       document.getElementById("secNow").textContent = t.secNow;
+      document.getElementById("secPop").textContent = t.secPop;
       document.getElementById("secSub").textContent = t.secSub;
 
       document.getElementById("btnJP").classList.toggle("is-active", lang === "ja");
