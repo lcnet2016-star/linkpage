@@ -45,7 +45,6 @@
       --cardShadow:0 18px 50px rgba(0,0,0,.20), inset 0 1px 0 rgba(255,255,255,.35);
 
       --sectionPad:18px;
-
       --brand:#A67189;
 
       --footerColor:rgba(255,255,255,.78);
@@ -157,50 +156,44 @@
       border-radius:18px;
       overflow:hidden;
       color:#fff;
-    
-      display:flex;            /* 追加 */
-      flex-direction:column;   /* 追加 */
-      height:100%;             /* 追加：列揃え */
+
+      display:flex;
+      flex-direction:column;
+      height:100%;
     }
 
-    /* サムネ枠：固定比率をやめる */
     .thumb-wrap{
       width:100%;
       border-radius:16px;
       overflow:hidden;
       background:rgba(255,255,255,.18);
     }
-    
-    /* サムネ画像：枠幅いっぱい、縦は画像比率で決まる */
     .thumb{
       width:100%;
       height:auto;
       display:block;
-      object-fit:contain;       /* 画像全体を表示（切らない） */
-      background:transparent;   /* 余白色を消す */
+      object-fit:contain;
+      background:transparent;
     }
 
-
-    /* 画像の下の領域を伸縮させる */
     .vmeta{
       padding:10px;
-      display:flex;            /* 追加 */
-      flex-direction:column;   /* 追加 */
-      flex:1;                  /* 追加：ここが伸びる */
+      display:flex;
+      flex-direction:column;
+      flex:1;
     }
-    /* タイトルは一定行で揃える（2行推奨） */
     .vtitle{
       font-weight:900;
       font-size:14px;
       line-height:1.35;
       margin:0 0 10px;
       text-shadow:var(--textShadow);
-    
-      display:-webkit-box;         /* 追加 */
-      -webkit-box-orient:vertical; /* 追加 */
-      -webkit-line-clamp:2;        /* 2行で固定 */
+
+      display:-webkit-box;
+      -webkit-box-orient:vertical;
+      -webkit-line-clamp:2;
       overflow:hidden;
-      min-height: calc(14px * 1.35 * 2); /* 2行分確保 */
+      min-height: calc(14px * 1.35 * 2);
     }
 
     .btn{
@@ -222,52 +215,30 @@
       color:#fff;
     }
 
-    /* ===== 月額FCアイコン（等分 / 枠なし / 角トリム） ===== */
-    .icon-row{
+    /* ===== 月額FCボタン（4個並び） ===== */
+    .fc-btns{
       display:grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(4, 1fr); /* PCは4並び固定 */
       gap:12px;
       margin-top:8px;
       align-items:stretch;
     }
-
-    .fc-icon{
-      aspect-ratio: 1 / 1;
-      border-radius: var(--cardRadius); /* ←月額カードと同じトリム感 */
-      overflow:hidden;
-
-      display:grid;
-      place-items:center;
-      text-decoration:none;
-
-      background: transparent; /* 枠(背景)削除 */
-      border: none;            /* 枠線削除 */
-
-      transition: transform .08s ease, filter .18s ease;
-    }
-    .fc-icon:hover{ filter: brightness(1.06); }
-    .fc-icon:active{ transform: scale(.985); }
-
-    .fc-icon img{
-      width:72%;
-      height:72%;
-      object-fit:contain;
-      display:block;
-      filter:none; /* 白反転はやめる（必要なら戻す） */
-    }
-
+    /* スマホは2列（押しやすい） */
     @media (max-width:420px){
-      .icon-row{ grid-template-columns: repeat(2, 1fr); }
-      .fc-icon img{ width:68%; height:68%; }
+      .fc-btns{ grid-template-columns: repeat(2, 1fr); }
+    }
+    .fc-btn{
+      margin:0;       /* .btnのmargin-bottomを無効化 */
+      width:100%;
     }
 
-    /* ===== SNS（カード外） ===== */
+    /* ===== SNS（カード外：月額の直下） ===== */
     .social{
       display:flex;
       justify-content:center;
       align-items:center;
       gap:var(--snsGap);
-      margin:0 0 16px; /* 月額カードの直下に置くので下に余白 */
+      margin:0 0 16px; /* 次のUIまでの余白 */
     }
     .social a{
       width:var(--snsSize);
@@ -351,9 +322,9 @@
           <a class="btn btn-sub  fc-btn" href="https://fantia.jp/fanclubs/532786" target="_blank" rel="noopener">Fantia</a>
           <a class="btn btn-sub  fc-btn" href="https://onlyfans.com/noanoshita" target="_blank" rel="noopener">OnlyFans</a>
         </div>
+      </div> <!-- ✅ 月額 section をここで閉じる -->
 
-
-      <!-- SNSはカード外：月額カードの下 -->
+      <!-- ✅ SNSは「月額の直下」＝カード外 -->
       <div class="social" aria-label="SNS links">
         <a href="https://x.com/noanoshita" target="_blank" rel="noopener" aria-label="X">
           <img src="../images/X.png" alt="X">
@@ -428,7 +399,7 @@
     async function loadVideos(){
       const nowGrid = document.getElementById("videoGrid");
       const popGrid = document.getElementById("popularGrid");
-    
+
       const renderCard = (v) => `
         <div class="vcard">
           <div class="thumb-wrap">
@@ -441,37 +412,35 @@
           </div>
         </div>
       `;
-    
+
       try{
         const res = await fetch(API_URL + "?t=" + Date.now(), { cache: "no-store" });
         const data = await res.json();
-    
+
         const nowList = (data.myfans_latest || [])
           .sort((a,b)=>Number(a.order)-Number(b.order))
           .slice(0,3);
-    
+
         const popList = (data.other_bn || [])
           .sort((a,b)=>Number(a.order)-Number(b.order))
           .slice(0,3);
-    
+
         nowGrid.innerHTML = nowList.length
           ? nowList.map(renderCard).join("")
           : `<div style="opacity:.9;font-weight:800;text-shadow:var(--textShadow);">準備中</div>`;
-    
+
         if(popGrid){
           popGrid.innerHTML = popList.length
             ? popList.map(renderCard).join("")
             : `<div style="opacity:.9;font-weight:800;text-shadow:var(--textShadow);">準備中</div>`;
         }
-    
+
       }catch(e){
         nowGrid.innerHTML = `<div style="opacity:.9;font-weight:800;text-shadow:var(--textShadow);">読み込みに失敗しました</div>`;
         if(popGrid) popGrid.innerHTML = "";
       }
     }
     loadVideos();
-
-
 
     // ===== 言語（全ページ連動） =====
     const I18N = {
