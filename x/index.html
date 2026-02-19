@@ -157,35 +157,50 @@
       border-radius:18px;
       overflow:hidden;
       color:#fff;
+    
+      display:flex;            /* 追加 */
+      flex-direction:column;   /* 追加 */
+      height:100%;             /* 追加：列揃え */
     }
 
-    /* サムネ枠：固定（4:5） */
+    /* サムネ枠：固定比率をやめる */
     .thumb-wrap{
       width:100%;
-      aspect-ratio:4/5;
       border-radius:16px;
       overflow:hidden;
       background:rgba(255,255,255,.18);
     }
-
-    /* サムネ：全体表示（切らない） */
+    
+    /* サムネ画像：枠幅いっぱい、縦は画像比率で決まる */
     .thumb{
       width:100%;
-      height:100%;
-      object-fit:contain;        /* ←切らずに縮小して全体表示 */
-      object-position:center;
+      height:auto;
       display:block;
-      background:rgba(0,0,0,.10); /* 余白が出るので薄い背景（不要なら消してOK） */
+      object-fit:contain;       /* 画像全体を表示（切らない） */
+      background:transparent;   /* 余白色を消す */
     }
 
-    .vmeta{ padding:10px; }
+
+    /* 画像の下の領域を伸縮させる */
+    .vmeta{
+      padding:10px;
+      display:flex;            /* 追加 */
+      flex-direction:column;   /* 追加 */
+      flex:1;                  /* 追加：ここが伸びる */
+    }
+    /* タイトルは一定行で揃える（2行推奨） */
     .vtitle{
       font-weight:900;
       font-size:14px;
       line-height:1.35;
       margin:0 0 10px;
       text-shadow:var(--textShadow);
-      min-height: 38px;
+    
+      display:-webkit-box;         /* 追加 */
+      -webkit-box-orient:vertical; /* 追加 */
+      -webkit-line-clamp:2;        /* 2行で固定 */
+      overflow:hidden;
+      min-height: calc(14px * 1.35 * 2); /* 2行分確保 */
     }
 
     .btn{
