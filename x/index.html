@@ -103,11 +103,15 @@
       padding:var(--padTop) var(--padSide) var(--padBottom);
       text-align:center;
     }
+
+    /* ✅ 右端くっつき問題の本丸：containerを常に中央 + 左右余白固定 */
     .container{
       width:100%;
       max-width:760px;
-      margin:0 auto;     /* これが中央揃えの本体 */
-      padding:0 16px;    /* ← これが左右対称余白 */
+      margin:0 auto;
+      padding-left: max(16px, env(safe-area-inset-left));
+      padding-right: max(16px, env(safe-area-inset-right));
+      box-sizing:border-box;
     }
 
     .title{
@@ -128,7 +132,7 @@
     /* ===== section ===== */
     .section{
       width:100%;
-      margin:0 0 16px;   /* ← auto不要 */
+      margin:0 0 16px;
       background:var(--cardBg);
       border:1px solid var(--cardBorder);
       border-radius:var(--cardRadius);
@@ -137,6 +141,7 @@
       -webkit-backdrop-filter:blur(14px);
       padding:var(--sectionPad);
       text-align:left;
+      box-sizing:border-box;
     }
 
     .section h2{
@@ -146,32 +151,24 @@
       text-shadow:var(--textShadow);
       text-align:left;
     }
-    
+
     /* ===== grid：デフォルトは3列（PC/横向き） ===== */
     .grid{
       display:grid;
       gap:14px;
       grid-template-columns: repeat(3, 1fr);
-    }
-    
-    /* ===== 縦持ちは必ず2列（機種依存を排除） ===== */
-    @media (orientation: portrait){
-      .grid{
-        grid-template-columns: repeat(2, 1fr);
-      }
-    
-      /* 縦持ちだけ少し詰める */
-      .btn{ padding:9px; }
-      .vtitle{ font-size:13px; }
-    }
-    
-    /* ===== さらに狭い端末だけは1列（任意） ===== */
-    @media (max-width: 360px){
-      .grid{
-        grid-template-columns: 1fr;
-      }
+      align-items:stretch;
     }
 
+    /* ✅ 縦持ちは必ず2列（機種依存排除） */
+    @media (orientation: portrait){
+      .grid{ grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* さらに狭い端末だけは1列（任意） */
+    @media (max-width: 360px){
+      .grid{ grid-template-columns: 1fr; }
+    }
 
     .vcard{
       background:rgba(255,255,255,.20);
@@ -183,6 +180,7 @@
       display:flex;
       flex-direction:column;
       height:100%;
+      min-width:0;
     }
 
     .thumb-wrap{
@@ -204,7 +202,9 @@
       display:flex;
       flex-direction:column;
       flex:1;
+      min-width:0;
     }
+
     .vtitle{
       font-weight:900;
       font-size:14px;
@@ -228,7 +228,15 @@
       text-decoration:none;
       margin-bottom:8px;
       border:1px solid rgba(255,255,255,.18);
+      box-sizing:border-box;
+
+      /* ✅ ボタン文字が2行になるのを抑止 */
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      font-size:14px;
     }
+
     .btn-main{
       background:var(--brand);
       color:#fff;
@@ -238,45 +246,41 @@
       color:#fff;
     }
 
+    /* ✅ 縦持ちだけ、ボタン/タイトルのフォントを少し落として1行に寄せる */
+    @media (orientation: portrait){
+      .vtitle{ font-size:13px; min-height: calc(13px * 1.35 * 2); }
+      .btn{ font-size:13px; padding:9px; }
+    }
+
     /* ===== 月額FCボタン（4個並び） ===== */
     .fc-btns{
       display:grid;
-      gap:12px;
       gap:10px;
       margin-top:8px;
-    
-      /* PCでは4個横並びを基本にする */
       grid-template-columns: repeat(4, 1fr);
+      align-items:stretch;
     }
-    
+
     /* タブレット */
     @media (max-width:900px){
-      .fc-btns{
-        grid-template-columns: repeat(2, 1fr);
-      }
+      .fc-btns{ grid-template-columns: repeat(2, 1fr); }
     }
-    
+
     /* スマホ */
     @media (max-width:480px){
-      .fc-btns{
-        grid-template-columns: 1fr;
-      }
+      .fc-btns{ grid-template-columns: 1fr; }
     }
-    
-    /* 月額ボタンだけ “くっついて見える” 問題を解消 */
+
     .fc-btn{
-      margin:0 !important;          /* .btnのmargin-bottomを完全に殺す */
-      padding:10px 0;               /* 横paddingを減らして安定 */
-      border-radius:12px;           /* 角丸を少し小さく */
+      margin:0 !important;
+      padding:10px 0;
+      border-radius:12px;
       min-width:0;
     }
-    
-    /* グリッド内で境界線が干渉して見えるなら薄くする */
+
     .fc-btn.btn-sub{
       border-color: rgba(255,255,255,.10);
     }
-
-
 
     /* ===== SNS（カード外：月額の直下） ===== */
     .social{
@@ -284,7 +288,7 @@
       justify-content:center;
       align-items:center;
       gap:var(--snsGap);
-      margin:0 0 16px; /* 次のUIまでの余白 */
+      margin:0 0 16px;
     }
     .social a{
       width:var(--snsSize);
@@ -368,9 +372,9 @@
           <a class="btn btn-sub  fc-btn" href="https://fantia.jp/fanclubs/532786" target="_blank" rel="noopener">Fantia</a>
           <a class="btn btn-sub  fc-btn" href="https://onlyfans.com/noanoshita" target="_blank" rel="noopener">OnlyFans</a>
         </div>
-      </div> <!-- ✅ 月額 section をここで閉じる -->
+      </div>
 
-      <!-- ✅ SNSは「月額の直下」＝カード外 -->
+      <!-- SNS：月額の直下（カード外） -->
       <div class="social" aria-label="SNS links">
         <a href="https://x.com/noanoshita" target="_blank" rel="noopener" aria-label="X">
           <img src="../images/X.png" alt="X">
@@ -430,8 +434,8 @@
     }
     setBG();
 
-    // ===== GAS JSON =====
-    const API_URL = "https://script.google.com/macros/s/AKfycbyWzml5CKfIw1qkY1exzuYA99AsdnpkuqXyNL1QM7lNNtZ5l7Z5Iib4OC-5aDs2dR2o/exec";
+    // ===== GAS JSON（新URL） =====
+    const API_URL = "https://script.google.com/macros/s/AKfycbxT_J40PjHDRD-sGVGrM3zPA8Loj7XV9yDV988lkMB7rXVQ7Epka8ZK8aOdYI5NriY1/exec";
 
     function escHtml(s){
       return String(s ?? "")
@@ -442,22 +446,36 @@
         .replaceAll("'","&#039;");
     }
 
+    function getLang(){
+      try{
+        const saved = localStorage.getItem("lang") || "ja";
+        return (saved === "en") ? "en" : "ja";
+      }catch(e){
+        return "ja";
+      }
+    }
+
     async function loadVideos(){
       const nowGrid = document.getElementById("videoGrid");
       const popGrid = document.getElementById("popularGrid");
+      const lang = getLang();
 
-      const renderCard = (v) => `
-        <div class="vcard">
-          <div class="thumb-wrap">
-            <img class="thumb" src="${escHtml(v.thumb_url)}" alt="">
+      const renderCard = (v) => {
+        const title = (lang === "en" && v.translation) ? v.translation : v.title;
+
+        return `
+          <div class="vcard">
+            <div class="thumb-wrap">
+              <img class="thumb" src="${escHtml(v.thumb_url)}" alt="">
+            </div>
+            <div class="vmeta">
+              <div class="vtitle">${escHtml(title)}</div>
+              ${v.url_CF ? `<a class="btn btn-main" href="${escHtml(v.url_CF)}" target="_blank" rel="noopener">CandFansで見る</a>` : ``}
+              ${v.url_MY ? `<a class="btn btn-sub"  href="${escHtml(v.url_MY)}" target="_blank" rel="noopener">MyFansで見る</a>`   : ``}
+            </div>
           </div>
-          <div class="vmeta">
-            <div class="vtitle">${escHtml(v.title)}</div>
-            ${v.url_CF ? `<a class="btn btn-main" href="${escHtml(v.url_CF)}" target="_blank" rel="noopener">CandFansで見る</a>` : ``}
-            ${v.url_MY ? `<a class="btn btn-sub"  href="${escHtml(v.url_MY)}" target="_blank" rel="noopener">MyFansで見る</a>`   : ``}
-          </div>
-        </div>
-      `;
+        `;
+      };
 
       try{
         const res = await fetch(API_URL + "?t=" + Date.now(), { cache: "no-store" });
@@ -486,6 +504,8 @@
         if(popGrid) popGrid.innerHTML = "";
       }
     }
+
+    // 初回描画
     loadVideos();
 
     // ===== 言語（全ページ連動） =====
@@ -522,6 +542,9 @@
       document.getElementById("btnEN").classList.toggle("is-active", lang === "en");
 
       try { localStorage.setItem("lang", lang); } catch(e) {}
+
+      // ✅ 重要：言語切替でカードも翻訳に合わせて再描画
+      loadVideos();
     }
 
     (function initLang(){
