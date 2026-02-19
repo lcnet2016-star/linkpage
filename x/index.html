@@ -216,20 +216,36 @@
     }
 
     /* ===== 月額FCボタン（4個並び） ===== */
+    /* ===== 月額FCボタン（自動調整） ===== */
     .fc-btns{
       display:grid;
-      grid-template-columns: repeat(4, 1fr); /* PCは4並び固定 */
-      gap:12px;
+      gap:10px;
       margin-top:8px;
-      align-items:stretch;
+    
+      /* 幅に応じて自動で列数を変える */
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     }
     /* スマホは2列（押しやすい） */
     @media (max-width:420px){
       .fc-btns{ grid-template-columns: repeat(2, 1fr); }
     }
+    /* ボタンは1行で収める */
     .fc-btn{
-      margin:0;       /* .btnのmargin-bottomを無効化 */
+      margin:0;
       width:100%;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    
+      /* 横幅が狭い時に自然に縮む */
+      min-width:0;
+    }
+    
+    /* さらに狭い端末は最小幅を下げる */
+    @media (max-width:420px){
+      .fc-btns{
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      }
     }
 
     /* ===== SNS（カード外：月額の直下） ===== */
