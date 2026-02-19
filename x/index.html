@@ -103,7 +103,12 @@
       padding:var(--padTop) var(--padSide) var(--padBottom);
       text-align:center;
     }
-    .container{width:min(var(--containerMax),100%)}
+    .container{
+      width:100%;
+      max-width:760px;
+      margin:0 auto;     /* これが中央揃えの本体 */
+      padding:0 16px;    /* ← これが左右対称余白 */
+    }
 
     .title{
       margin:0 0 6px;
@@ -122,10 +127,8 @@
 
     /* ===== section ===== */
     .section{
-      /* 760pxまで。スマホでも左右に余白が残る（左右合計24px） */
-      width: min(var(--cardMax), calc(100% - 24px));
-      margin: 0 auto 16px;
-    
+      width:100%;
+      margin:0 0 16px;   /* ← auto不要 */
       background:var(--cardBg);
       border:1px solid var(--cardBorder);
       border-radius:var(--cardRadius);
@@ -135,6 +138,7 @@
       padding:var(--sectionPad);
       text-align:left;
     }
+
     .section h2{
       margin:0 0 12px;
       font-size:18px;
