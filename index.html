@@ -247,31 +247,13 @@
         </a>
       </div>
 
-      <!-- 3つの入口（カード画像は png 指定） -->
-      <div class="cards" aria-label="Entry links">
-        <a class="card" href="newbee/" aria-label="Newbee entry">
-          <img class="logo" src="../images/newbee_icon.png" alt="Newbee">
+      <!-- 入口は1つだけ：秘密の日記 → /verify/ -->
+      <div class="cards" aria-label="Entry link">
+        <a class="card" id="secretLink" href="../verify/" aria-label="Age verification">
+          <img class="logo" src="../images/lock_icon.png" alt="Secret diary">
           <div class="meta">
-            <div class="h" id="c1h">はじめての人</div>
-            <div class="d" id="c1d">おすすめから最短で見つける</div>
-          </div>
-          <div class="chev">›</div>
-        </a>
-
-        <a class="card" href="fans/" aria-label="Fans entry">
-          <img class="logo" src="../images/fans_icon.png" alt="Fans">
-          <div class="meta">
-            <div class="h" id="c2h">ファンの人</div>
-            <div class="d" id="c2d">今週の更新・限定案内</div>
-          </div>
-          <div class="chev">›</div>
-        </a>
-
-        <a class="card" href="links/" aria-label="All links">
-          <img class="logo" src="../images/link_icon.png" alt="Links">
-          <div class="meta">
-            <div class="h" id="c3h">リンク集</div>
-            <div class="d" id="c3d">全部まとめて見る</div>
+            <div class="h" id="c1h">秘密の日記</div>
+            <div class="d" id="c1d">年齢確認してから見る</div>
           </div>
           <div class="chev">›</div>
         </a>
@@ -287,6 +269,25 @@
   </div>
 
   <script>
+    // ===== 遷移先（verifyが既存なのでここ固定） =====
+    // entry/ から見て ../verify/ が正しい想定
+    const VERIFY_URL = "../verify/";
+
+    (function wireSecretLink(){
+      const a = document.getElementById("secretLink");
+      if(!a) return;
+      a.href = VERIFY_URL;
+
+      a.addEventListener("click", () => {
+        try{
+          gtag("event", "click_entry_secret_diary", {
+            event_category: "entry",
+            event_label: VERIFY_URL
+          });
+        }catch(e){}
+      });
+    })();
+
     // ===== 背景画像（entry配下なので ../images/） =====
     const BG = {
       morning: "../images/morning.png",
@@ -330,17 +331,15 @@
         htmlLang:"ja",
         title:"のあ୨୧",
         sub:"田舎で暮らす陰キャ女子",
-        c1h:"はじめての人", c1d:"おすすめから最短で見つける",
-        c2h:"ファンの人",   c2d:"今週の更新・限定案内",
-        c3h:"リンク集",     c3d:"全部まとめて見る"
+        c1h:"秘密の日記",
+        c1d:"年齢確認してから見る"
       },
       en: {
         htmlLang:"en",
         title:"Noa",
         sub:"Quiet countryside girl",
-        c1h:"New here",   c1d:"Start with curated picks",
-        c2h:"For fans",   c2d:"Weekly updates / notices",
-        c3h:"All links",  c3d:"See everything"
+        c1h:"Secret diary",
+        c1d:"Confirm age to continue"
       }
     };
 
@@ -353,10 +352,6 @@
 
       document.getElementById("c1h").textContent = t.c1h;
       document.getElementById("c1d").textContent = t.c1d;
-      document.getElementById("c2h").textContent = t.c2h;
-      document.getElementById("c2d").textContent = t.c2d;
-      document.getElementById("c3h").textContent = t.c3h;
-      document.getElementById("c3d").textContent = t.c3d;
 
       document.getElementById("btnJP").classList.toggle("is-active", lang === "ja");
       document.getElementById("btnEN").classList.toggle("is-active", lang === "en");
