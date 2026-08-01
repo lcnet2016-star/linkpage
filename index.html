@@ -12,8 +12,8 @@
 
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Noa | entry</title>
-  <meta name="description" content="Noa entry page" />
+  <title>Noa | links</title>
+  <meta name="description" content="Noa links" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,25 +36,17 @@
       --titleColor:#fff; --subtitleColor:rgba(255,255,255,.9);
       --textShadow:0 6px 20px rgba(0,0,0,.35);
 
-      --snsSize:88px; --snsIconSize:40px; --snsGap:10px; --snsRadius:14px;
-
-      --cardMax:560px;
       --cardBg:rgba(255,255,255,.25);
       --cardBorder:rgba(255,255,255,.28);
       --cardRadius:22px;
-      --cardPadY:16px; --cardPadX:18px;
       --cardShadow:0 18px 50px rgba(0,0,0,.20), inset 0 1px 0 rgba(255,255,255,.35);
 
-      --logoSize:58px; --logoRadius:16px;
-
-      --cardTitleSize:20px; --cardDescSize:14px;
-      --cardText:#fff;
-      --chevOpacity:.5;
+      --sectionPad:18px;
+      --brand:#A67189;
 
       --footerColor:rgba(255,255,255,.78);
       --footerSize:12px;
 
-      /* language switch */
       --langGap:10px;
       --langMt:14px;
       --langBtnH:34px;
@@ -71,10 +63,9 @@
       :root{
         --padTop:22px;
         --titleSize:30px; --subtitleSize:16px;
-        --snsSize:72px; --snsIconSize:34px;
-        --cardMax:92%;
         --langBtnH:32px;
         --langBtnPx:12px;
+        --sectionPad:16px;
       }
     }
 
@@ -83,7 +74,6 @@
       margin:0;
       font-family:var(--fontFamily);
       color:var(--titleColor);
-
       background-color:var(--bgBase);
       background-image:none;
       background-size:var(--bgSize);
@@ -106,8 +96,17 @@
       justify-content:center;
       padding:var(--padTop) var(--padSide) var(--padBottom);
       text-align:center;
+      box-sizing:border-box;
     }
-    .container{width:min(var(--containerMax),100%)}
+
+    .container{
+      width:100%;
+      max-width:760px;
+      margin:0 auto;
+      padding-left:max(16px, env(safe-area-inset-left));
+      padding-right:max(16px, env(safe-area-inset-right));
+      box-sizing:border-box;
+    }
 
     .title{
       margin:0 0 6px;
@@ -124,100 +123,168 @@
       text-shadow:var(--textShadow);
     }
 
-    .social{
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      gap:var(--snsGap);
-      margin:0 0 18px;
-    }
-    .social a{
-      width:var(--snsSize);
-      height:var(--snsSize);
-      display:grid;
-      place-items:center;
-      border-radius:var(--snsRadius);
-      text-decoration:none;
-      background:transparent;
-    }
-    .social img{
-      width:var(--snsIconSize);
-      height:var(--snsIconSize);
-      display:block;
-      filter:brightness(0) invert(1);
-    }
-
-    .cards{
-      display:flex;
-      flex-direction:column;
-      gap:14px;
-      align-items:center;
-    }
-
-    .card{
-      width:min(var(--cardMax),100%);
-      margin:0 auto;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:14px;
-
+    .section{
+      width:100%;
+      margin:0 0 16px;
       background:var(--cardBg);
       border:1px solid var(--cardBorder);
       border-radius:var(--cardRadius);
       box-shadow:var(--cardShadow);
       backdrop-filter:blur(14px);
       -webkit-backdrop-filter:blur(14px);
-
-      padding:var(--cardPadY) var(--cardPadX);
-      color:var(--cardText);
-      text-decoration:none;
-      transition:transform .08s ease, filter .18s ease;
+      padding:var(--sectionPad);
+      text-align:left;
+      box-sizing:border-box;
     }
-    .card:hover{filter:brightness(1.03)}
-    .card:active{transform:scale(.985)}
 
-    .logo{
-      width:var(--logoSize);
-      height:var(--logoSize);
-      border-radius:var(--logoRadius);
+    .section h2{
+      margin:0 0 12px;
+      font-size:18px;
+      font-weight:900;
+      text-shadow:var(--textShadow);
+      text-align:left;
+    }
+
+    .grid{
+      display:grid;
+      gap:14px;
+      grid-template-columns:repeat(3, 1fr);
+      align-items:stretch;
+    }
+
+    @media (orientation:portrait){
+      .grid{grid-template-columns:repeat(2, 1fr)}
+    }
+
+    @media (max-width:360px){
+      .grid{grid-template-columns:1fr}
+    }
+
+    .vcard{
+      background:rgba(255,255,255,.20);
+      border:1px solid rgba(255,255,255,.22);
+      border-radius:18px;
+      overflow:hidden;
+      color:#fff;
+      display:flex;
+      flex-direction:column;
+      height:100%;
+      min-width:0;
+    }
+
+    .platform-name{
+      padding:9px 10px 7px;
+      font-size:14px;
+      font-weight:900;
+      text-align:center;
+      text-shadow:var(--textShadow);
+    }
+
+    .thumb-wrap{
+      width:100%;
+      aspect-ratio:16 / 9;
+      overflow:hidden;
+      background:rgba(255,255,255,.18);
+    }
+
+    .thumb{
+      width:100%;
+      height:100%;
+      display:block;
       object-fit:cover;
-      background:#fff;
-      flex:0 0 auto;
+      background:transparent;
     }
 
-    .meta{ text-align:left; min-width:0; flex:1; }
-    .h{ font-weight:900; font-size:var(--cardTitleSize); }
-    .d{ margin-top:4px; font-weight:800; font-size:var(--cardDescSize); opacity:.95; }
+    .vmeta{
+      padding:10px;
+      display:flex;
+      flex-direction:column;
+      flex:1;
+      min-width:0;
+    }
 
-    .chev{ font-weight:900; opacity:var(--chevOpacity); font-size:22px }
+    .vtitle{
+      font-weight:900;
+      font-size:14px;
+      line-height:1.35;
+      margin:0 0 10px;
+      text-shadow:var(--textShadow);
+      display:-webkit-box;
+      -webkit-box-orient:vertical;
+      -webkit-line-clamp:2;
+      overflow:hidden;
+      min-height:calc(14px * 1.35 * 2);
+    }
+
+    .btn{
+      display:block;
+      text-align:center;
+      padding:10px;
+      border-radius:14px;
+      font-weight:900;
+      text-decoration:none;
+      border:1px solid rgba(255,255,255,.18);
+      box-sizing:border-box;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      font-size:14px;
+    }
+
+    .vmeta .btn{margin-top:auto}
+
+    .btn-main{
+      background:var(--brand);
+      color:#fff;
+    }
+
+    @media (orientation:portrait){
+      .vtitle{font-size:13px; min-height:calc(13px * 1.35 * 2)}
+      .btn{font-size:13px; padding:9px}
+    }
+
+    .fc-btn{
+      width:100%;
+      margin:0;
+      padding:12px 14px;
+      border-radius:14px;
+    }
+
+    .loading{
+      grid-column:1 / -1;
+      opacity:.9;
+      font-weight:800;
+      text-align:center;
+      text-shadow:var(--textShadow);
+      padding:8px 0;
+    }
 
     .lang{
-      margin-top: var(--langMt);
+      margin-top:var(--langMt);
       display:flex;
       justify-content:center;
-      gap: var(--langGap);
+      gap:var(--langGap);
     }
     .lang button{
-      height: var(--langBtnH);
-      padding: 0 var(--langBtnPx);
-      border-radius: var(--langBtnRadius);
-      background: var(--langBtnBg);
-      border: 1px solid var(--langBtnBorder);
-      color: var(--langBtnText);
-      font-weight: 900;
-      font-family: var(--fontFamily);
+      height:var(--langBtnH);
+      padding:0 var(--langBtnPx);
+      border-radius:var(--langBtnRadius);
+      background:var(--langBtnBg);
+      border:1px solid var(--langBtnBorder);
+      color:var(--langBtnText);
+      font-weight:900;
+      font-family:var(--fontFamily);
       cursor:pointer;
-      text-shadow: var(--textShadow);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      transition: filter .18s ease, transform .08s ease, background .18s ease, color .18s ease;
+      text-shadow:var(--textShadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      transition:filter .18s ease, transform .08s ease, background .18s ease, color .18s ease;
     }
-    .lang button:hover{ filter: brightness(1.08); }
-    .lang button:active{ transform: scale(.98); }
+    .lang button:hover{filter:brightness(1.08)}
+    .lang button:active{transform:scale(.98)}
     .lang button.is-active{
-      background: var(--langBtnBgActive);
-      color: var(--langBtnTextActive);
+      background:var(--langBtnBgActive);
+      color:var(--langBtnTextActive);
     }
 
     .foot{
@@ -225,6 +292,7 @@
       font-size:var(--footerSize);
       color:var(--footerColor);
       text-shadow:var(--textShadow);
+      text-align:center;
     }
   </style>
 </head>
@@ -235,28 +303,21 @@
       <h1 class="title" id="tTitle">のあ୨୧</h1>
       <p class="subtitle" id="tSub">田舎で暮らす陰キャ女子</p>
 
-      <div class="social" aria-label="SNS links">
-        <a href="https://x.com/noanoshita" target="_blank" rel="noopener" aria-label="X">
-          <img src="../images/X.png" alt="X">
-        </a>
-        <a href="https://www.instagram.com/noanoshita/" target="_blank" rel="noopener" aria-label="Instagram">
-          <img src="../images/instagram.png" alt="Instagram">
-        </a>
-        <a href="https://www.youtube.com/@challengenoa" target="_blank" rel="noopener" aria-label="YouTube">
-          <img src="../images/Youtube.png" alt="YouTube">
-        </a>
+      <div class="section" aria-label="Latest social posts">
+        <h2 id="secSocial">📱 SNSをチェックする</h2>
+        <div class="grid" id="snsGrid">
+          <div class="loading">読み込み中...</div>
+        </div>
       </div>
 
-      <!-- 入口は1つだけ：秘密の日記 → /verify/ -->
-      <div class="cards" aria-label="Entry link">
-        <a class="card" id="secretLink" href="../verify/" aria-label="Age verification">
-          <img class="logo" src="../images/fans_icon.png" alt="Secret diary">
-          <div class="meta">
-            <div class="h" id="c1h">秘密の日記</div>
-            <div class="d" id="c1d">年齢確認してから見る</div>
-          </div>
-          <div class="chev">›</div>
-        </a>
+      <div class="section" aria-label="Fan club list">
+        <h2 id="secFanclub">🔞 18歳以上はこちら</h2>
+        <a
+          class="btn btn-main fc-btn"
+          id="fanclubLink"
+          href="https://noanoshita.com/verify/"
+          aria-label="ファンクラブ一覧"
+        >ファンクラブ一覧</a>
       </div>
 
       <div class="lang" aria-label="Language switch">
@@ -269,30 +330,11 @@
   </div>
 
   <script>
-    // ===== 遷移先（verifyが既存なのでここ固定） =====
-    // entry/ から見て ../verify/ が正しい想定
-    const VERIFY_URL = "../verify/";
-
-    (function wireSecretLink(){
-      const a = document.getElementById("secretLink");
-      if(!a) return;
-      a.href = VERIFY_URL;
-
-      a.addEventListener("click", () => {
-        try{
-          gtag("event", "click_entry_secret_diary", {
-            event_category: "entry",
-            event_label: VERIFY_URL
-          });
-        }catch(e){}
-      });
-    })();
-
-    // ===== 背景画像（entry配下なので ../images/） =====
+    // ===== 背景画像（ルート直下のindex.htmlから参照） =====
     const BG = {
-      morning: "../images/morning.png",
-      evening: "../images/evening.jpg",
-      night: "../images/night.jpg"
+      morning:"images/morning.png",
+      evening:"images/evening.jpg",
+      night:"images/night.jpg"
     };
 
     function pickBgByTime(){
@@ -307,13 +349,18 @@
       img.onload = () => {
         const portrait = img.naturalHeight > img.naturalWidth;
         document.documentElement.style.setProperty('--bgSize', portrait ? 'contain' : 'cover');
-        document.body.style.setProperty('--veilOpacity', portrait ? getComputedStyle(document.documentElement).getPropertyValue('--veilOpacityPortrait').trim() : '.30');
-        document.body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bgBase').trim();
+        document.documentElement.style.setProperty(
+          '--veilOpacity',
+          portrait
+            ? getComputedStyle(document.documentElement).getPropertyValue('--veilOpacityPortrait').trim()
+            : '.30'
+        );
+        document.body.style.backgroundColor = getComputedStyle(document.documentElement)
+          .getPropertyValue('--bgBase').trim();
       };
       img.onerror = () => {
         document.documentElement.style.setProperty('--bgSize', 'cover');
-        document.body.style.setProperty('--veilOpacity', '.30');
-        document.body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bgBase').trim();
+        document.documentElement.style.setProperty('--veilOpacity', '.30');
       };
       img.src = imgUrl;
     }
@@ -325,21 +372,141 @@
     }
     setBG();
 
-    // ===== 言語（全ページ連動） =====
+    // ===== SNS同期API =====
+    const SNS_API_URL = "https://script.google.com/macros/s/AKfycbyV4N5O_3INXD4ry7lWM8HoYIsHjPSAHO_0BSSY1_m5fwQQ7H940VyCgAbU_eBGTW5C/exec";
+
+    // Instagram・Xの自動取得が完成するまで使用する仮サムネイル
+    const PLACEHOLDER_THUMB = "images/NY.jpg";
+
+    const SNS_LINKS = {
+      youtube:"https://www.youtube.com/@challengenoa",
+      instagram:"https://www.instagram.com/noanoshita/",
+      x:"https://x.com/noanoshita"
+    };
+
+    function escHtml(value){
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function getLang(){
+      try{
+        return localStorage.getItem("lang") === "en" ? "en" : "ja";
+      }catch(e){
+        return "ja";
+      }
+    }
+
+    function buildSnsCard(item){
+      return `
+        <div class="vcard">
+          <div class="platform-name">${escHtml(item.platform)}</div>
+          <div class="thumb-wrap">
+            <img class="thumb" src="${escHtml(item.thumb)}" alt="${escHtml(item.platform)} 最新投稿">
+          </div>
+          <div class="vmeta">
+            <div class="vtitle">${escHtml(item.title)}</div>
+            <a
+              class="btn btn-main"
+              href="${escHtml(item.url)}"
+              target="_blank"
+              rel="noopener"
+              data-platform="${escHtml(item.key)}"
+            >${escHtml(item.button)}</a>
+          </div>
+        </div>
+      `;
+    }
+
+    async function loadLatestSns(){
+      const grid = document.getElementById("snsGrid");
+      const lang = getLang();
+      const t = I18N[lang] || I18N.ja;
+
+      let youtube = null;
+
+      try{
+        const response = await fetch(SNS_API_URL + "?t=" + Date.now(), {cache:"no-store"});
+        if(!response.ok) throw new Error("HTTP " + response.status);
+        const data = await response.json();
+        youtube = data.youtube_latest || null;
+      }catch(error){
+        console.error("SNS API load error:", error);
+      }
+
+      const items = [
+        {
+          key:"youtube",
+          platform:"YouTube",
+          title:youtube && youtube.title ? youtube.title : t.youtubeFallback,
+          thumb:youtube && youtube.thumb_url ? youtube.thumb_url : PLACEHOLDER_THUMB,
+          url:youtube && youtube.url ? youtube.url : SNS_LINKS.youtube,
+          button:t.youtubeButton
+        },
+        {
+          key:"instagram",
+          platform:"Instagram",
+          title:t.instagramPending,
+          thumb:PLACEHOLDER_THUMB,
+          url:SNS_LINKS.instagram,
+          button:t.instagramButton
+        },
+        {
+          key:"x",
+          platform:"X",
+          title:t.xPending,
+          thumb:PLACEHOLDER_THUMB,
+          url:SNS_LINKS.x,
+          button:t.xButton
+        }
+      ];
+
+      grid.innerHTML = items.map(buildSnsCard).join("");
+
+      grid.querySelectorAll("a[data-platform]").forEach(link => {
+        link.addEventListener("click", () => {
+          try{
+            gtag("event", "click_latest_sns", {
+              event_category:"sns",
+              event_label:link.dataset.platform
+            });
+          }catch(e){}
+        });
+      });
+    }
+
     const I18N = {
-      ja: {
+      ja:{
         htmlLang:"ja",
         title:"のあ୨୧",
         sub:"田舎で暮らす陰キャ女子",
-        c1h:"秘密の日記",
-        c1d:"年齢確認してから見る"
+        secSocial:"📱 SNSをチェックする",
+        secFanclub:"🔞 18歳以上はこちら",
+        fanclubButton:"ファンクラブ一覧",
+        youtubeButton:"YouTubeで見る",
+        instagramButton:"Instagramで見る",
+        xButton:"Xで見る",
+        youtubeFallback:"最新動画をYouTubeで見る",
+        instagramPending:"最新投稿は準備中です",
+        xPending:"最新投稿は準備中です"
       },
-      en: {
+      en:{
         htmlLang:"en",
         title:"Noa",
         sub:"Quiet countryside girl",
-        c1h:"Secret diary",
-        c1d:"Confirm age to continue"
+        secSocial:"📱 Check my social media",
+        secFanclub:"🔞 For adults only",
+        fanclubButton:"Fan club list",
+        youtubeButton:"Watch on YouTube",
+        instagramButton:"View on Instagram",
+        xButton:"View on X",
+        youtubeFallback:"Watch the latest video on YouTube",
+        instagramPending:"Latest post coming soon",
+        xPending:"Latest post coming soon"
       }
     };
 
@@ -349,19 +516,20 @@
 
       document.getElementById("tTitle").textContent = t.title;
       document.getElementById("tSub").textContent = t.sub;
-
-      document.getElementById("c1h").textContent = t.c1h;
-      document.getElementById("c1d").textContent = t.c1d;
+      document.getElementById("secSocial").textContent = t.secSocial;
+      document.getElementById("secFanclub").textContent = t.secFanclub;
+      document.getElementById("fanclubLink").textContent = t.fanclubButton;
 
       document.getElementById("btnJP").classList.toggle("is-active", lang === "ja");
       document.getElementById("btnEN").classList.toggle("is-active", lang === "en");
 
-      try { localStorage.setItem("lang", lang); } catch(e) {}
+      try{localStorage.setItem("lang", lang)}catch(e){}
+      loadLatestSns();
     }
 
     (function initLang(){
       let saved = "ja";
-      try { saved = localStorage.getItem("lang") || "ja"; } catch(e) {}
+      try{saved = localStorage.getItem("lang") || "ja"}catch(e){}
       setLang(saved === "en" ? "en" : "ja");
     })();
   </script>
