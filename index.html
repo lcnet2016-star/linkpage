@@ -332,9 +332,9 @@
   <script>
     // ===== 背景画像（ルート直下のindex.htmlから参照） =====
     const BG = {
-      morning:"images/morning.png",
-      evening:"images/evening.jpg",
-      night:"images/night.jpg"
+      morning:"/images/morning.png",
+      evening:"/images/evening.jpg",
+      night:"/images/night.jpg"
     };
 
     function pickBgByTime(){
@@ -375,13 +375,13 @@
     // ===== SNS同期API =====
     const SNS_API_URL = "https://script.google.com/macros/s/AKfycbyV4N5O_3INXD4ry7lWM8HoYIsHjPSAHO_0BSSY1_m5fwQQ7H940VyCgAbU_eBGTW5C/exec";
 
-    // Instagram・Xの自動取得が完成するまで使用する仮サムネイル
-    const PLACEHOLDER_THUMB = "images/NY.jpg";
+    // Xの自動取得が完成するまで使用する仮サムネイル
+    const PLACEHOLDER_THUMB = "/images/NY.jpg";
 
     const SNS_LINKS = {
       youtube:"https://www.youtube.com/@challengenoa",
       instagram:"https://www.instagram.com/noanoshita/",
-      x:"https://x.com/noachidesu"
+      x:"https://x.com/noanoshita"
     };
 
     function escHtml(value){
@@ -428,12 +428,14 @@
       const t = I18N[lang] || I18N.ja;
 
       let youtube = null;
+      let instagram = null;
 
       try{
         const response = await fetch(SNS_API_URL + "?t=" + Date.now(), {cache:"no-store"});
         if(!response.ok) throw new Error("HTTP " + response.status);
         const data = await response.json();
         youtube = data.youtube_latest || null;
+        instagram = data.instagram_latest || null;
       }catch(error){
         console.error("SNS API load error:", error);
       }
@@ -450,9 +452,9 @@
         {
           key:"instagram",
           platform:"Instagram",
-          title:t.instagramPending,
-          thumb:PLACEHOLDER_THUMB,
-          url:SNS_LINKS.instagram,
+          title:instagram && instagram.title ? instagram.title : t.instagramFallback,
+          thumb:instagram && instagram.thumb_url ? instagram.thumb_url : PLACEHOLDER_THUMB,
+          url:instagram && instagram.url ? instagram.url : SNS_LINKS.instagram,
           button:t.instagramButton
         },
         {
@@ -491,7 +493,7 @@
         instagramButton:"Instagramで見る",
         xButton:"Xで見る",
         youtubeFallback:"最新動画をYouTubeで見る",
-        instagramPending:"最新投稿は準備中です",
+        instagramFallback:"最新投稿をInstagramで見る",
         xPending:"最新投稿は準備中です"
       },
       en:{
@@ -505,7 +507,7 @@
         instagramButton:"View on Instagram",
         xButton:"View on X",
         youtubeFallback:"Watch the latest video on YouTube",
-        instagramPending:"Latest post coming soon",
+        instagramFallback:"View the latest post on Instagram",
         xPending:"Latest post coming soon"
       }
     };
