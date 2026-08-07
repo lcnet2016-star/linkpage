@@ -180,6 +180,12 @@
       .grid{grid-template-columns:1fr}
     }
 
+    /* 期間限定が1件だけなら中央配置 */
+    #campaignGrid.single-item{
+      grid-template-columns:minmax(0,1fr);
+      max-width:220px;
+      margin:0 auto;
+    }
 
     .vcard{
       background:rgba(255,255,255,.20);
@@ -376,6 +382,32 @@
       text-align:center;
     }
 
+
+    .campaign-preview-text{
+      grid-column:1 / -1;
+      padding:10px 4px 2px;
+      text-align:left;
+      color:#fff;
+      font-weight:900;
+      line-height:1.65;
+      text-shadow:var(--textShadow);
+    }
+
+    .campaign-preview-text .preview-title{
+      display:block;
+      font-size:16px;
+      margin-bottom:2px;
+    }
+
+    .preview-date{
+      margin-top:auto;
+      color:#fff;
+      font-size:13px;
+      font-weight:900;
+      line-height:1.45;
+      text-shadow:var(--textShadow);
+    }
+
     [hidden]{display:none !important}
   </style>
 </head>
@@ -554,6 +586,21 @@
     }
 
     // ===== CMS：期間限定 =====
+    function formatUpcomingText(item, lang){
+      const date = new Date(Number(item.start_at_ms));
+
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      const hour = String(date.getHours()).padStart(2,"0");
+      const minute = String(date.getMinutes()).padStart(2,"0");
+
+      if(lang === "en"){
+        return `${month}/${day} ${hour}:${minute} Coming soon!?`;
+      }
+
+      return `${month}/${day} ${hour}:${minute}から開催予定！？`;
+    }
+
     function renderCampaignCard(c){
       const lang = getLang();
       const image = c.image_url || FALLBACK_IMAGE;
@@ -589,6 +636,33 @@
       `;
     }
 
+    function renderUpcomingCard(item){
+      const lang = getLang();
+
+      return `
+        <div class="vcard">
+          ${thumbHtml(FALLBACK_IMAGE, item.title || "")}
+          <div class="vmeta">
+            <div class="vtitle">${escHtml(item.title || "")}</div>
+            <div class="preview-date">
+              ${escHtml(formatUpcomingText(item, lang))}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderUpcomingText(item){
+      const lang = getLang();
+
+      return `
+        <div class="campaign-preview-text">
+          <span class="preview-title">${escHtml(item.title || "")}</span>
+          <span>${escHtml(formatUpcomingText(item, lang))}</span>
+        </div>
+      `;
+    }
+
     async function loadCampaigns(){
       const section = document.getElementById("campaignSection");
       const grid = document.getElementById("campaignGrid");
@@ -604,18 +678,32 @@
         if(!res.ok) throw new Error("HTTP " + res.status);
 
         const data = await res.json();
+
         const campaigns = Array.isArray(data.campaigns)
           ? data.campaigns
           : [];
 
-        if(!campaigns.length){
+        const upcoming = Array.isArray(data.upcoming)
+          ? data.upcoming
+          : [];
+
+        if(!campaigns.length && !upcoming.length){
           section.hidden = true;
           grid.innerHTML = "";
           return;
         }
 
-        grid.innerHTML = campaigns.map(renderCampaignCard).join("");
         section.hidden = false;
+
+        if(!campaigns.length && upcoming.length){
+          grid.innerHTML = upcoming.map(renderUpcomingText).join("");
+          return;
+        }
+
+        const liveCards = campaigns.map(renderCampaignCard).join("");
+        const upcomingCards = upcoming.map(renderUpcomingCard).join("");
+
+        grid.innerHTML = liveCards + upcomingCards;
 
       }catch(error){
         console.error("CMS API load error:",error);
