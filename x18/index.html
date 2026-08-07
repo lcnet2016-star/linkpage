@@ -3,6 +3,15 @@
 <head>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-VSEFPGK0YZ"></script>
+      <div class="lang" aria-label="Language switch">
+        <button id="btnJP" type="button" onclick="setLang('ja')">JP</button>
+        <button id="btnEN" type="button" onclick="setLang('en')">EN</button>
+      </div>
+
+      <div class="foot">© Noa</div>
+    </div>
+  </div>
+
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -183,19 +192,42 @@
       min-width:0;
     }
 
+
+
+    /* ===== 正方形サムネ共通 ===== */
     .thumb-wrap{
+      position:relative;
       width:100%;
+      aspect-ratio:1 / 1;
       border-radius:16px;
       overflow:hidden;
       background:rgba(255,255,255,.18);
     }
+
+    .thumb-bg{
+      position:absolute;
+      inset:-8%;
+      width:116%;
+      height:116%;
+      object-fit:cover;
+      filter:blur(18px) brightness(.62);
+      opacity:.55;
+      transform:scale(1.08);
+      pointer-events:none;
+      user-select:none;
+    }
+
     .thumb{
+      position:relative;
+      z-index:1;
       width:100%;
-      height:auto;
+      height:100%;
       display:block;
       object-fit:contain;
       background:transparent;
     }
+
+    [hidden]{ display:none !important; }
 
     .vmeta{
       padding:10px;
@@ -350,6 +382,12 @@
       <h1 class="title" id="tTitle">のあ୨୧</h1>
       <p class="subtitle" id="tSub">田舎で暮らす陰キャ女子</p>
 
+      <!-- 🎉 期間限定（リンク集CMS） -->
+      <div class="section" id="campaignSection" aria-label="Limited campaign" hidden>
+        <h2 id="secCampaign">🎉 期間限定</h2>
+        <div class="grid" id="campaignGrid"></div>
+      </div>
+
       <!-- 🔥 今すぐ見る（myfans_latest order 1..3） -->
       <div class="section" aria-label="Watch now">
         <h2 id="secNow">🔥 今すぐ見る</h2>
@@ -434,6 +472,10 @@
     // ===== GAS JSON（新URL） =====
     const API_URL = "https://script.google.com/macros/s/AKfycbxT_J40PjHDRD-sGVGrM3zPA8Loj7XV9yDV988lkMB7rXVQ7Epka8ZK8aOdYI5NriY1/exec";
 
+    // ===== リンク集CMS API =====
+    const CMS_API_URL = "https://script.google.com/macros/s/AKfycbyyhzKs--PsnAylt-bAgGeTOpMV14CrvJieNXsaIBYSDUrlWl0PXmhm_FvhrYKf65QqRw/exec";
+    const CMS_FALLBACK_IMAGE = "../images/NY.jpg";
+
     function escHtml(s){
       return String(s ?? "")
         .replaceAll("&","&amp;")
@@ -452,6 +494,63 @@
       }
     }
 
+
+    function renderCampaignCard(c){
+      const image = c.image_url || CMS_FALLBACK_IMAGE;
+      const buttons = Array.isArray(c.links)
+        ? c.links
+            .filter(link => link && link.url)
+            .slice(0,4)
+            .map((link, index) => {
+              const cls = index === 0 ? "btn btn-main" : "btn btn-sub";
+              return `<a class="${cls}" href="${escHtml(link.url)}" target="_blank" rel="noopener">${escHtml(link.text || "見る")}</a>`;
+            })
+            .join("")
+        : "";
+
+      return `
+        <div class="vcard">
+          <div class="thumb-wrap">
+            <img class="thumb-bg" src="${escHtml(image)}" alt="" aria-hidden="true">
+            <img class="thumb" src="${escHtml(image)}" alt="${escHtml(c.title || "")}">
+          </div>
+          <div class="vmeta">
+            <div class="vtitle">${escHtml(c.title || "")}</div>
+            ${buttons}
+          </div>
+        </div>
+      `;
+    }
+
+    async function loadCampaigns(){
+      const section = document.getElementById("campaignSection");
+      const grid = document.getElementById("campaignGrid");
+
+      if(!section || !grid) return;
+
+      try{
+        const res = await fetch(CMS_API_URL + "?t=" + Date.now(), { cache:"no-store" });
+        if(!res.ok) throw new Error("HTTP " + res.status);
+
+        const data = await res.json();
+        const campaigns = Array.isArray(data.campaigns) ? data.campaigns : [];
+
+        if(!campaigns.length){
+          section.hidden = true;
+          grid.innerHTML = "";
+          return;
+        }
+
+        grid.innerHTML = campaigns.map(renderCampaignCard).join("");
+        section.hidden = false;
+
+      }catch(error){
+        console.error("CMS API load error:", error);
+        section.hidden = true;
+        grid.innerHTML = "";
+      }
+    }
+
     async function loadVideos(){
       const nowGrid = document.getElementById("videoGrid");
       const popGrid = document.getElementById("popularGrid");
@@ -463,6 +562,7 @@
         return `
           <div class="vcard">
             <div class="thumb-wrap">
+              <img class="thumb-bg" src="${escHtml(v.thumb_url)}" alt="" aria-hidden="true">
               <img class="thumb" src="${escHtml(v.thumb_url)}" alt="">
             </div>
             <div class="vmeta">
@@ -503,6 +603,7 @@
     }
 
     // 初回描画
+    loadCampaigns();
     loadVideos();
 
     // ===== 言語（全ページ連動） =====
@@ -511,6 +612,7 @@
         htmlLang:"ja",
         title:"のあ୨୧",
         sub:"田舎で暮らす陰キャ女子",
+        secCampaign:"🎉 期間限定",
         secNow:"🔥 今すぐ見る",
         secPop:"⭐ 人気3本",
         secSub:"💎 月額で全部見る"
@@ -519,6 +621,7 @@
         htmlLang:"en",
         title:"Noa",
         sub:"Quiet countryside girl",
+        secCampaign:"🎉 Limited time",
         secNow:"🔥 Watch now",
         secPop:"⭐ Popular 3",
         secSub:"💎 Subscribe monthly"
@@ -531,6 +634,7 @@
 
       document.getElementById("tTitle").textContent = t.title;
       document.getElementById("tSub").textContent = t.sub;
+      document.getElementById("secCampaign").textContent = t.secCampaign;
       document.getElementById("secNow").textContent = t.secNow;
       document.getElementById("secPop").textContent = t.secPop;
       document.getElementById("secSub").textContent = t.secSub;
