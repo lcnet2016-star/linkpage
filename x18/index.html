@@ -180,12 +180,6 @@
       .grid{grid-template-columns:1fr}
     }
 
-    /* 期間限定が1件だけなら中央配置 */
-    #campaignGrid.single-item{
-      grid-template-columns:minmax(0,1fr);
-      max-width:220px;
-      margin:0 auto;
-    }
 
     .vcard{
       background:rgba(255,255,255,.20);
@@ -617,11 +611,9 @@
         if(!campaigns.length){
           section.hidden = true;
           grid.innerHTML = "";
-          grid.classList.remove("single-item");
           return;
         }
 
-        grid.classList.toggle("single-item", campaigns.length === 1);
         grid.innerHTML = campaigns.map(renderCampaignCard).join("");
         section.hidden = false;
 
@@ -629,7 +621,6 @@
         console.error("CMS API load error:",error);
         section.hidden = true;
         grid.innerHTML = "";
-        grid.classList.remove("single-item");
       }
     }
 
