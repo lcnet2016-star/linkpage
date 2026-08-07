@@ -1,4 +1,5 @@
 <!doctype html>
+<!-- redeploy -->
 <html lang="ja">
 <head>
   <!-- Google tag (gtag.js) -->
@@ -36,9 +37,6 @@
       --titleColor:#fff; --subtitleColor:rgba(255,255,255,.9);
       --textShadow:0 6px 20px rgba(0,0,0,.35);
 
-      --snsSize:88px; --snsIconSize:40px; --snsGap:10px; --snsRadius:14px;
-
-      --cardMax:760px;
       --cardBg:rgba(255,255,255,.25);
       --cardBorder:rgba(255,255,255,.28);
       --cardRadius:22px;
@@ -50,7 +48,6 @@
       --footerColor:rgba(255,255,255,.78);
       --footerSize:12px;
 
-      /* language switch */
       --langGap:10px;
       --langMt:14px;
       --langBtnH:34px;
@@ -67,7 +64,6 @@
       :root{
         --padTop:22px;
         --titleSize:30px; --subtitleSize:16px;
-        --snsSize:72px; --snsIconSize:34px;
         --langBtnH:32px;
         --langBtnPx:12px;
         --sectionPad:16px;
@@ -79,7 +75,6 @@
       margin:0;
       font-family:var(--fontFamily);
       color:var(--titleColor);
-
       background-color:var(--bgBase);
       background-image:none;
       background-size:var(--bgSize);
@@ -102,15 +97,15 @@
       justify-content:center;
       padding:var(--padTop) var(--padSide) var(--padBottom);
       text-align:center;
+      box-sizing:border-box;
     }
 
-    /* ✅ 右端くっつき問題の本丸：containerを常に中央 + 左右余白固定 */
     .container{
       width:100%;
       max-width:760px;
       margin:0 auto;
-      padding-left: max(16px, env(safe-area-inset-left));
-      padding-right: max(16px, env(safe-area-inset-right));
+      padding-left:max(16px, env(safe-area-inset-left));
+      padding-right:max(16px, env(safe-area-inset-right));
       box-sizing:border-box;
     }
 
@@ -129,7 +124,6 @@
       text-shadow:var(--textShadow);
     }
 
-    /* ===== section ===== */
     .section{
       width:100%;
       margin:0 0 16px;
@@ -152,22 +146,19 @@
       text-align:left;
     }
 
-    /* ===== grid：デフォルトは3列（PC/横向き） ===== */
     .grid{
       display:grid;
       gap:14px;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns:repeat(3, 1fr);
       align-items:stretch;
     }
 
-    /* ✅ 縦持ちは必ず2列（機種依存排除） */
-    @media (orientation: portrait){
-      .grid{ grid-template-columns: repeat(2, 1fr); }
+    @media (orientation:portrait){
+      .grid{grid-template-columns:repeat(2, 1fr)}
     }
 
-    /* さらに狭い端末だけは1列（任意） */
-    @media (max-width: 360px){
-      .grid{ grid-template-columns: 1fr; }
+    @media (max-width:360px){
+      .grid{grid-template-columns:1fr}
     }
 
     .vcard{
@@ -176,24 +167,32 @@
       border-radius:18px;
       overflow:hidden;
       color:#fff;
-
       display:flex;
       flex-direction:column;
       height:100%;
       min-width:0;
     }
 
+    .platform-name{
+      padding:9px 10px 7px;
+      font-size:14px;
+      font-weight:900;
+      text-align:center;
+      text-shadow:var(--textShadow);
+    }
+
     .thumb-wrap{
       width:100%;
-      border-radius:16px;
+      aspect-ratio:16 / 9;
       overflow:hidden;
       background:rgba(255,255,255,.18);
     }
+
     .thumb{
       width:100%;
-      height:auto;
+      height:100%;
       display:block;
-      object-fit:contain;
+      object-fit:cover;
       background:transparent;
     }
 
@@ -211,12 +210,11 @@
       line-height:1.35;
       margin:0 0 10px;
       text-shadow:var(--textShadow);
-
       display:-webkit-box;
       -webkit-box-orient:vertical;
       -webkit-line-clamp:2;
       overflow:hidden;
-      min-height: calc(14px * 1.35 * 2);
+      min-height:calc(14px * 1.35 * 2);
     }
 
     .btn{
@@ -226,112 +224,68 @@
       border-radius:14px;
       font-weight:900;
       text-decoration:none;
-      margin-bottom:8px;
       border:1px solid rgba(255,255,255,.18);
       box-sizing:border-box;
-
-      /* ✅ ボタン文字が2行になるのを抑止 */
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
       font-size:14px;
     }
 
+    .vmeta .btn{margin-top:auto}
+
     .btn-main{
       background:var(--brand);
       color:#fff;
     }
-    .btn-sub{
-      background:rgba(166,113,137,.20);
-      color:#fff;
-    }
 
-    /* ✅ 縦持ちだけ、ボタン/タイトルのフォントを少し落として1行に寄せる */
-    @media (orientation: portrait){
-      .vtitle{ font-size:13px; min-height: calc(13px * 1.35 * 2); }
-      .btn{ font-size:13px; padding:9px; }
-    }
-
-    /* ===== 月額FCボタン（4個並び） ===== */
-    .fc-btns{
-      display:grid;
-      gap:10px;
-      margin-top:8px;
-      grid-template-columns: repeat(4, 1fr);
-      align-items:stretch;
-    }
-
-    /* タブレット */
-    @media (max-width:900px){
-      .fc-btns{ grid-template-columns: repeat(2, 1fr); }
-    }
-
-    /* スマホ */
-    @media (max-width:480px){
-      .fc-btns{ grid-template-columns: 1fr; }
+    @media (orientation:portrait){
+      .vtitle{font-size:13px; min-height:calc(13px * 1.35 * 2)}
+      .btn{font-size:13px; padding:9px}
     }
 
     .fc-btn{
-      margin:0 !important;
-      padding:10px 0;
-      border-radius:12px;
-      min-width:0;
+      width:100%;
+      margin:0;
+      padding:12px 14px;
+      border-radius:14px;
     }
 
-    .fc-btn.btn-sub{
-      border-color: rgba(255,255,255,.10);
-    }
-
-    /* ===== SNS（カード外：月額の直下） ===== */
-    .social{
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      gap:var(--snsGap);
-      margin:0 0 16px;
-    }
-    .social a{
-      width:var(--snsSize);
-      height:var(--snsSize);
-      display:grid;
-      place-items:center;
-      border-radius:var(--snsRadius);
-      text-decoration:none;
-      background:transparent;
-    }
-    .social img{
-      width:var(--snsIconSize);
-      height:var(--snsIconSize);
-      display:block;
-      filter:brightness(0) invert(1);
+    .loading{
+      grid-column:1 / -1;
+      opacity:.9;
+      font-weight:800;
+      text-align:center;
+      text-shadow:var(--textShadow);
+      padding:8px 0;
     }
 
     .lang{
-      margin-top: var(--langMt);
+      margin-top:var(--langMt);
       display:flex;
       justify-content:center;
-      gap: var(--langGap);
+      gap:var(--langGap);
     }
     .lang button{
-      height: var(--langBtnH);
-      padding: 0 var(--langBtnPx);
-      border-radius: var(--langBtnRadius);
-      background: var(--langBtnBg);
-      border: 1px solid var(--langBtnBorder);
-      color: var(--langBtnText);
-      font-weight: 900;
-      font-family: var(--fontFamily);
+      height:var(--langBtnH);
+      padding:0 var(--langBtnPx);
+      border-radius:var(--langBtnRadius);
+      background:var(--langBtnBg);
+      border:1px solid var(--langBtnBorder);
+      color:var(--langBtnText);
+      font-weight:900;
+      font-family:var(--fontFamily);
       cursor:pointer;
-      text-shadow: var(--textShadow);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      transition: filter .18s ease, transform .08s ease, background .18s ease, color .18s ease;
+      text-shadow:var(--textShadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      transition:filter .18s ease, transform .08s ease, background .18s ease, color .18s ease;
     }
-    .lang button:hover{ filter: brightness(1.08); }
-    .lang button:active{ transform: scale(.98); }
+    .lang button:hover{filter:brightness(1.08)}
+    .lang button:active{transform:scale(.98)}
     .lang button.is-active{
-      background: var(--langBtnBgActive);
-      color: var(--langBtnTextActive);
+      background:var(--langBtnBgActive);
+      color:var(--langBtnTextActive);
     }
 
     .foot{
@@ -341,7 +295,11 @@
       text-shadow:var(--textShadow);
       text-align:center;
     }
-  </style>
+  
+.x-text-thumb{width:100%;height:100%;background:#A67189;display:flex;align-items:center;justify-content:center;padding:18px;box-sizing:border-box;position:relative}
+.x-logo{position:absolute;top:14px;right:14px;width:28px;height:28px;filter:brightness(0) invert(1);opacity:.22}
+.x-text{color:#fff;font-weight:800;font-size:14px;line-height:1.5;text-align:center;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+</style>
 </head>
 
 <body>
@@ -350,55 +308,38 @@
       <h1 class="title" id="tTitle">のあ୨୧</h1>
       <p class="subtitle" id="tSub">田舎で暮らす陰キャ女子</p>
 
-      <!-- 🔥 今すぐ見る（myfans_latest order 1..3） -->
-      <div class="section" aria-label="Watch now">
-        <h2 id="secNow">🔥 今すぐ見る</h2>
-        <div class="grid" id="videoGrid"></div>
-      </div>
-
-      <!-- ⭐ 人気3本（other_bn order 1..3） -->
-      <div class="section" aria-label="Popular 3">
-        <h2 id="secPop">⭐ 人気3本</h2>
-        <div class="grid" id="popularGrid"></div>
-      </div>
-
-      <!-- 💎 月額で全部見る -->
-      <div class="section" aria-label="Subscribe monthly">
-        <h2 id="secSub">💎 月額で全部見る</h2>
-
-        <div class="fc-btns" aria-label="Fanclub links">
-          <a class="btn btn-main fc-btn" href="https://candfans.jp/noanoshita?plan-contents=17822" target="_blank" rel="noopener">CandFans</a>
-          <a class="btn btn-sub  fc-btn" href="https://myfans.jp/account/plans/118dc278-f5db-49bb-ab25-f66723160f18?tab=posts" target="_blank" rel="noopener">MyFans</a>
-          <a class="btn btn-sub  fc-btn" href="https://fantia.jp/fanclubs/532786" target="_blank" rel="noopener">Fantia</a>
-          <a class="btn btn-sub  fc-btn" href="https://onlyfans.com/noanoshita" target="_blank" rel="noopener">OnlyFans</a>
+      <div class="section" aria-label="Latest social posts">
+        <h2 id="secSocial">📱 SNSをチェックする</h2>
+        <div class="grid" id="snsGrid">
+          <div class="loading">読み込み中...</div>
         </div>
       </div>
 
-      <!-- SNS：月額の直下（カード外） -->
-      <div class="social" aria-label="SNS links">
-        <a href="https://x.com/noanoshita" target="_blank" rel="noopener" aria-label="X">
-          <img src="../images/X.png" alt="X">
-        </a>
-      
-        <a href="https://www.instagram.com/noanoshita/" target="_blank" rel="noopener" aria-label="Instagram">
-          <img src="../images/instagram.png" alt="Instagram">
-        </a>
-      
-        <a href="https://www.youtube.com/@challengenoa" target="_blank" rel="noopener" aria-label="YouTube">
-          <img src="../images/Youtube.png" alt="YouTube">
-        </a>
-      
-        <a href="https://reelfans.io/@noanoshita" target="_blank" rel="noopener" aria-label="ReelFans">
-          <img src="../images/RF.png" alt="ReelFans">
-        </a>
+      <div class="section" aria-label="Fan club list">
+        <h2 id="secFanclub">🔞 18歳以上はこちら</h2>
+        <a
+          class="btn btn-main fc-btn"
+          id="fanclubLink"
+          href="https://noanoshita.com/verify/"
+          aria-label="ファンクラブ一覧"
+        >ファンクラブ一覧</a>
       </div>
 
+      <div class="lang" aria-label="Language switch">
+        <button id="btnJP" type="button" onclick="setLang('ja')">JP</button>
+        <button id="btnEN" type="button" onclick="setLang('en')">EN</button>
+      </div>
+
+      <div class="foot">© Noa</div>
+    </div>
+  </div>
+
   <script>
-    // ===== 背景画像（links配下なので ../images/） =====
+    // ===== 背景画像（ルート直下のindex.htmlから参照） =====
     const BG = {
-      morning: "../images/morning.png",
-      evening: "../images/evening.jpg",
-      night: "../images/night.jpg"
+      morning:"/images/morning.png",
+      evening:"/images/evening.jpg",
+      night:"/images/night.jpg"
     };
 
     function pickBgByTime(){
@@ -413,13 +354,18 @@
       img.onload = () => {
         const portrait = img.naturalHeight > img.naturalWidth;
         document.documentElement.style.setProperty('--bgSize', portrait ? 'contain' : 'cover');
-        document.documentElement.style.setProperty('--veilOpacity', portrait ? getComputedStyle(document.documentElement).getPropertyValue('--veilOpacityPortrait').trim() : '.30');
-        document.body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bgBase').trim();
+        document.documentElement.style.setProperty(
+          '--veilOpacity',
+          portrait
+            ? getComputedStyle(document.documentElement).getPropertyValue('--veilOpacityPortrait').trim()
+            : '.30'
+        );
+        document.body.style.backgroundColor = getComputedStyle(document.documentElement)
+          .getPropertyValue('--bgBase').trim();
       };
       img.onerror = () => {
         document.documentElement.style.setProperty('--bgSize', 'cover');
         document.documentElement.style.setProperty('--veilOpacity', '.30');
-        document.body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bgBase').trim();
       };
       img.src = imgUrl;
     }
@@ -431,97 +377,146 @@
     }
     setBG();
 
-    // ===== GAS JSON（新URL） =====
-    const API_URL = "https://script.google.com/macros/s/AKfycbxT_J40PjHDRD-sGVGrM3zPA8Loj7XV9yDV988lkMB7rXVQ7Epka8ZK8aOdYI5NriY1/exec";
+    // ===== SNS同期API =====
+    const SNS_API_URL = "https://script.google.com/macros/s/AKfycbyV4N5O_3INXD4ry7lWM8HoYIsHjPSAHO_0BSSY1_m5fwQQ7H940VyCgAbU_eBGTW5C/exec";
 
-    function escHtml(s){
-      return String(s ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+    // Xの自動取得が完成するまで使用する仮サムネイル
+    const PLACEHOLDER_THUMB = "/images/NY.jpg";
+
+    const SNS_LINKS = {
+      youtube:"https://www.youtube.com/@challengenoa",
+      instagram:"https://www.instagram.com/noanoshita/",
+      x:"https://x.com/noachidesu"
+    };
+
+    function escHtml(value){
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
     }
 
     function getLang(){
       try{
-        const saved = localStorage.getItem("lang") || "ja";
-        return (saved === "en") ? "en" : "ja";
+        return localStorage.getItem("lang") === "en" ? "en" : "ja";
       }catch(e){
         return "ja";
       }
     }
 
-    async function loadVideos(){
-      const nowGrid = document.getElementById("videoGrid");
-      const popGrid = document.getElementById("popularGrid");
-      const lang = getLang();
-
-      const renderCard = (v) => {
-        const title = (lang === "en" && v.translation) ? v.translation : v.title;
-
-        return `
-          <div class="vcard">
-            <div class="thumb-wrap">
-              <img class="thumb" src="${escHtml(v.thumb_url)}" alt="">
-            </div>
-            <div class="vmeta">
-              <div class="vtitle">${escHtml(title)}</div>
-              ${v.url_CF ? `<a class="btn btn-main" href="${escHtml(v.url_CF)}" target="_blank" rel="noopener">CandFansで見る</a>` : ``}
-              ${v.url_MY ? `<a class="btn btn-sub"  href="${escHtml(v.url_MY)}" target="_blank" rel="noopener">MyFansで見る</a>`   : ``}
-            </div>
+    function buildSnsCard(item){
+      return `
+        <div class="vcard">
+          <div class="platform-name">${escHtml(item.platform)}</div>
+          <div class="thumb-wrap ${item.textOnly ? "text-only" : ""}">
+${item.textOnly?`<div class="x-text-thumb"><img class="x-logo" src="/images/X.png" alt=""><div class="x-text">${escHtml(item.title)}</div></div>`:`<img class="thumb" src="${escHtml(item.thumb)}" alt="${escHtml(item.platform)} 最新投稿">`}
+</div>
+          <div class="vmeta">
+            <div class="vtitle">${escHtml(item.title)}</div>
+            <a
+              class="btn btn-main"
+              href="${escHtml(item.url)}"
+              target="_blank"
+              rel="noopener"
+              data-platform="${escHtml(item.key)}"
+            >${escHtml(item.button)}</a>
           </div>
-        `;
-      };
-
-      try{
-        const res = await fetch(API_URL + "?t=" + Date.now(), { cache: "no-store" });
-        const data = await res.json();
-
-        const nowList = (data.myfans_latest || [])
-          .sort((a,b)=>Number(a.order)-Number(b.order))
-          .slice(0,3);
-
-        const popList = (data.other_bn || [])
-          .sort((a,b)=>Number(a.order)-Number(b.order))
-          .slice(0,3);
-
-        nowGrid.innerHTML = nowList.length
-          ? nowList.map(renderCard).join("")
-          : `<div style="opacity:.9;font-weight:800;text-shadow:var(--textShadow);">準備中</div>`;
-
-        if(popGrid){
-          popGrid.innerHTML = popList.length
-            ? popList.map(renderCard).join("")
-            : `<div style="opacity:.9;font-weight:800;text-shadow:var(--textShadow);">準備中</div>`;
-        }
-
-      }catch(e){
-        nowGrid.innerHTML = `<div style="opacity:.9;font-weight:800;text-shadow:var(--textShadow);">読み込みに失敗しました</div>`;
-        if(popGrid) popGrid.innerHTML = "";
-      }
+        </div>
+      `;
     }
 
-    // 初回描画
-    loadVideos();
+    async function loadLatestSns(){
+      const grid = document.getElementById("snsGrid");
+      const lang = getLang();
+      const t = I18N[lang] || I18N.ja;
 
-    // ===== 言語（全ページ連動） =====
+      let youtube = null;
+      let instagram = null;
+      let x = null;
+
+      try{
+        const response = await fetch(SNS_API_URL + "?t=" + Date.now(), {cache:"no-store"});
+        if(!response.ok) throw new Error("HTTP " + response.status);
+        const data = await response.json();
+        youtube = data.youtube_latest || null;
+        instagram = data.instagram_latest || null;
+        x = data.x_latest || null;
+      }catch(error){
+        console.error("SNS API load error:", error);
+      }
+
+      const items = [
+        {
+          key:"youtube",
+          platform:"YouTube",
+          title:youtube && youtube.title ? youtube.title : t.youtubeFallback,
+          thumb:youtube && youtube.thumb_url ? youtube.thumb_url : PLACEHOLDER_THUMB,
+          url:youtube && youtube.url ? youtube.url : SNS_LINKS.youtube,
+          button:t.youtubeButton
+        },
+        {
+          key:"instagram",
+          platform:"Instagram",
+          title:instagram && instagram.title ? instagram.title : t.instagramFallback,
+          thumb:instagram && instagram.thumb_url ? instagram.thumb_url : PLACEHOLDER_THUMB,
+          url:instagram && instagram.url ? instagram.url : SNS_LINKS.instagram,
+          button:t.instagramButton
+        },
+        {
+          key:"x",
+          platform:"X",
+          title:x && x.title ? x.title : t.xPending,
+          thumb:x && x.thumb_url ? x.thumb_url : "",
+          url:x && x.url ? x.url : SNS_LINKS.x,
+          button:t.xButton,
+          textOnly:!(x && x.thumb_url)
+        }
+      ];
+
+      grid.innerHTML = items.map(buildSnsCard).join("");
+
+      grid.querySelectorAll("a[data-platform]").forEach(link => {
+        link.addEventListener("click", () => {
+          try{
+            gtag("event", "click_latest_sns", {
+              event_category:"sns",
+              event_label:link.dataset.platform
+            });
+          }catch(e){}
+        });
+      });
+    }
+
     const I18N = {
-      ja: {
+      ja:{
         htmlLang:"ja",
         title:"のあ୨୧",
         sub:"田舎で暮らす陰キャ女子",
-        secNow:"🔥 今すぐ見る",
-        secPop:"⭐ 人気3本",
-        secSub:"💎 月額で全部見る"
+        secSocial:"📱 SNSをチェックする",
+        secFanclub:"🔞 18歳以上はこちら",
+        fanclubButton:"ファンクラブ一覧",
+        youtubeButton:"YouTubeで見る",
+        instagramButton:"Instagramで見る",
+        xButton:"Xで見る",
+        youtubeFallback:"最新動画をYouTubeで見る",
+        instagramFallback:"最新投稿をInstagramで見る",
+        xPending:"最新投稿は準備中です"
       },
-      en: {
+      en:{
         htmlLang:"en",
         title:"Noa",
         sub:"Quiet countryside girl",
-        secNow:"🔥 Watch now",
-        secPop:"⭐ Popular 3",
-        secSub:"💎 Subscribe monthly"
+        secSocial:"📱 Check my social media",
+        secFanclub:"🔞 For adults only",
+        fanclubButton:"Fan club list",
+        youtubeButton:"Watch on YouTube",
+        instagramButton:"View on Instagram",
+        xButton:"View on X",
+        youtubeFallback:"Watch the latest video on YouTube",
+        instagramFallback:"View the latest post on Instagram",
+        xPending:"Latest post coming soon"
       }
     };
 
@@ -531,22 +526,20 @@
 
       document.getElementById("tTitle").textContent = t.title;
       document.getElementById("tSub").textContent = t.sub;
-      document.getElementById("secNow").textContent = t.secNow;
-      document.getElementById("secPop").textContent = t.secPop;
-      document.getElementById("secSub").textContent = t.secSub;
+      document.getElementById("secSocial").textContent = t.secSocial;
+      document.getElementById("secFanclub").textContent = t.secFanclub;
+      document.getElementById("fanclubLink").textContent = t.fanclubButton;
 
       document.getElementById("btnJP").classList.toggle("is-active", lang === "ja");
       document.getElementById("btnEN").classList.toggle("is-active", lang === "en");
 
-      try { localStorage.setItem("lang", lang); } catch(e) {}
-
-      // ✅ 重要：言語切替でカードも翻訳に合わせて再描画
-      loadVideos();
+      try{localStorage.setItem("lang", lang)}catch(e){}
+      loadLatestSns();
     }
 
     (function initLang(){
       let saved = "ja";
-      try { saved = localStorage.getItem("lang") || "ja"; } catch(e) {}
+      try{saved = localStorage.getItem("lang") || "ja"}catch(e){}
       setLang(saved === "en" ? "en" : "ja");
     })();
   </script>
