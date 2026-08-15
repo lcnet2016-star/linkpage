@@ -180,13 +180,6 @@
       .grid{grid-template-columns:1fr}
     }
 
-    /* 期間限定が1件だけなら中央配置 */
-    #campaignGrid.single-item{
-      grid-template-columns:minmax(0,1fr);
-      max-width:220px;
-      margin:0 auto;
-    }
-
     .vcard{
       background:rgba(255,255,255,.20);
       border:1px solid rgba(255,255,255,.22);
@@ -321,12 +314,20 @@
     .social{
       display:flex;
       justify-content:center;
-      align-items:center;
+      align-items:flex-start;
       gap:var(--snsGap);
       margin:0 0 16px;
     }
 
-    .social a{
+    .social-item{
+      width:var(--snsSize);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      min-width:0;
+    }
+
+    .social-item a{
       width:var(--snsSize);
       height:var(--snsSize);
       display:grid;
@@ -336,11 +337,32 @@
       background:transparent;
     }
 
-    .social img{
+    .social-item img{
       width:var(--snsIconSize);
       height:var(--snsIconSize);
       display:block;
       filter:brightness(0) invert(1);
+    }
+
+    .social-update{
+      min-height:14px;
+      margin-top:4px;
+      font-size:11px;
+      line-height:1;
+      font-weight:600;
+      color:rgba(255,255,255,.92);
+      text-align:center;
+      white-space:nowrap;
+      text-shadow:var(--textShadow);
+    }
+
+    @media (max-width:420px){
+      .social-update{
+        min-height:13px;
+        margin-top:3px;
+        font-size:10px;
+        line-height:1;
+      }
     }
 
     /* JP / EN はページ最下部 */
@@ -448,20 +470,35 @@
         </div>
       </div>
 
-      <!-- SNS -->
+      <!-- SNS：X ｜ Instagram ｜ Facebook ｜ ReelFans -->
       <div class="social" aria-label="SNS links">
-        <a href="https://x.com/noanoshita" target="_blank" rel="noopener" aria-label="X">
-          <img src="../images/X.png" alt="X">
-        </a>
-        <a href="https://www.instagram.com/noanoshita/" target="_blank" rel="noopener" aria-label="Instagram">
-          <img src="../images/instagram.png" alt="Instagram">
-        </a>
-        <a href="https://www.youtube.com/@challengenoa" target="_blank" rel="noopener" aria-label="YouTube">
-          <img src="../images/Youtube.png" alt="YouTube">
-        </a>
-        <a href="https://reelfans.io/@noanoshita" target="_blank" rel="noopener" aria-label="ReelFans">
-          <img src="../images/RF.png" alt="ReelFans">
-        </a>
+        <div class="social-item">
+          <a href="https://x.com/noanoshita" target="_blank" rel="noopener" aria-label="X">
+            <img src="../images/X.png" alt="X">
+          </a>
+          <div class="social-update" id="updateX" aria-live="polite"></div>
+        </div>
+
+        <div class="social-item">
+          <a href="https://www.instagram.com/noanoshita/" target="_blank" rel="noopener" aria-label="Instagram">
+            <img src="../images/instagram.png" alt="Instagram">
+          </a>
+          <div class="social-update" id="updateInstagram" aria-live="polite"></div>
+        </div>
+
+        <div class="social-item">
+          <a href="https://www.facebook.com/noanoshita.noa" target="_blank" rel="noopener" aria-label="Facebook">
+            <img src="../images/facebook.png" alt="Facebook">
+          </a>
+          <div class="social-update" id="updateFacebook" aria-live="polite"></div>
+        </div>
+
+        <div class="social-item">
+          <a href="https://reelfans.io/@noanoshita" target="_blank" rel="noopener" aria-label="ReelFans">
+            <img src="../images/RF.png" alt="ReelFans">
+          </a>
+          <div class="social-update" aria-hidden="true"></div>
+        </div>
       </div>
 
       <!-- 最下部にJP / EN -->
@@ -532,6 +569,9 @@
 
     const CMS_API_URL =
       "https://script.google.com/macros/s/AKfycbyyhzKs--PsnAylt-bAgGeTOpMV14CrvJieNXsaIBYSDUrlWl0PXmhm_FvhrYKf65QqRw/exec";
+
+    const SNS_API_URL =
+      "https://script.google.com/macros/s/AKfycbyV4N5O_3INXD4ry7lWM8HoYIsHjPSAHO_0BSSY1_m5fwQQ7H940VyCgAbU_eBGTW5C/exec";
 
     const FALLBACK_IMAGE = "../images/NY.jpg";
 
@@ -803,6 +843,82 @@
       }
     }
 
+    // ===== SNS当日更新表示 =====
+    function getJstDateKey_(dateValue){
+      const date = new Date(dateValue);
+
+      if(Number.isNaN(date.getTime())){
+        return "";
+      }
+
+      const parts = new Intl.DateTimeFormat("en-CA", {
+        timeZone:"Asia/Tokyo",
+        year:"numeric",
+        month:"2-digit",
+        day:"2-digit"
+      }).formatToParts(date);
+
+      const map = {};
+      parts.forEach(part => {
+        if(part.type !== "literal"){
+          map[part.type] = part.value;
+        }
+      });
+
+      return `${map.year}-${map.month}-${map.day}`;
+    }
+
+    function isUpdatedTodayJst_(item){
+      if(!item || !item.published_at){
+        return false;
+      }
+
+      return getJstDateKey_(item.published_at) ===
+        getJstDateKey_(new Date());
+    }
+
+    function renderSnsUpdateBadges_(data){
+      const lang = getLang();
+      const label = lang === "en" ? "Updated today!" : "本日更新！";
+
+      const targets = [
+        ["updateX", data.x_latest],
+        ["updateInstagram", data.instagram_latest],
+        ["updateFacebook", data.facebook_latest]
+      ];
+
+      targets.forEach(([id, item]) => {
+        const el = document.getElementById(id);
+        if(!el) return;
+
+        el.textContent = isUpdatedTodayJst_(item) ? label : "";
+      });
+    }
+
+    async function loadSnsUpdateStatus(){
+      try{
+        const res = await fetch(
+          SNS_API_URL + "?t=" + Date.now(),
+          {cache:"no-store"}
+        );
+
+        if(!res.ok){
+          throw new Error("HTTP " + res.status);
+        }
+
+        const data = await res.json();
+        renderSnsUpdateBadges_(data);
+
+      }catch(error){
+        console.error("SNS update status load error:", error);
+
+        ["updateX","updateInstagram","updateFacebook"].forEach(id => {
+          const el = document.getElementById(id);
+          if(el) el.textContent = "";
+        });
+      }
+    }
+
     // ===== 言語 =====
     const I18N = {
       ja:{
@@ -846,9 +962,10 @@
         localStorage.setItem("lang",lang);
       }catch(e){}
 
-      /* 言語切替でボタン文言まで再描画 */
+      /* 言語切替で各表示を再描画 */
       loadCampaigns();
       loadVideos();
+      loadSnsUpdateStatus();
     }
 
     (function initLang(){
