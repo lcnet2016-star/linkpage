@@ -383,7 +383,7 @@
     const PLACEHOLDER_THUMB = "/images/NY.jpg";
 
     const SNS_LINKS = {
-      youtube:"https://www.youtube.com/@challengenoa",
+      facebook:"https://www.facebook.com/1278933258642176",
       instagram:"https://www.instagram.com/noanoshita/",
       x:"https://x.com/noachidesu"
     };
@@ -431,7 +431,7 @@ ${item.textOnly?`<div class="x-text-thumb"><img class="x-logo" src="/images/X.pn
       const lang = getLang();
       const t = I18N[lang] || I18N.ja;
 
-      let youtube = null;
+      let facebook = null;
       let instagram = null;
       let x = null;
 
@@ -439,7 +439,7 @@ ${item.textOnly?`<div class="x-text-thumb"><img class="x-logo" src="/images/X.pn
         const response = await fetch(SNS_API_URL + "?t=" + Date.now(), {cache:"no-store"});
         if(!response.ok) throw new Error("HTTP " + response.status);
         const data = await response.json();
-        youtube = data.youtube_latest || null;
+        facebook = data.facebook_latest || null;
         instagram = data.instagram_latest || null;
         x = data.x_latest || null;
       }catch(error){
@@ -448,12 +448,12 @@ ${item.textOnly?`<div class="x-text-thumb"><img class="x-logo" src="/images/X.pn
 
       const items = [
         {
-          key:"youtube",
-          platform:"YouTube",
-          title:youtube && youtube.title ? youtube.title : t.youtubeFallback,
-          thumb:youtube && youtube.thumb_url ? youtube.thumb_url : PLACEHOLDER_THUMB,
-          url:youtube && youtube.url ? youtube.url : SNS_LINKS.youtube,
-          button:t.youtubeButton
+          key:"facebook",
+          platform:"Facebook",
+          title:facebook && facebook.title ? facebook.title : t.facebookFallback,
+          thumb:facebook && facebook.thumb_url ? facebook.thumb_url : PLACEHOLDER_THUMB,
+          url:facebook && facebook.url ? facebook.url : SNS_LINKS.facebook,
+          button:t.facebookButton
         },
         {
           key:"instagram",
@@ -496,10 +496,10 @@ ${item.textOnly?`<div class="x-text-thumb"><img class="x-logo" src="/images/X.pn
         secSocial:"📱 SNSをチェックする",
         secFanclub:"🔞 18歳以上はこちら",
         fanclubButton:"ファンクラブ一覧",
-        youtubeButton:"YouTubeで見る",
+        facebookButton:"Facebookで見る",
         instagramButton:"Instagramで見る",
         xButton:"Xで見る",
-        youtubeFallback:"最新動画をYouTubeで見る",
+        facebookFallback:"最新投稿をFacebookで見る",
         instagramFallback:"最新投稿をInstagramで見る",
         xPending:"最新投稿は準備中です"
       },
@@ -510,10 +510,10 @@ ${item.textOnly?`<div class="x-text-thumb"><img class="x-logo" src="/images/X.pn
         secSocial:"📱 Check my social media",
         secFanclub:"🔞 For adults only",
         fanclubButton:"Fan club list",
-        youtubeButton:"Watch on YouTube",
+        facebookButton:"View on Facebook",
         instagramButton:"View on Instagram",
         xButton:"View on X",
-        youtubeFallback:"Watch the latest video on YouTube",
+        facebookFallback:"View the latest post on Facebook",
         instagramFallback:"View the latest post on Instagram",
         xPending:"Latest post coming soon"
       }
@@ -544,4 +544,3 @@ ${item.textOnly?`<div class="x-text-thumb"><img class="x-logo" src="/images/X.pn
   </script>
 </body>
 </html>
-
