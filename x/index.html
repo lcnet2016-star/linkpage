@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="ja">
 <head>
-  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-VSEFPGK0YZ"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -23,30 +22,34 @@
   <style>
     :root{
       --bgBase:#fff0ebff;
-      --bgSize:cover; --bgRepeat:no-repeat; --bgPos:center; --bgTransition:1s;
-      --veilOpacity:.30; --veilOpacityPortrait:.42;
-
-      --fontFamily:"M PLUS Rounded 1c", system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", sans-serif;
-      --titleFont:"Hachi Maru Pop", cursive;
-
+      --bgSize:cover;
+      --bgRepeat:no-repeat;
+      --bgPos:center;
+      --veilOpacity:.30;
+      --veilOpacityPortrait:.42;
+      --fontFamily:"M PLUS Rounded 1c",system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans JP",sans-serif;
+      --titleFont:"Hachi Maru Pop",cursive;
       --containerMax:760px;
-      --padTop:30px; --padSide:16px; --padBottom:40px;
-
-      --titleSize:38px; --subtitleSize:18px;
-      --titleColor:#fff; --subtitleColor:rgba(255,255,255,.9);
+      --padTop:30px;
+      --padSide:16px;
+      --padBottom:40px;
+      --titleSize:38px;
+      --subtitleSize:18px;
+      --titleColor:#fff;
+      --subtitleColor:rgba(255,255,255,.9);
       --textShadow:0 6px 20px rgba(0,0,0,.35);
-
       --cardBg:rgba(255,255,255,.25);
       --cardBorder:rgba(255,255,255,.28);
       --cardRadius:22px;
-      --cardShadow:0 18px 50px rgba(0,0,0,.20), inset 0 1px 0 rgba(255,255,255,.35);
-
+      --cardShadow:0 18px 50px rgba(0,0,0,.20),inset 0 1px 0 rgba(255,255,255,.35);
       --sectionPad:18px;
       --brand:#A67189;
-
+      --snsSize:72px;
+      --snsIconSize:34px;
+      --snsGap:8px;
+      --snsRadius:14px;
       --footerColor:rgba(255,255,255,.78);
       --footerSize:12px;
-
       --langGap:10px;
       --langMt:14px;
       --langBtnH:34px;
@@ -59,13 +62,17 @@
       --langBtnTextActive:rgba(255,255,255,1);
     }
 
-    @media (max-width:420px){
+    @media(max-width:420px){
       :root{
         --padTop:22px;
-        --titleSize:30px; --subtitleSize:16px;
+        --titleSize:30px;
+        --subtitleSize:16px;
         --langBtnH:32px;
         --langBtnPx:12px;
         --sectionPad:16px;
+        --snsSize:58px;
+        --snsIconSize:30px;
+        --snsGap:4px;
       }
     }
 
@@ -80,11 +87,11 @@
       background-repeat:var(--bgRepeat);
       background-position:var(--bgPos);
       background-attachment:fixed;
-      transition:background-image var(--bgTransition) ease-in-out;
     }
     body::before{
       content:"";
-      position:fixed; inset:0;
+      position:fixed;
+      inset:0;
       background:rgba(255,240,235,var(--veilOpacity));
       z-index:-1;
     }
@@ -101,10 +108,10 @@
 
     .container{
       width:100%;
-      max-width:760px;
+      max-width:var(--containerMax);
       margin:0 auto;
-      padding-left:max(16px, env(safe-area-inset-left));
-      padding-right:max(16px, env(safe-area-inset-right));
+      padding-left:max(16px,env(safe-area-inset-left));
+      padding-right:max(16px,env(safe-area-inset-right));
       box-sizing:border-box;
     }
 
@@ -115,6 +122,7 @@
       font-weight:900;
       text-shadow:var(--textShadow);
     }
+
     .subtitle{
       margin:0 0 10px;
       font-size:var(--subtitleSize);
@@ -142,21 +150,20 @@
       font-size:18px;
       font-weight:900;
       text-shadow:var(--textShadow);
-      text-align:left;
     }
 
     .grid{
       display:grid;
       gap:14px;
-      grid-template-columns:repeat(3, 1fr);
+      grid-template-columns:repeat(4,1fr);
       align-items:stretch;
     }
 
-    @media (orientation:portrait){
-      .grid{grid-template-columns:repeat(2, 1fr)}
+    @media(max-width:760px){
+      .grid{grid-template-columns:repeat(2,1fr)}
     }
 
-    @media (max-width:360px){
+    @media(max-width:360px){
       .grid{grid-template-columns:1fr}
     }
 
@@ -182,7 +189,7 @@
 
     .thumb-wrap{
       width:100%;
-      aspect-ratio:16 / 9;
+      aspect-ratio:16/9;
       overflow:hidden;
       background:rgba(255,255,255,.18);
     }
@@ -192,7 +199,6 @@
       height:100%;
       display:block;
       object-fit:cover;
-      background:transparent;
     }
 
     .vmeta{
@@ -218,6 +224,7 @@
 
     .btn{
       display:block;
+      width:100%;
       text-align:center;
       padding:10px;
       border-radius:14px;
@@ -229,34 +236,68 @@
       overflow:hidden;
       text-overflow:ellipsis;
       font-size:14px;
+      margin-top:8px;
     }
 
-    .vmeta .btn{margin-top:auto}
+    .vmeta .btn:first-of-type{margin-top:auto}
 
     .btn-main{
       background:var(--brand);
       color:#fff;
     }
 
-    @media (orientation:portrait){
-      .vtitle{font-size:13px; min-height:calc(13px * 1.35 * 2)}
-      .btn{font-size:13px; padding:9px}
+    .btn-sub{
+      background:rgba(166,113,137,.20);
+      color:#fff;
     }
 
-    .fc-btn{
-      width:100%;
-      margin:0;
-      padding:12px 14px;
-      border-radius:14px;
-    }
+    .single-button-wrap .btn{margin-top:0}
 
     .loading{
-      grid-column:1 / -1;
       opacity:.9;
       font-weight:800;
       text-align:center;
       text-shadow:var(--textShadow);
-      padding:8px 0;
+      padding:10px 0;
+    }
+
+    .social{
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+      gap:var(--snsGap);
+      margin:0 0 16px;
+      flex-wrap:wrap;
+    }
+
+    .social-item{
+      width:var(--snsSize);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+    }
+
+    .social-item a{
+      width:var(--snsSize);
+      height:var(--snsSize);
+      display:grid;
+      place-items:center;
+      border-radius:var(--snsRadius);
+      text-decoration:none;
+    }
+
+    .social-item img{
+      width:var(--snsIconSize);
+      height:var(--snsIconSize);
+      display:block;
+      filter:brightness(0) invert(1);
+    }
+
+    .campaign-preview{
+      font-weight:900;
+      line-height:1.6;
+      text-shadow:var(--textShadow);
+      padding:4px 0;
     }
 
     .lang{
@@ -265,6 +306,7 @@
       justify-content:center;
       gap:var(--langGap);
     }
+
     .lang button{
       height:var(--langBtnH);
       padding:0 var(--langBtnPx);
@@ -276,12 +318,8 @@
       font-family:var(--fontFamily);
       cursor:pointer;
       text-shadow:var(--textShadow);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-      transition:filter .18s ease, transform .08s ease, background .18s ease, color .18s ease;
     }
-    .lang button:hover{filter:brightness(1.08)}
-    .lang button:active{transform:scale(.98)}
+
     .lang button.is-active{
       background:var(--langBtnBgActive);
       color:var(--langBtnTextActive);
@@ -294,11 +332,7 @@
       text-shadow:var(--textShadow);
       text-align:center;
     }
-  
-.x-text-thumb{width:100%;height:100%;background:#A67189;display:flex;align-items:center;justify-content:center;padding:18px;box-sizing:border-box;position:relative}
-.x-logo{position:absolute;top:14px;right:14px;width:28px;height:28px;filter:brightness(0) invert(1);opacity:.22}
-.x-text{color:#fff;font-weight:800;font-size:14px;line-height:1.5;text-align:center;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
-</style>
+  </style>
 </head>
 
 <body>
@@ -307,22 +341,11 @@
       <h1 class="title" id="tTitle">のあ୨୧</h1>
       <p class="subtitle" id="tSub">田舎で暮らす陰キャ女子</p>
 
-      <div class="section" aria-label="Latest social posts">
-        <h2 id="secSocial">📱 SNSをチェックする</h2>
-        <div class="grid" id="snsGrid">
-          <div class="loading">読み込み中...</div>
-        </div>
+      <div id="pageContent">
+        <div class="loading">読み込み中...</div>
       </div>
 
-      <div class="section" aria-label="Fan club list">
-        <h2 id="secFanclub">🔞 18歳以上はこちら</h2>
-        <a
-          class="btn btn-main fc-btn"
-          id="fanclubLink"
-          href="https://noanoshita.com/verify/"
-          aria-label="ファンクラブ一覧"
-        >ファンクラブ一覧</a>
-      </div>
+      <div class="social" id="socialFooter" aria-label="SNS links"></div>
 
       <div class="lang" aria-label="Language switch">
         <button id="btnJP" type="button" onclick="setLang('ja')">JP</button>
@@ -334,212 +357,391 @@
   </div>
 
   <script>
-    // ===== 背景画像（ルート直下のindex.htmlから参照） =====
-    const BG = {
-      morning:"/images/morning.png",
-      evening:"/images/evening.jpg",
-      night:"/images/night.jpg"
+    const PAGE_ID = "x";
+
+    const CMS_API_URL =
+      "https://script.google.com/macros/s/AKfycbyyhzKs--PsnAylt-bAgGeTOpMV14CrvJieNXsaIBYSDUrlWl0PXmhm_FvhrYKf65QqRw/exec";
+
+    const FALLBACK_IMAGE = "/images/NY.jpg";
+
+    const PAGE_I18N = {
+      ja:{
+        htmlLang:"ja",
+        title:"のあ୨୧",
+        sub:"田舎で暮らす陰キャ女子",
+        loading:"読み込み中...",
+        loadError:"読み込みに失敗しました"
+      },
+      en:{
+        htmlLang:"en",
+        title:"Noa୨୧",
+        sub:"Quiet countryside girl",
+        loading:"Loading...",
+        loadError:"Failed to load"
+      }
     };
 
-    function pickBgByTime(){
-      const h = new Date().getHours();
-      if(h >= 5 && h < 16) return BG.morning;
-      if(h >= 16 && h < 19) return BG.evening;
-      return BG.night;
-    }
-
-    function applyBgModeByAspect(imgUrl){
-      const img = new Image();
-      img.onload = () => {
-        const portrait = img.naturalHeight > img.naturalWidth;
-        document.documentElement.style.setProperty('--bgSize', portrait ? 'contain' : 'cover');
-        document.documentElement.style.setProperty(
-          '--veilOpacity',
-          portrait
-            ? getComputedStyle(document.documentElement).getPropertyValue('--veilOpacityPortrait').trim()
-            : '.30'
-        );
-        document.body.style.backgroundColor = getComputedStyle(document.documentElement)
-          .getPropertyValue('--bgBase').trim();
-      };
-      img.onerror = () => {
-        document.documentElement.style.setProperty('--bgSize', 'cover');
-        document.documentElement.style.setProperty('--veilOpacity', '.30');
-      };
-      img.src = imgUrl;
-    }
-
-    function setBG(){
-      const imgUrl = pickBgByTime();
-      document.body.style.backgroundImage = `url('${imgUrl}')`;
-      applyBgModeByAspect(imgUrl);
-    }
-    setBG();
-
-    // ===== SNS同期API =====
-    const SNS_API_URL = "https://script.google.com/macros/s/AKfycbyV4N5O_3INXD4ry7lWM8HoYIsHjPSAHO_0BSSY1_m5fwQQ7H940VyCgAbU_eBGTW5C/exec";
-
-    // Xの自動取得が完成するまで使用する仮サムネイル
-    const PLACEHOLDER_THUMB = "/images/NY.jpg";
-
-    const SNS_LINKS = {
-      facebook:"https://www.facebook.com/1278933258642176",
-      instagram:"https://www.instagram.com/noanoshita/",
-      x:"https://x.com/noachidesu"
-    };
+    let cmsData = null;
 
     function escHtml(value){
       return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
     }
 
     function getLang(){
       try{
-        return localStorage.getItem("lang") === "en" ? "en" : "ja";
+        return localStorage.getItem("lang") === "ja" ? "ja" : "en";
       }catch(e){
-        return "ja";
+        return "en";
       }
     }
 
-    function buildSnsCard(item){
+    function getLinkLabel(link,lang){
+      if(lang === "ja"){
+        return link.label_ja || link.label_en || "見る";
+      }
+      return link.label_en || link.label_ja || "View";
+    }
+
+    function trackClick(trackingId,extra={}){
+      if(!trackingId) return;
+
+      try{
+        gtag("event","link_click",{
+          tracking_id:trackingId,
+          page_id:PAGE_ID,
+          ...extra
+        });
+      }catch(e){}
+    }
+
+    function bindTrackedLinks(root){
+      root.querySelectorAll("[data-tracking-id]").forEach(link => {
+        link.addEventListener("click",() => {
+          trackClick(
+            link.dataset.trackingId || "",
+            {
+              destination_url:link.href || "",
+              link_text:(link.textContent || "").trim()
+            }
+          );
+        });
+      });
+    }
+
+    function applyBackground(backgrounds){
+      const bg = backgrounds || {};
+      const h = new Date().getHours();
+
+      let slot = "night";
+      if(h >= 5 && h < 16) slot = "morning";
+      else if(h >= 16 && h < 19) slot = "evening";
+
+      const imgUrl =
+        bg[slot] ||
+        bg.morning ||
+        bg.evening ||
+        bg.night ||
+        FALLBACK_IMAGE;
+
+      document.body.style.backgroundImage = `url('${imgUrl}')`;
+
+      const img = new Image();
+
+      img.onload = () => {
+        const portrait = img.naturalHeight > img.naturalWidth;
+
+        document.documentElement.style.setProperty(
+          "--bgSize",
+          portrait ? "contain" : "cover"
+        );
+
+        document.documentElement.style.setProperty(
+          "--veilOpacity",
+          portrait
+            ? getComputedStyle(document.documentElement)
+                .getPropertyValue("--veilOpacityPortrait").trim()
+            : ".30"
+        );
+      };
+
+      img.onerror = () => {
+        document.documentElement.style.setProperty("--bgSize","cover");
+        document.documentElement.style.setProperty("--veilOpacity",".30");
+      };
+
+      img.src = imgUrl;
+    }
+
+    function renderCard(card,lang){
+      const title = String(card.title || "");
+      const image = card.image_url || FALLBACK_IMAGE;
+      const links = Array.isArray(card.links) ? card.links : [];
+
+      const buttons = links.map((link,index) => {
+        const cls = index === 0 ? "btn btn-main" : "btn btn-sub";
+        return `
+          <a
+            class="${cls}"
+            href="${escHtml(link.url || "#")}"
+            target="_blank"
+            rel="noopener"
+            data-tracking-id="${escHtml(link.tracking_id || card.tracking_id || "")}"
+          >${escHtml(getLinkLabel(link,lang))}</a>
+        `;
+      }).join("");
+
+      const platform =
+        card.card_type === "sns"
+          ? (card.source_key || "")
+          : "";
+
       return `
         <div class="vcard">
-          <div class="platform-name">${escHtml(item.platform)}</div>
-          <div class="thumb-wrap ${item.textOnly ? "text-only" : ""}">
-${item.textOnly?`<div class="x-text-thumb"><img class="x-logo" src="/images/X.png" alt=""><div class="x-text">${escHtml(item.title)}</div></div>`:`<img class="thumb" src="${escHtml(item.thumb)}" alt="${escHtml(item.platform)} 最新投稿">`}
-</div>
+          ${platform ? `<div class="platform-name">${escHtml(platform.charAt(0).toUpperCase() + platform.slice(1))}</div>` : ""}
+          <div class="thumb-wrap">
+            <img
+              class="thumb"
+              src="${escHtml(image)}"
+              alt="${escHtml(title)}"
+              onerror="this.onerror=null;this.src='${escHtml(FALLBACK_IMAGE)}';"
+            >
+          </div>
           <div class="vmeta">
-            <div class="vtitle">${escHtml(item.title)}</div>
-            <a
-              class="btn btn-main"
-              href="${escHtml(item.url)}"
-              target="_blank"
-              rel="noopener"
-              data-platform="${escHtml(item.key)}"
-            >${escHtml(item.button)}</a>
+            <div class="vtitle">${escHtml(title)}</div>
+            ${buttons}
           </div>
         </div>
       `;
     }
 
-    async function loadLatestSns(){
-      const grid = document.getElementById("snsGrid");
-      const lang = getLang();
-      const t = I18N[lang] || I18N.ja;
+    function renderButtonSection(section,lang){
+      const cards = Array.isArray(section.cards) ? section.cards : [];
+      const buttons = [];
 
-      let facebook = null;
-      let instagram = null;
-      let x = null;
-
-      try{
-        const response = await fetch(SNS_API_URL + "?t=" + Date.now(), {cache:"no-store"});
-        if(!response.ok) throw new Error("HTTP " + response.status);
-        const data = await response.json();
-        facebook = data.facebook_latest || null;
-        instagram = data.instagram_latest || null;
-        x = data.x_latest || null;
-      }catch(error){
-        console.error("SNS API load error:", error);
-      }
-
-      const items = [
-        {
-          key:"facebook",
-          platform:"Facebook",
-          title:facebook && facebook.title ? facebook.title : t.facebookFallback,
-          thumb:facebook && facebook.thumb_url ? facebook.thumb_url : PLACEHOLDER_THUMB,
-          url:facebook && facebook.url ? facebook.url : SNS_LINKS.facebook,
-          button:t.facebookButton
-        },
-        {
-          key:"instagram",
-          platform:"Instagram",
-          title:instagram && instagram.title ? instagram.title : t.instagramFallback,
-          thumb:instagram && instagram.thumb_url ? instagram.thumb_url : PLACEHOLDER_THUMB,
-          url:instagram && instagram.url ? instagram.url : SNS_LINKS.instagram,
-          button:t.instagramButton
-        },
-        {
-          key:"x",
-          platform:"X",
-          title:x && x.title ? x.title : t.xPending,
-          thumb:x && x.thumb_url ? x.thumb_url : "",
-          url:x && x.url ? x.url : SNS_LINKS.x,
-          button:t.xButton,
-          textOnly:!(x && x.thumb_url)
-        }
-      ];
-
-      grid.innerHTML = items.map(buildSnsCard).join("");
-
-      grid.querySelectorAll("a[data-platform]").forEach(link => {
-        link.addEventListener("click", () => {
-          try{
-            gtag("event", "click_latest_sns", {
-              event_category:"sns",
-              event_label:link.dataset.platform
-            });
-          }catch(e){}
+      cards.forEach(card => {
+        (card.links || []).forEach((link,index) => {
+          buttons.push(`
+            <a
+              class="${index === 0 ? "btn btn-main" : "btn btn-sub"}"
+              href="${escHtml(link.url || "#")}"
+              target="_blank"
+              rel="noopener"
+              data-tracking-id="${escHtml(link.tracking_id || card.tracking_id || "")}"
+            >${escHtml(getLinkLabel(link,lang))}</a>
+          `);
         });
       });
+
+      return `<div class="single-button-wrap">${buttons.join("")}</div>`;
     }
 
-    const I18N = {
-      ja:{
-        htmlLang:"ja",
-        title:"のあ୨୧",
-        sub:"田舎で暮らす陰キャ女子",
-        secSocial:"📱 SNSをチェックする",
-        secFanclub:"🔞 18歳以上はこちら",
-        fanclubButton:"ファンクラブ一覧",
-        facebookButton:"Facebookで見る",
-        instagramButton:"Instagramで見る",
-        xButton:"Xで見る",
-        facebookFallback:"最新投稿をFacebookで見る",
-        instagramFallback:"最新投稿をInstagramで見る",
-        xPending:"最新投稿は準備中です"
-      },
-      en:{
-        htmlLang:"en",
-        title:"Noa",
-        sub:"Quiet countryside girl",
-        secSocial:"📱 Check my social media",
-        secFanclub:"🔞 For adults only",
-        fanclubButton:"Fan club list",
-        facebookButton:"View on Facebook",
-        instagramButton:"View on Instagram",
-        xButton:"View on X",
-        facebookFallback:"View the latest post on Facebook",
-        instagramFallback:"View the latest post on Instagram",
-        xPending:"Latest post coming soon"
+    function renderSection(section,lang){
+      const heading =
+        `${section.icon ? section.icon + " " : ""}${section.title || ""}`;
+
+      let body = "";
+
+      if(section.layout === "button" || section.layout === "buttons"){
+        body = renderButtonSection(section,lang);
+      }else{
+        const cards = Array.isArray(section.cards) ? section.cards : [];
+        if(!cards.length) return "";
+
+        body = `
+          <div class="grid">
+            ${cards.map(card => renderCard(card,lang)).join("")}
+          </div>
+        `;
       }
-    };
 
-    function setLang(lang){
-      const t = I18N[lang] || I18N.ja;
+      return `
+        <section class="section" data-section-id="${escHtml(section.section_id || "")}">
+          <h2>${escHtml(heading)}</h2>
+          ${body}
+        </section>
+      `;
+    }
+
+    function renderCampaigns(data,lang){
+      const campaigns = Array.isArray(data.campaigns) ? data.campaigns : [];
+      const upcoming = Array.isArray(data.upcoming) ? data.upcoming : [];
+
+      if(!campaigns.length && !upcoming.length){
+        return "";
+      }
+
+      const title = lang === "ja" ? "🎉 期間限定" : "🎉 Limited time";
+
+      if(!campaigns.length && upcoming.length){
+        return `
+          <section class="section">
+            <h2>${title}</h2>
+            ${upcoming.map(item => `
+              <div class="campaign-preview">${escHtml(item.title || "")}</div>
+            `).join("")}
+          </section>
+        `;
+      }
+
+      const campaignCards = campaigns.map(campaign => {
+        const links = (campaign.links || []).map((link,index) => `
+          <a
+            class="${index === 0 ? "btn btn-main" : "btn btn-sub"}"
+            href="${escHtml(link.url || "#")}"
+            target="_blank"
+            rel="noopener"
+            data-tracking-id="${escHtml(campaign.tracking_id || "")}"
+          >${escHtml(link.text || (lang === "ja" ? "見る" : "View"))}</a>
+        `).join("");
+
+        return `
+          <div class="vcard">
+            <div class="thumb-wrap">
+              <img
+                class="thumb"
+                src="${escHtml(campaign.image_url || FALLBACK_IMAGE)}"
+                alt="${escHtml(campaign.title || "")}"
+                onerror="this.onerror=null;this.src='${escHtml(FALLBACK_IMAGE)}';"
+              >
+            </div>
+            <div class="vmeta">
+              <div class="vtitle">${escHtml(campaign.title || "")}</div>
+              ${links}
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      return `
+        <section class="section">
+          <h2>${title}</h2>
+          <div class="grid">${campaignCards}</div>
+        </section>
+      `;
+    }
+
+    function renderSocialFooter(data){
+      const root = document.getElementById("socialFooter");
+      const socials = Array.isArray(data.social) ? data.social : [];
+
+      root.innerHTML = socials.map(item => `
+        <div class="social-item">
+          <a
+            href="${escHtml(item.url || "#")}"
+            target="_blank"
+            rel="noopener"
+            aria-label="${escHtml(item.name || item.sns_id || "")}"
+            data-tracking-id="${escHtml(item.tracking_id || "")}"
+          >
+            <img
+              src="${escHtml(item.icon_url || "")}"
+              alt="${escHtml(item.name || item.sns_id || "")}"
+            >
+          </a>
+        </div>
+      `).join("");
+
+      bindTrackedLinks(root);
+    }
+
+    function renderPage(){
+      if(!cmsData) return;
+
+      const lang = getLang();
+      const t = PAGE_I18N[lang] || PAGE_I18N.en;
+
       document.documentElement.lang = t.htmlLang;
-
       document.getElementById("tTitle").textContent = t.title;
       document.getElementById("tSub").textContent = t.sub;
-      document.getElementById("secSocial").textContent = t.secSocial;
-      document.getElementById("secFanclub").textContent = t.secFanclub;
-      document.getElementById("fanclubLink").textContent = t.fanclubButton;
 
-      document.getElementById("btnJP").classList.toggle("is-active", lang === "ja");
-      document.getElementById("btnEN").classList.toggle("is-active", lang === "en");
+      document.getElementById("btnJP")
+        .classList.toggle("is-active",lang === "ja");
 
-      try{localStorage.setItem("lang", lang)}catch(e){}
-      loadLatestSns();
+      document.getElementById("btnEN")
+        .classList.toggle("is-active",lang === "en");
+
+      const sections = Array.isArray(cmsData.sections) ? cmsData.sections : [];
+
+      const html = [
+        renderCampaigns(cmsData,lang),
+        ...sections.map(section => renderSection(section,lang))
+      ].join("");
+
+      const root = document.getElementById("pageContent");
+      root.innerHTML = html || `<div class="loading">${escHtml(t.loadError)}</div>`;
+
+      bindTrackedLinks(root);
+      renderSocialFooter(cmsData);
     }
 
-    (function initLang(){
+    async function loadCms(){
+      const lang = getLang();
+      const t = PAGE_I18N[lang] || PAGE_I18N.en;
+      const root = document.getElementById("pageContent");
+
+      root.innerHTML = `<div class="loading">${escHtml(t.loading)}</div>`;
+
+      try{
+        const response = await fetch(
+          `${CMS_API_URL}?page_id=${encodeURIComponent(PAGE_ID)}&t=${Date.now()}`,
+          {cache:"no-store"}
+        );
+
+        if(!response.ok){
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if(!data || data.success !== true){
+          throw new Error(data && data.error ? data.error : "CMS API error");
+        }
+
+        cmsData = data;
+
+        applyBackground(data.backgrounds || {});
+        renderPage();
+
+      }catch(error){
+        console.error("CMS load error:",error);
+        root.innerHTML = `<div class="loading">${escHtml(t.loadError)}</div>`;
+      }
+    }
+
+    function setLang(lang){
+      try{
+        localStorage.setItem(
+          "lang",
+          lang === "ja" ? "ja" : "en"
+        );
+      }catch(e){}
+
+      renderPage();
+    }
+
+    (function init(){
       let saved = "ja";
-      try{saved = localStorage.getItem("lang") || "ja"}catch(e){}
-      setLang(saved === "en" ? "en" : "ja");
+
+      try{
+        saved = localStorage.getItem("lang") || "ja";
+      }catch(e){}
+
+      if(saved !== "en"){
+        saved = "ja";
+      }
+
+      document.getElementById("btnJP")
+        .classList.toggle("is-active",saved === "ja");
+
+      document.getElementById("btnEN")
+        .classList.toggle("is-active",saved === "en");
+
+      loadCms();
     })();
   </script>
 </body>
