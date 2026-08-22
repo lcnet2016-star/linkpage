@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ja">
+<html lang="en">
 <head>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-VSEFPGK0YZ"></script>
@@ -148,7 +148,7 @@
     .grid{
       display:grid;
       gap:14px;
-      grid-template-columns:repeat(3, 1fr);
+      grid-template-columns:repeat(4, 1fr);
       align-items:stretch;
     }
 
@@ -304,24 +304,24 @@
 <body>
   <div class="wrap">
     <div class="container">
-      <h1 class="title" id="tTitle">のあ୨୧</h1>
-      <p class="subtitle" id="tSub">田舎で暮らす陰キャ女子</p>
+      <h1 class="title" id="tTitle">Noa୨୧</h1>
+      <p class="subtitle" id="tSub">Quiet countryside girl</p>
 
       <div class="section" aria-label="Latest social posts">
-        <h2 id="secSocial">📱 SNSをチェックする</h2>
+        <h2 id="secSocial">📱 Check my social media</h2>
         <div class="grid" id="snsGrid">
-          <div class="loading">読み込み中...</div>
+          <div class="loading">Loading...</div>
         </div>
       </div>
 
       <div class="section" aria-label="Fan club list">
-        <h2 id="secFanclub">🔞 18歳以上はこちら</h2>
+        <h2 id="secFanclub">🔞 For adults only</h2>
         <a
           class="btn btn-main fc-btn"
           id="fanclubLink"
           href="https://noanoshita.com/verify/"
           aria-label="ファンクラブ一覧"
-        >ファンクラブ一覧</a>
+        >Fan club list</a>
       </div>
 
       <div class="lang" aria-label="Language switch">
@@ -383,7 +383,8 @@
     const PLACEHOLDER_THUMB = "/images/NY.jpg";
 
     const SNS_LINKS = {
-      youtube:"https://www.youtube.com/@challengenoa",
+      facebook:"https://www.facebook.com/1278933258642176",
+      youtube:"https://www.youtube.com/channel/UC0RDaouFGRuQvStBnnkmqVw",
       instagram:"https://www.instagram.com/noanoshita/",
       x:"https://x.com/noachidesu"
     };
@@ -399,9 +400,9 @@
 
     function getLang(){
       try{
-        return localStorage.getItem("lang") === "en" ? "en" : "ja";
+        return localStorage.getItem("lang") === "ja" ? "ja" : "en";
       }catch(e){
-        return "ja";
+        return "en";
       }
     }
 
@@ -431,7 +432,7 @@ ${item.textOnly?`<div class="x-text-thumb"><img class="x-logo" src="/images/X.pn
       const lang = getLang();
       const t = I18N[lang] || I18N.ja;
 
-      let youtube = null;
+      let facebook = null;
       let instagram = null;
       let x = null;
 
@@ -439,7 +440,7 @@ ${item.textOnly?`<div class="x-text-thumb"><img class="x-logo" src="/images/X.pn
         const response = await fetch(SNS_API_URL + "?t=" + Date.now(), {cache:"no-store"});
         if(!response.ok) throw new Error("HTTP " + response.status);
         const data = await response.json();
-        youtube = data.youtube_latest || null;
+        facebook = data.facebook_latest || null;
         instagram = data.instagram_latest || null;
         x = data.x_latest || null;
       }catch(error){
@@ -448,11 +449,19 @@ ${item.textOnly?`<div class="x-text-thumb"><img class="x-logo" src="/images/X.pn
 
       const items = [
         {
+          key:"facebook",
+          platform:"Facebook",
+          title:facebook && facebook.title ? facebook.title : t.facebookFallback,
+          thumb:facebook && facebook.thumb_url ? facebook.thumb_url : PLACEHOLDER_THUMB,
+          url:facebook && facebook.url ? facebook.url : SNS_LINKS.facebook,
+          button:t.facebookButton
+        },
+        {
           key:"youtube",
           platform:"YouTube",
-          title:youtube && youtube.title ? youtube.title : t.youtubeFallback,
-          thumb:youtube && youtube.thumb_url ? youtube.thumb_url : PLACEHOLDER_THUMB,
-          url:youtube && youtube.url ? youtube.url : SNS_LINKS.youtube,
+          title:t.youtubeFallback,
+          thumb:"/images/Youtube.png",
+          url:SNS_LINKS.youtube,
           button:t.youtubeButton
         },
         {
@@ -496,24 +505,28 @@ ${item.textOnly?`<div class="x-text-thumb"><img class="x-logo" src="/images/X.pn
         secSocial:"📱 SNSをチェックする",
         secFanclub:"🔞 18歳以上はこちら",
         fanclubButton:"ファンクラブ一覧",
+        facebookButton:"Facebookで見る",
         youtubeButton:"YouTubeで見る",
         instagramButton:"Instagramで見る",
         xButton:"Xで見る",
-        youtubeFallback:"最新動画をYouTubeで見る",
+        facebookFallback:"最新投稿をFacebookで見る",
+        youtubeFallback:"YouTubeチャンネルを見る",
         instagramFallback:"最新投稿をInstagramで見る",
         xPending:"最新投稿は準備中です"
       },
       en:{
         htmlLang:"en",
-        title:"Noa",
+        title:"Noa୨୧",
         sub:"Quiet countryside girl",
         secSocial:"📱 Check my social media",
         secFanclub:"🔞 For adults only",
         fanclubButton:"Fan club list",
-        youtubeButton:"Watch on YouTube",
+        facebookButton:"View on Facebook",
+        youtubeButton:"View on YouTube",
         instagramButton:"View on Instagram",
         xButton:"View on X",
-        youtubeFallback:"Watch the latest video on YouTube",
+        facebookFallback:"View the latest post on Facebook",
+        youtubeFallback:"Visit my YouTube channel",
         instagramFallback:"View the latest post on Instagram",
         xPending:"Latest post coming soon"
       }
@@ -537,9 +550,9 @@ ${item.textOnly?`<div class="x-text-thumb"><img class="x-logo" src="/images/X.pn
     }
 
     (function initLang(){
-      let saved = "ja";
-      try{saved = localStorage.getItem("lang") || "ja"}catch(e){}
-      setLang(saved === "en" ? "en" : "ja");
+      let saved = "en";
+      try{saved = localStorage.getItem("lang") || "en"}catch(e){}
+      setLang(saved === "ja" ? "ja" : "en");
     })();
   </script>
 </body>
