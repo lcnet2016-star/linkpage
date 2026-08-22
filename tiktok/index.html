@@ -1,0 +1,748 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VSEFPGK0YZ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VSEFPGK0YZ');
+  </script>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Noa | links</title>
+  <meta name="description" content="Noa links" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Hachi+Maru+Pop&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bgBase:#fff0ebff;
+      --bgSize:cover;
+      --bgRepeat:no-repeat;
+      --bgPos:center;
+      --veilOpacity:.30;
+      --veilOpacityPortrait:.42;
+      --fontFamily:"M PLUS Rounded 1c",system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans JP",sans-serif;
+      --titleFont:"Hachi Maru Pop",cursive;
+      --containerMax:760px;
+      --padTop:30px;
+      --padSide:16px;
+      --padBottom:40px;
+      --titleSize:38px;
+      --subtitleSize:18px;
+      --titleColor:#fff;
+      --subtitleColor:rgba(255,255,255,.9);
+      --textShadow:0 6px 20px rgba(0,0,0,.35);
+      --cardBg:rgba(255,255,255,.25);
+      --cardBorder:rgba(255,255,255,.28);
+      --cardRadius:22px;
+      --cardShadow:0 18px 50px rgba(0,0,0,.20),inset 0 1px 0 rgba(255,255,255,.35);
+      --sectionPad:18px;
+      --brand:#A67189;
+      --snsSize:72px;
+      --snsIconSize:34px;
+      --snsGap:8px;
+      --snsRadius:14px;
+      --footerColor:rgba(255,255,255,.78);
+      --footerSize:12px;
+      --langGap:10px;
+      --langMt:14px;
+      --langBtnH:34px;
+      --langBtnPx:14px;
+      --langBtnRadius:12px;
+      --langBtnBg:rgba(255,255,255,.25);
+      --langBtnBorder:rgba(255,255,255,.28);
+      --langBtnText:rgba(255,255,255,.92);
+      --langBtnBgActive:rgba(255,255,255,.40);
+      --langBtnTextActive:rgba(255,255,255,1);
+    }
+
+    @media(max-width:420px){
+      :root{
+        --padTop:22px;
+        --titleSize:30px;
+        --subtitleSize:16px;
+        --langBtnH:32px;
+        --langBtnPx:12px;
+        --sectionPad:16px;
+        --snsSize:58px;
+        --snsIconSize:30px;
+        --snsGap:4px;
+      }
+    }
+
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--fontFamily);
+      color:var(--titleColor);
+      background-color:var(--bgBase);
+      background-image:none;
+      background-size:var(--bgSize);
+      background-repeat:var(--bgRepeat);
+      background-position:var(--bgPos);
+      background-attachment:fixed;
+    }
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background:rgba(255,240,235,var(--veilOpacity));
+      z-index:-1;
+    }
+
+    .wrap{
+      min-height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:var(--padTop) var(--padSide) var(--padBottom);
+      text-align:center;
+      box-sizing:border-box;
+    }
+
+    .container{
+      width:100%;
+      max-width:var(--containerMax);
+      margin:0 auto;
+      padding-left:max(16px,env(safe-area-inset-left));
+      padding-right:max(16px,env(safe-area-inset-right));
+      box-sizing:border-box;
+    }
+
+    .title{
+      margin:0 0 6px;
+      font-family:var(--titleFont);
+      font-size:var(--titleSize);
+      font-weight:900;
+      text-shadow:var(--textShadow);
+    }
+
+    .subtitle{
+      margin:0 0 10px;
+      font-size:var(--subtitleSize);
+      font-weight:800;
+      color:var(--subtitleColor);
+      text-shadow:var(--textShadow);
+    }
+
+    .section{
+      width:100%;
+      margin:0 0 16px;
+      background:var(--cardBg);
+      border:1px solid var(--cardBorder);
+      border-radius:var(--cardRadius);
+      box-shadow:var(--cardShadow);
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
+      padding:var(--sectionPad);
+      text-align:left;
+      box-sizing:border-box;
+    }
+
+    .section h2{
+      margin:0 0 12px;
+      font-size:18px;
+      font-weight:900;
+      text-shadow:var(--textShadow);
+    }
+
+    .grid{
+      display:grid;
+      gap:14px;
+      grid-template-columns:repeat(4,1fr);
+      align-items:stretch;
+    }
+
+    @media(max-width:760px){
+      .grid{grid-template-columns:repeat(2,1fr)}
+    }
+
+    @media(max-width:360px){
+      .grid{grid-template-columns:1fr}
+    }
+
+    .vcard{
+      background:rgba(255,255,255,.20);
+      border:1px solid rgba(255,255,255,.22);
+      border-radius:18px;
+      overflow:hidden;
+      color:#fff;
+      display:flex;
+      flex-direction:column;
+      height:100%;
+      min-width:0;
+    }
+
+    .platform-name{
+      padding:9px 10px 7px;
+      font-size:14px;
+      font-weight:900;
+      text-align:center;
+      text-shadow:var(--textShadow);
+    }
+
+    .thumb-wrap{
+      width:100%;
+      aspect-ratio:16/9;
+      overflow:hidden;
+      background:rgba(255,255,255,.18);
+    }
+
+    .thumb{
+      width:100%;
+      height:100%;
+      display:block;
+      object-fit:cover;
+    }
+
+    .vmeta{
+      padding:10px;
+      display:flex;
+      flex-direction:column;
+      flex:1;
+      min-width:0;
+    }
+
+    .vtitle{
+      font-weight:900;
+      font-size:14px;
+      line-height:1.35;
+      margin:0 0 10px;
+      text-shadow:var(--textShadow);
+      display:-webkit-box;
+      -webkit-box-orient:vertical;
+      -webkit-line-clamp:2;
+      overflow:hidden;
+      min-height:calc(14px * 1.35 * 2);
+    }
+
+    .btn{
+      display:block;
+      width:100%;
+      text-align:center;
+      padding:10px;
+      border-radius:14px;
+      font-weight:900;
+      text-decoration:none;
+      border:1px solid rgba(255,255,255,.18);
+      box-sizing:border-box;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      font-size:14px;
+      margin-top:8px;
+    }
+
+    .vmeta .btn:first-of-type{margin-top:auto}
+
+    .btn-main{
+      background:var(--brand);
+      color:#fff;
+    }
+
+    .btn-sub{
+      background:rgba(166,113,137,.20);
+      color:#fff;
+    }
+
+    .single-button-wrap .btn{margin-top:0}
+
+    .loading{
+      opacity:.9;
+      font-weight:800;
+      text-align:center;
+      text-shadow:var(--textShadow);
+      padding:10px 0;
+    }
+
+    .social{
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+      gap:var(--snsGap);
+      margin:0 0 16px;
+      flex-wrap:wrap;
+    }
+
+    .social-item{
+      width:var(--snsSize);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+    }
+
+    .social-item a{
+      width:var(--snsSize);
+      height:var(--snsSize);
+      display:grid;
+      place-items:center;
+      border-radius:var(--snsRadius);
+      text-decoration:none;
+    }
+
+    .social-item img{
+      width:var(--snsIconSize);
+      height:var(--snsIconSize);
+      display:block;
+      filter:brightness(0) invert(1);
+    }
+
+    .campaign-preview{
+      font-weight:900;
+      line-height:1.6;
+      text-shadow:var(--textShadow);
+      padding:4px 0;
+    }
+
+    .lang{
+      margin-top:var(--langMt);
+      display:flex;
+      justify-content:center;
+      gap:var(--langGap);
+    }
+
+    .lang button{
+      height:var(--langBtnH);
+      padding:0 var(--langBtnPx);
+      border-radius:var(--langBtnRadius);
+      background:var(--langBtnBg);
+      border:1px solid var(--langBtnBorder);
+      color:var(--langBtnText);
+      font-weight:900;
+      font-family:var(--fontFamily);
+      cursor:pointer;
+      text-shadow:var(--textShadow);
+    }
+
+    .lang button.is-active{
+      background:var(--langBtnBgActive);
+      color:var(--langBtnTextActive);
+    }
+
+    .foot{
+      margin-top:14px;
+      font-size:var(--footerSize);
+      color:var(--footerColor);
+      text-shadow:var(--textShadow);
+      text-align:center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="container">
+      <h1 class="title" id="tTitle">のあ୨୧</h1>
+      <p class="subtitle" id="tSub">田舎で暮らす陰キャ女子</p>
+
+      <div id="pageContent">
+        <div class="loading">読み込み中...</div>
+      </div>
+
+      <div class="social" id="socialFooter" aria-label="SNS links"></div>
+
+      <div class="lang" aria-label="Language switch">
+        <button id="btnJP" type="button" onclick="setLang('ja')">JP</button>
+        <button id="btnEN" type="button" onclick="setLang('en')">EN</button>
+      </div>
+
+      <div class="foot">© Noa</div>
+    </div>
+  </div>
+
+  <script>
+    const PAGE_ID = "tiktok";
+
+    const CMS_API_URL =
+      "https://script.google.com/macros/s/AKfycbyyhzKs--PsnAylt-bAgGeTOpMV14CrvJieNXsaIBYSDUrlWl0PXmhm_FvhrYKf65QqRw/exec";
+
+    const FALLBACK_IMAGE = "/images/NY.jpg";
+
+    const PAGE_I18N = {
+      ja:{
+        htmlLang:"ja",
+        title:"のあ୨୧",
+        sub:"田舎で暮らす陰キャ女子",
+        loading:"読み込み中...",
+        loadError:"読み込みに失敗しました"
+      },
+      en:{
+        htmlLang:"en",
+        title:"Noa୨୧",
+        sub:"Quiet countryside girl",
+        loading:"Loading...",
+        loadError:"Failed to load"
+      }
+    };
+
+    let cmsData = null;
+
+    function escHtml(value){
+      return String(value ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function getLang(){
+      try{
+        return localStorage.getItem("lang") === "ja" ? "ja" : "en";
+      }catch(e){
+        return "en";
+      }
+    }
+
+    function getLinkLabel(link,lang){
+      if(lang === "ja"){
+        return link.label_ja || link.label_en || "見る";
+      }
+      return link.label_en || link.label_ja || "View";
+    }
+
+    function trackClick(trackingId,extra={}){
+      if(!trackingId) return;
+
+      try{
+        gtag("event","link_click",{
+          tracking_id:trackingId,
+          page_id:PAGE_ID,
+          ...extra
+        });
+      }catch(e){}
+    }
+
+    function bindTrackedLinks(root){
+      root.querySelectorAll("[data-tracking-id]").forEach(link => {
+        link.addEventListener("click",() => {
+          trackClick(
+            link.dataset.trackingId || "",
+            {
+              destination_url:link.href || "",
+              link_text:(link.textContent || "").trim()
+            }
+          );
+        });
+      });
+    }
+
+    function applyBackground(backgrounds){
+      const bg = backgrounds || {};
+      const h = new Date().getHours();
+
+      let slot = "night";
+      if(h >= 5 && h < 16) slot = "morning";
+      else if(h >= 16 && h < 19) slot = "evening";
+
+      const imgUrl =
+        bg[slot] ||
+        bg.morning ||
+        bg.evening ||
+        bg.night ||
+        FALLBACK_IMAGE;
+
+      document.body.style.backgroundImage = `url('${imgUrl}')`;
+
+      const img = new Image();
+
+      img.onload = () => {
+        const portrait = img.naturalHeight > img.naturalWidth;
+
+        document.documentElement.style.setProperty(
+          "--bgSize",
+          portrait ? "contain" : "cover"
+        );
+
+        document.documentElement.style.setProperty(
+          "--veilOpacity",
+          portrait
+            ? getComputedStyle(document.documentElement)
+                .getPropertyValue("--veilOpacityPortrait").trim()
+            : ".30"
+        );
+      };
+
+      img.onerror = () => {
+        document.documentElement.style.setProperty("--bgSize","cover");
+        document.documentElement.style.setProperty("--veilOpacity",".30");
+      };
+
+      img.src = imgUrl;
+    }
+
+    function renderCard(card,lang){
+      const title = String(card.title || "");
+      const image = card.image_url || FALLBACK_IMAGE;
+      const links = Array.isArray(card.links) ? card.links : [];
+
+      const buttons = links.map((link,index) => {
+        const cls = index === 0 ? "btn btn-main" : "btn btn-sub";
+        return `
+          <a
+            class="${cls}"
+            href="${escHtml(link.url || "#")}"
+            target="_blank"
+            rel="noopener"
+            data-tracking-id="${escHtml(link.tracking_id || card.tracking_id || "")}"
+          >${escHtml(getLinkLabel(link,lang))}</a>
+        `;
+      }).join("");
+
+      const platform =
+        card.card_type === "sns"
+          ? (card.source_key || "")
+          : "";
+
+      return `
+        <div class="vcard">
+          ${platform ? `<div class="platform-name">${escHtml(platform.charAt(0).toUpperCase() + platform.slice(1))}</div>` : ""}
+          <div class="thumb-wrap">
+            <img
+              class="thumb"
+              src="${escHtml(image)}"
+              alt="${escHtml(title)}"
+              onerror="this.onerror=null;this.src='${escHtml(FALLBACK_IMAGE)}';"
+            >
+          </div>
+          <div class="vmeta">
+            <div class="vtitle">${escHtml(title)}</div>
+            ${buttons}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderButtonSection(section,lang){
+      const cards = Array.isArray(section.cards) ? section.cards : [];
+      const buttons = [];
+
+      cards.forEach(card => {
+        (card.links || []).forEach((link,index) => {
+          buttons.push(`
+            <a
+              class="${index === 0 ? "btn btn-main" : "btn btn-sub"}"
+              href="${escHtml(link.url || "#")}"
+              target="_blank"
+              rel="noopener"
+              data-tracking-id="${escHtml(link.tracking_id || card.tracking_id || "")}"
+            >${escHtml(getLinkLabel(link,lang))}</a>
+          `);
+        });
+      });
+
+      return `<div class="single-button-wrap">${buttons.join("")}</div>`;
+    }
+
+    function renderSection(section,lang){
+      const heading =
+        `${section.icon ? section.icon + " " : ""}${section.title || ""}`;
+
+      let body = "";
+
+      if(section.layout === "button" || section.layout === "buttons"){
+        body = renderButtonSection(section,lang);
+      }else{
+        const cards = Array.isArray(section.cards) ? section.cards : [];
+        if(!cards.length) return "";
+
+        body = `
+          <div class="grid">
+            ${cards.map(card => renderCard(card,lang)).join("")}
+          </div>
+        `;
+      }
+
+      return `
+        <section class="section" data-section-id="${escHtml(section.section_id || "")}">
+          <h2>${escHtml(heading)}</h2>
+          ${body}
+        </section>
+      `;
+    }
+
+    function renderCampaigns(data,lang){
+      const campaigns = Array.isArray(data.campaigns) ? data.campaigns : [];
+      const upcoming = Array.isArray(data.upcoming) ? data.upcoming : [];
+
+      if(!campaigns.length && !upcoming.length){
+        return "";
+      }
+
+      const title = lang === "ja" ? "🎉 期間限定" : "🎉 Limited time";
+
+      if(!campaigns.length && upcoming.length){
+        return `
+          <section class="section">
+            <h2>${title}</h2>
+            ${upcoming.map(item => `
+              <div class="campaign-preview">${escHtml(item.title || "")}</div>
+            `).join("")}
+          </section>
+        `;
+      }
+
+      const campaignCards = campaigns.map(campaign => {
+        const links = (campaign.links || []).map((link,index) => `
+          <a
+            class="${index === 0 ? "btn btn-main" : "btn btn-sub"}"
+            href="${escHtml(link.url || "#")}"
+            target="_blank"
+            rel="noopener"
+            data-tracking-id="${escHtml(campaign.tracking_id || "")}"
+          >${escHtml(link.text || (lang === "ja" ? "見る" : "View"))}</a>
+        `).join("");
+
+        return `
+          <div class="vcard">
+            <div class="thumb-wrap">
+              <img
+                class="thumb"
+                src="${escHtml(campaign.image_url || FALLBACK_IMAGE)}"
+                alt="${escHtml(campaign.title || "")}"
+                onerror="this.onerror=null;this.src='${escHtml(FALLBACK_IMAGE)}';"
+              >
+            </div>
+            <div class="vmeta">
+              <div class="vtitle">${escHtml(campaign.title || "")}</div>
+              ${links}
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      return `
+        <section class="section">
+          <h2>${title}</h2>
+          <div class="grid">${campaignCards}</div>
+        </section>
+      `;
+    }
+
+    function renderSocialFooter(data){
+      const root = document.getElementById("socialFooter");
+      const socials = Array.isArray(data.social) ? data.social : [];
+
+      root.innerHTML = socials.map(item => `
+        <div class="social-item">
+          <a
+            href="${escHtml(item.url || "#")}"
+            target="_blank"
+            rel="noopener"
+            aria-label="${escHtml(item.name || item.sns_id || "")}"
+            data-tracking-id="${escHtml(item.tracking_id || "")}"
+          >
+            <img
+              src="${escHtml(item.icon_url || "")}"
+              alt="${escHtml(item.name || item.sns_id || "")}"
+            >
+          </a>
+        </div>
+      `).join("");
+
+      bindTrackedLinks(root);
+    }
+
+    function renderPage(){
+      if(!cmsData) return;
+
+      const lang = getLang();
+      const t = PAGE_I18N[lang] || PAGE_I18N.en;
+
+      document.documentElement.lang = t.htmlLang;
+      document.getElementById("tTitle").textContent = t.title;
+      document.getElementById("tSub").textContent = t.sub;
+
+      document.getElementById("btnJP")
+        .classList.toggle("is-active",lang === "ja");
+
+      document.getElementById("btnEN")
+        .classList.toggle("is-active",lang === "en");
+
+      const sections = Array.isArray(cmsData.sections) ? cmsData.sections : [];
+
+      const html = [
+        renderCampaigns(cmsData,lang),
+        ...sections.map(section => renderSection(section,lang))
+      ].join("");
+
+      const root = document.getElementById("pageContent");
+      root.innerHTML = html || `<div class="loading">${escHtml(t.loadError)}</div>`;
+
+      bindTrackedLinks(root);
+      renderSocialFooter(cmsData);
+    }
+
+    async function loadCms(){
+      const lang = getLang();
+      const t = PAGE_I18N[lang] || PAGE_I18N.en;
+      const root = document.getElementById("pageContent");
+
+      root.innerHTML = `<div class="loading">${escHtml(t.loading)}</div>`;
+
+      try{
+        const response = await fetch(
+          `${CMS_API_URL}?page_id=${encodeURIComponent(PAGE_ID)}&t=${Date.now()}`,
+          {cache:"no-store"}
+        );
+
+        if(!response.ok){
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if(!data || data.success !== true){
+          throw new Error(data && data.error ? data.error : "CMS API error");
+        }
+
+        cmsData = data;
+
+        applyBackground(data.backgrounds || {});
+        renderPage();
+
+      }catch(error){
+        console.error("CMS load error:",error);
+        root.innerHTML = `<div class="loading">${escHtml(t.loadError)}</div>`;
+      }
+    }
+
+    function setLang(lang){
+      try{
+        localStorage.setItem(
+          "lang",
+          lang === "ja" ? "ja" : "en"
+        );
+      }catch(e){}
+
+      renderPage();
+    }
+
+    (function init(){
+      let saved = "ja";
+
+      try{
+        saved = localStorage.getItem("lang") || "ja";
+      }catch(e){}
+
+      if(saved !== "en"){
+        saved = "ja";
+      }
+
+      document.getElementById("btnJP")
+        .classList.toggle("is-active",saved === "ja");
+
+      document.getElementById("btnEN")
+        .classList.toggle("is-active",saved === "en");
+
+      loadCms();
+    })();
+  </script>
+</body>
+</html>
