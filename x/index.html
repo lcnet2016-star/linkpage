@@ -364,6 +364,8 @@
 
     const FALLBACK_IMAGE = "/images/NY.jpg";
 
+    const CMS_CACHE_KEY = `cms_cache_${PAGE_ID}`;
+
     const PAGE_I18N = {
       ja:{
         htmlLang:"ja",
@@ -506,6 +508,8 @@
           <div class="thumb-wrap">
             <img
               class="thumb"
+              loading="lazy"
+              decoding="async"
               src="${escHtml(image)}"
               alt="${escHtml(title)}"
               onerror="this.onerror=null;this.src='${escHtml(FALLBACK_IMAGE)}';"
@@ -604,6 +608,8 @@
             <div class="thumb-wrap">
               <img
                 class="thumb"
+                loading="lazy"
+                decoding="async"
                 src="${escHtml(campaign.image_url || FALLBACK_IMAGE)}"
                 alt="${escHtml(campaign.title || "")}"
                 onerror="this.onerror=null;this.src='${escHtml(FALLBACK_IMAGE)}';"
@@ -639,6 +645,8 @@
             data-tracking-id="${escHtml(item.tracking_id || "")}"
           >
             <img
+              loading="lazy"
+              decoding="async"
               src="${escHtml(item.icon_url || "")}"
               alt="${escHtml(item.name || item.sns_id || "")}"
             >
@@ -679,13 +687,51 @@
       renderSocialFooter(cmsData);
     }
 
+
+    function loadCachedCms(){
+      try{
+        const raw = localStorage.getItem(CMS_CACHE_KEY);
+        if(!raw) return null;
+
+        const data = JSON.parse(raw);
+        if(!data || data.success !== true) return null;
+
+        return data;
+      }catch(error){
+        console.warn("CMS browser cache read error:", error);
+        return null;
+      }
+    }
+
+    function saveCachedCms(data){
+      try{
+        localStorage.setItem(
+          CMS_CACHE_KEY,
+          JSON.stringify(data)
+        );
+      }catch(error){
+        console.warn("CMS browser cache write error:", error);
+      }
+    }
+
     async function loadCms(){
       const lang = getLang();
       const t = PAGE_I18N[lang] || PAGE_I18N.en;
       const root = document.getElementById("pageContent");
 
-      root.innerHTML = `<div class="loading">${escHtml(t.loading)}</div>`;
+      // 前回取得したCMSデータがあれば即表示
+      const cached = loadCachedCms();
 
+      if(cached){
+        cmsData = cached;
+        applyBackground(cached.backgrounds || {});
+        renderPage();
+      }else{
+        root.innerHTML =
+          `<div class="loading">${escHtml(t.loading)}</div>`;
+      }
+
+      // 裏で最新CMSを取得
       try{
         const response = await fetch(
           `${CMS_API_URL}?page_id=${encodeURIComponent(PAGE_ID)}&t=${Date.now()}`,
@@ -699,17 +745,29 @@
         const data = await response.json();
 
         if(!data || data.success !== true){
-          throw new Error(data && data.error ? data.error : "CMS API error");
+          throw new Error(
+            data && data.error
+              ? data.error
+              : "CMS API error"
+          );
         }
 
-        cmsData = data;
+        // 次回アクセス用に保存
+        saveCachedCms(data);
 
+        // 最新データへ差し替え
+        cmsData = data;
         applyBackground(data.backgrounds || {});
         renderPage();
 
       }catch(error){
-        console.error("CMS load error:",error);
-        root.innerHTML = `<div class="loading">${escHtml(t.loadError)}</div>`;
+        console.error("CMS load error:", error);
+
+        // キャッシュすら無い初回だけエラー表示
+        if(!cached){
+          root.innerHTML =
+            `<div class="loading">${escHtml(t.loadError)}</div>`;
+        }
       }
     }
 
