@@ -362,6 +362,8 @@
     const CMS_API_URL =
       "https://script.google.com/macros/s/AKfycbyyhzKs--PsnAylt-bAgGeTOpMV14CrvJieNXsaIBYSDUrlWl0PXmhm_FvhrYKf65QqRw/exec";
 
+    const CMS_STATIC_URL = `/data/cms/${PAGE_ID}.json`;
+
     const FALLBACK_IMAGE = "/images/NY.jpg";
 
     const CMS_CACHE_KEY = `cms_cache_${PAGE_ID}`;
@@ -714,12 +716,40 @@
       }
     }
 
+    async function fetchJson_(url){
+      const response = await fetch(
+        url,
+        {cache:"no-store"}
+      );
+
+      if(!response.ok){
+        throw new Error(
+          `HTTP ${response.status}`
+        );
+      }
+
+      const data = await response.json();
+
+      if(
+        !data ||
+        data.success !== true
+      ){
+        throw new Error(
+          data && data.error
+            ? data.error
+            : "CMS data error"
+        );
+      }
+
+      return data;
+    }
+
     async function loadCms(){
       const lang = getLang();
       const t = PAGE_I18N[lang] || PAGE_I18N.en;
       const root = document.getElementById("pageContent");
 
-      // 前回取得したCMSデータがあれば即表示
+      // ① ブラウザに前回データがあれば即表示
       const cached = loadCachedCms();
 
       if(cached){
@@ -731,39 +761,46 @@
           `<div class="loading">${escHtml(t.loading)}</div>`;
       }
 
-      // 裏で最新CMSを取得
+      // ② GitHub Pages上の静的JSONを優先取得
       try{
-        const response = await fetch(
-          `${CMS_API_URL}?page_id=${encodeURIComponent(PAGE_ID)}&t=${Date.now()}`,
-          {cache:"no-store"}
+        const staticData = await fetchJson_(
+          `${CMS_STATIC_URL}?v=${Date.now()}`
         );
 
-        if(!response.ok){
-          throw new Error(`HTTP ${response.status}`);
-        }
+        saveCachedCms(staticData);
 
-        const data = await response.json();
-
-        if(!data || data.success !== true){
-          throw new Error(
-            data && data.error
-              ? data.error
-              : "CMS API error"
-          );
-        }
-
-        // 次回アクセス用に保存
-        saveCachedCms(data);
-
-        // 最新データへ差し替え
-        cmsData = data;
-        applyBackground(data.backgrounds || {});
+        cmsData = staticData;
+        applyBackground(staticData.backgrounds || {});
         renderPage();
 
-      }catch(error){
-        console.error("CMS load error:", error);
+        return;
 
-        // キャッシュすら無い初回だけエラー表示
+      }catch(staticError){
+        console.warn(
+          "Static CMS JSON load error:",
+          staticError
+        );
+      }
+
+      // ③ 静的JSONが壊れている・未生成の場合のみGASへフォールバック
+      try{
+        const gasData = await fetchJson_(
+          `${CMS_API_URL}?page_id=${encodeURIComponent(PAGE_ID)}&t=${Date.now()}`
+        );
+
+        saveCachedCms(gasData);
+
+        cmsData = gasData;
+        applyBackground(gasData.backgrounds || {});
+        renderPage();
+
+      }catch(gasError){
+        console.error(
+          "CMS GAS fallback error:",
+          gasError
+        );
+
+        // localStorageにも何も無い初回だけエラー表示
         if(!cached){
           root.innerHTML =
             `<div class="loading">${escHtml(t.loadError)}</div>`;
