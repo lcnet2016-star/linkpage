@@ -293,6 +293,22 @@
       filter:brightness(0) invert(1);
     }
 
+    .update-badge{
+      min-height:16px;
+      margin-top:-5px;
+      font-size:10px;
+      line-height:16px;
+      font-weight:900;
+      color:#fff;
+      text-align:center;
+      text-shadow:var(--textShadow);
+      white-space:nowrap;
+    }
+
+    .update-badge.is-empty{
+      visibility:hidden;
+    }
+
     .campaign-preview{
       font-weight:900;
       line-height:1.6;
@@ -357,12 +373,16 @@
   </div>
 
   <script>
-    const PAGE_ID = "youtube";
+    const PAGE_ID = "noanoshita.com";
 
     const CMS_API_URL =
       "https://script.google.com/macros/s/AKfycbyyhzKs--PsnAylt-bAgGeTOpMV14CrvJieNXsaIBYSDUrlWl0PXmhm_FvhrYKf65QqRw/exec";
 
+    const CMS_STATIC_URL = `/data/cms/${PAGE_ID}.json`;
+
     const FALLBACK_IMAGE = "/images/NY.jpg";
+
+    const CMS_CACHE_KEY = `cms_cache_${PAGE_ID}`;
 
     const PAGE_I18N = {
       ja:{
@@ -506,6 +526,8 @@
           <div class="thumb-wrap">
             <img
               class="thumb"
+              loading="lazy"
+              decoding="async"
               src="${escHtml(image)}"
               alt="${escHtml(title)}"
               onerror="this.onerror=null;this.src='${escHtml(FALLBACK_IMAGE)}';"
@@ -604,6 +626,8 @@
             <div class="thumb-wrap">
               <img
                 class="thumb"
+                loading="lazy"
+                decoding="async"
                 src="${escHtml(campaign.image_url || FALLBACK_IMAGE)}"
                 alt="${escHtml(campaign.title || "")}"
                 onerror="this.onerror=null;this.src='${escHtml(FALLBACK_IMAGE)}';"
@@ -625,26 +649,118 @@
       `;
     }
 
+
+    function getTodayKeyJst(){
+      const parts = new Intl.DateTimeFormat(
+        "en-CA",
+        {
+          timeZone:"Asia/Tokyo",
+          year:"numeric",
+          month:"2-digit",
+          day:"2-digit"
+        }
+      ).formatToParts(new Date());
+
+      const map = {};
+      parts.forEach(part => {
+        map[part.type] = part.value;
+      });
+
+      return `${map.year}-${map.month}-${map.day}`;
+    }
+
+    function getDateKeyJst(value){
+      if(!value) return "";
+
+      const date = new Date(value);
+      if(Number.isNaN(date.getTime())) return "";
+
+      const parts = new Intl.DateTimeFormat(
+        "en-CA",
+        {
+          timeZone:"Asia/Tokyo",
+          year:"numeric",
+          month:"2-digit",
+          day:"2-digit"
+        }
+      ).formatToParts(date);
+
+      const map = {};
+      parts.forEach(part => {
+        map[part.type] = part.value;
+      });
+
+      return `${map.year}-${map.month}-${map.day}`;
+    }
+
+    function getLatestPublishedMap(data){
+      const result = {};
+      const sections = Array.isArray(data.sections) ? data.sections : [];
+
+      sections.forEach(section => {
+        const cards = Array.isArray(section.cards) ? section.cards : [];
+
+        cards.forEach(card => {
+          if(
+            String(card.card_type || "").toLowerCase() !== "sns"
+          ){
+            return;
+          }
+
+          const key = String(card.source_key || "").toLowerCase();
+          if(!key) return;
+
+          result[key] = card.published_at || "";
+        });
+      });
+
+      return result;
+    }
+
     function renderSocialFooter(data){
       const root = document.getElementById("socialFooter");
       const socials = Array.isArray(data.social) ? data.social : [];
+      const publishedMap = getLatestPublishedMap(data);
+      const todayKey = getTodayKeyJst();
+      const lang = getLang();
 
-      root.innerHTML = socials.map(item => `
-        <div class="social-item">
-          <a
-            href="${escHtml(item.url || "#")}"
-            target="_blank"
-            rel="noopener"
-            aria-label="${escHtml(item.name || item.sns_id || "")}"
-            data-tracking-id="${escHtml(item.tracking_id || "")}"
-          >
-            <img
-              src="${escHtml(item.icon_url || "")}"
-              alt="${escHtml(item.name || item.sns_id || "")}"
+      root.innerHTML = socials.map(item => {
+        const snsKey = String(item.sns_id || "").toLowerCase();
+        const publishedAt = publishedMap[snsKey] || "";
+
+        const showToday =
+          item.update_badge === true &&
+          getDateKeyJst(publishedAt) === todayKey;
+
+        const badgeText =
+          showToday
+            ? (lang === "ja" ? "本日更新！" : "Updated today!")
+            : "";
+
+        return `
+          <div class="social-item">
+            <a
+              href="${escHtml(item.url || "#")}"
+              target="_blank"
+              rel="noopener"
+              aria-label="${escHtml(item.name || item.sns_id || "")}"
+              data-tracking-id="${escHtml(item.tracking_id || "")}"
             >
-          </a>
-        </div>
-      `).join("");
+              <img
+                loading="lazy"
+                decoding="async"
+                src="${escHtml(item.icon_url || "")}"
+                alt="${escHtml(item.name || item.sns_id || "")}"
+              >
+            </a>
+
+            <div
+              class="update-badge ${showToday ? "" : "is-empty"}"
+              aria-hidden="${showToday ? "false" : "true"}"
+            >${escHtml(badgeText || "更新")}</div>
+          </div>
+        `;
+      }).join("");
 
       bindTrackedLinks(root);
     }
@@ -679,37 +795,122 @@
       renderSocialFooter(cmsData);
     }
 
+
+    function loadCachedCms(){
+      try{
+        const raw = localStorage.getItem(CMS_CACHE_KEY);
+        if(!raw) return null;
+
+        const data = JSON.parse(raw);
+        if(!data || data.success !== true) return null;
+
+        return data;
+      }catch(error){
+        console.warn("CMS browser cache read error:", error);
+        return null;
+      }
+    }
+
+    function saveCachedCms(data){
+      try{
+        localStorage.setItem(
+          CMS_CACHE_KEY,
+          JSON.stringify(data)
+        );
+      }catch(error){
+        console.warn("CMS browser cache write error:", error);
+      }
+    }
+
+    async function fetchJson_(url){
+      const response = await fetch(
+        url,
+        {cache:"no-store"}
+      );
+
+      if(!response.ok){
+        throw new Error(
+          `HTTP ${response.status}`
+        );
+      }
+
+      const data = await response.json();
+
+      if(
+        !data ||
+        data.success !== true
+      ){
+        throw new Error(
+          data && data.error
+            ? data.error
+            : "CMS data error"
+        );
+      }
+
+      return data;
+    }
+
     async function loadCms(){
       const lang = getLang();
       const t = PAGE_I18N[lang] || PAGE_I18N.en;
       const root = document.getElementById("pageContent");
 
-      root.innerHTML = `<div class="loading">${escHtml(t.loading)}</div>`;
+      // ① ブラウザに前回データがあれば即表示
+      const cached = loadCachedCms();
 
+      if(cached){
+        cmsData = cached;
+        applyBackground(cached.backgrounds || {});
+        renderPage();
+      }else{
+        root.innerHTML =
+          `<div class="loading">${escHtml(t.loading)}</div>`;
+      }
+
+      // ② GitHub Pages上の静的JSONを優先取得
       try{
-        const response = await fetch(
-          `${CMS_API_URL}?page_id=${encodeURIComponent(PAGE_ID)}&t=${Date.now()}`,
-          {cache:"no-store"}
+        const staticData = await fetchJson_(
+          `${CMS_STATIC_URL}?v=${Date.now()}`
         );
 
-        if(!response.ok){
-          throw new Error(`HTTP ${response.status}`);
-        }
+        saveCachedCms(staticData);
 
-        const data = await response.json();
-
-        if(!data || data.success !== true){
-          throw new Error(data && data.error ? data.error : "CMS API error");
-        }
-
-        cmsData = data;
-
-        applyBackground(data.backgrounds || {});
+        cmsData = staticData;
+        applyBackground(staticData.backgrounds || {});
         renderPage();
 
-      }catch(error){
-        console.error("CMS load error:",error);
-        root.innerHTML = `<div class="loading">${escHtml(t.loadError)}</div>`;
+        return;
+
+      }catch(staticError){
+        console.warn(
+          "Static CMS JSON load error:",
+          staticError
+        );
+      }
+
+      // ③ 静的JSONが壊れている・未生成の場合のみGASへフォールバック
+      try{
+        const gasData = await fetchJson_(
+          `${CMS_API_URL}?page_id=${encodeURIComponent(PAGE_ID)}&t=${Date.now()}`
+        );
+
+        saveCachedCms(gasData);
+
+        cmsData = gasData;
+        applyBackground(gasData.backgrounds || {});
+        renderPage();
+
+      }catch(gasError){
+        console.error(
+          "CMS GAS fallback error:",
+          gasError
+        );
+
+        // localStorageにも何も無い初回だけエラー表示
+        if(!cached){
+          root.innerHTML =
+            `<div class="loading">${escHtml(t.loadError)}</div>`;
+        }
       }
     }
 
