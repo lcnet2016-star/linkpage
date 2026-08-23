@@ -293,6 +293,22 @@
       filter:brightness(0) invert(1);
     }
 
+    .update-badge{
+      min-height:16px;
+      margin-top:-5px;
+      font-size:10px;
+      line-height:16px;
+      font-weight:900;
+      color:#fff;
+      text-align:center;
+      text-shadow:var(--textShadow);
+      white-space:nowrap;
+    }
+
+    .update-badge.is-empty{
+      visibility:hidden;
+    }
+
     .campaign-preview{
       font-weight:900;
       line-height:1.6;
@@ -633,28 +649,118 @@
       `;
     }
 
+
+    function getTodayKeyJst(){
+      const parts = new Intl.DateTimeFormat(
+        "en-CA",
+        {
+          timeZone:"Asia/Tokyo",
+          year:"numeric",
+          month:"2-digit",
+          day:"2-digit"
+        }
+      ).formatToParts(new Date());
+
+      const map = {};
+      parts.forEach(part => {
+        map[part.type] = part.value;
+      });
+
+      return `${map.year}-${map.month}-${map.day}`;
+    }
+
+    function getDateKeyJst(value){
+      if(!value) return "";
+
+      const date = new Date(value);
+      if(Number.isNaN(date.getTime())) return "";
+
+      const parts = new Intl.DateTimeFormat(
+        "en-CA",
+        {
+          timeZone:"Asia/Tokyo",
+          year:"numeric",
+          month:"2-digit",
+          day:"2-digit"
+        }
+      ).formatToParts(date);
+
+      const map = {};
+      parts.forEach(part => {
+        map[part.type] = part.value;
+      });
+
+      return `${map.year}-${map.month}-${map.day}`;
+    }
+
+    function getLatestPublishedMap(data){
+      const result = {};
+      const sections = Array.isArray(data.sections) ? data.sections : [];
+
+      sections.forEach(section => {
+        const cards = Array.isArray(section.cards) ? section.cards : [];
+
+        cards.forEach(card => {
+          if(
+            String(card.card_type || "").toLowerCase() !== "sns"
+          ){
+            return;
+          }
+
+          const key = String(card.source_key || "").toLowerCase();
+          if(!key) return;
+
+          result[key] = card.published_at || "";
+        });
+      });
+
+      return result;
+    }
+
     function renderSocialFooter(data){
       const root = document.getElementById("socialFooter");
       const socials = Array.isArray(data.social) ? data.social : [];
+      const publishedMap = getLatestPublishedMap(data);
+      const todayKey = getTodayKeyJst();
+      const lang = getLang();
 
-      root.innerHTML = socials.map(item => `
-        <div class="social-item">
-          <a
-            href="${escHtml(item.url || "#")}"
-            target="_blank"
-            rel="noopener"
-            aria-label="${escHtml(item.name || item.sns_id || "")}"
-            data-tracking-id="${escHtml(item.tracking_id || "")}"
-          >
-            <img
-              loading="lazy"
-              decoding="async"
-              src="${escHtml(item.icon_url || "")}"
-              alt="${escHtml(item.name || item.sns_id || "")}"
+      root.innerHTML = socials.map(item => {
+        const snsKey = String(item.sns_id || "").toLowerCase();
+        const publishedAt = publishedMap[snsKey] || "";
+
+        const showToday =
+          item.update_badge === true &&
+          getDateKeyJst(publishedAt) === todayKey;
+
+        const badgeText =
+          showToday
+            ? (lang === "ja" ? "本日更新！" : "Updated today!")
+            : "";
+
+        return `
+          <div class="social-item">
+            <a
+              href="${escHtml(item.url || "#")}"
+              target="_blank"
+              rel="noopener"
+              aria-label="${escHtml(item.name || item.sns_id || "")}"
+              data-tracking-id="${escHtml(item.tracking_id || "")}"
             >
-          </a>
-        </div>
-      `).join("");
+              <img
+                loading="lazy"
+                decoding="async"
+                src="${escHtml(item.icon_url || "")}"
+                alt="${escHtml(item.name || item.sns_id || "")}"
+              >
+            </a>
+
+            <div
+              class="update-badge ${showToday ? "" : "is-empty"}"
+              aria-hidden="${showToday ? "false" : "true"}"
+            >${escHtml(badgeText || "更新")}</div>
+          </div>
+        `;
+      }).join("");
 
       bindTrackedLinks(root);
     }
