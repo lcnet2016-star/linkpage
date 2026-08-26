@@ -465,43 +465,8 @@
         <div class="fc-btns" id="monthlyButtons" aria-label="Fanclub links"></div>
       </div>
 
-      <!-- SNS：X ｜ Instagram ｜ YouTube ｜ Facebook ｜ ReelFans -->
-      <div class="social" aria-label="SNS links">
-        <div class="social-item">
-          <a href="https://x.com/noanoshita" target="_blank" rel="noopener" aria-label="X">
-            <img src="../images/X.png" alt="X">
-          </a>
-          <div class="social-update" id="updateX" aria-live="polite"></div>
-        </div>
-
-        <div class="social-item">
-          <a href="https://www.instagram.com/noanoshita/" target="_blank" rel="noopener" aria-label="Instagram">
-            <img src="../images/instagram.png" alt="Instagram">
-          </a>
-          <div class="social-update" id="updateInstagram" aria-live="polite"></div>
-        </div>
-
-        <div class="social-item">
-          <a href="https://www.youtube.com/channel/UC0RDaouFGRuQvStBnnkmqVw" target="_blank" rel="noopener" aria-label="YouTube">
-            <img src="../images/Youtube.png" alt="YouTube">
-          </a>
-          <div class="social-update" aria-hidden="true"></div>
-        </div>
-
-        <div class="social-item">
-          <a href="https://www.facebook.com/noanoshita.noa" target="_blank" rel="noopener" aria-label="Facebook">
-            <img src="../images/facebook.png" alt="Facebook">
-          </a>
-          <div class="social-update" id="updateFacebook" aria-live="polite"></div>
-        </div>
-
-        <div class="social-item">
-          <a href="https://reelfans.io/@noanoshita" target="_blank" rel="noopener" aria-label="ReelFans">
-            <img src="../images/RF.png" alt="ReelFans">
-          </a>
-          <div class="social-update" aria-hidden="true"></div>
-        </div>
-      </div>
+      <!-- SNS：CMSから自動生成 -->
+      <div class="social" id="socialFooter" aria-label="SNS links"></div>
 
       <!-- 最下部にJP / EN -->
       <div class="lang" aria-label="Language switch">
@@ -516,20 +481,23 @@
 
   <script>
     // ===== 背景 =====
-    const BG = {
-      morning:"../images/morning.png",
-      evening:"../images/evening.jpg",
-      night:"../images/night.jpg"
-    };
-
-    function pickBgByTime(){
+    function applyBackgroundFromCms_(backgrounds){
+      const bg = backgrounds || {};
       const h = new Date().getHours();
-      if(h >= 5 && h < 16) return BG.morning;
-      if(h >= 16 && h < 19) return BG.evening;
-      return BG.night;
-    }
 
-    function applyBgModeByAspect(imgUrl){
+      let slot = "night";
+      if(h >= 5 && h < 16) slot = "morning";
+      else if(h >= 16 && h < 19) slot = "evening";
+
+      const imgUrl =
+        bg[slot] ||
+        bg.morning ||
+        bg.evening ||
+        bg.night ||
+        FALLBACK_IMAGE;
+
+      document.body.style.backgroundImage = `url('${imgUrl}')`;
+
       const img = new Image();
 
       img.onload = () => {
@@ -557,14 +525,6 @@
       img.src = imgUrl;
     }
 
-    function setBG(){
-      const imgUrl = pickBgByTime();
-      document.body.style.backgroundImage = `url('${imgUrl}')`;
-      applyBgModeByAspect(imgUrl);
-    }
-
-    setBG();
-
     // ===== API =====
     const API_URL =
       "https://script.google.com/macros/s/AKfycbxT_J40PjHDRD-sGVGrM3zPA8Loj7XV9yDV988lkMB7rXVQ7Epka8ZK8aOdYI5NriY1/exec";
@@ -586,8 +546,6 @@
     const CMS_CACHE_KEY =
       `cms_cache_${PAGE_ID}`;
 
-    const SNS_API_URL =
-      "https://script.google.com/macros/s/AKfycbyV4N5O_3INXD4ry7lWM8HoYIsHjPSAHO_0BSSY1_m5fwQQ7H940VyCgAbU_eBGTW5C/exec";
 
     const FALLBACK_IMAGE = "../images/NY.jpg";
 
@@ -781,7 +739,9 @@
     }
 
     function renderCampaignData_(data){
-      // 同じCMS JSONから月額FCも描画
+      // 同じCMS JSONから背景・SNS・月額FCも描画
+      applyBackgroundFromCms_(data.backgrounds || {});
+      renderSocialFromCms_(data);
       renderMonthlyFromCms_(data);
 
       const section = document.getElementById("campaignSection");
@@ -871,6 +831,131 @@
           grid.innerHTML = "";
         }
       }
+    }
+
+    // ===== CMS：SNS =====
+    function getTodayKeyJst_(){
+      const parts = new Intl.DateTimeFormat(
+        "en-CA",
+        {
+          timeZone:"Asia/Tokyo",
+          year:"numeric",
+          month:"2-digit",
+          day:"2-digit"
+        }
+      ).formatToParts(new Date());
+
+      const map = {};
+      parts.forEach(part => {
+        map[part.type] = part.value;
+      });
+
+      return `${map.year}-${map.month}-${map.day}`;
+    }
+
+    function getDateKeyJst_(value){
+      if(!value) return "";
+
+      const date = new Date(value);
+      if(Number.isNaN(date.getTime())) return "";
+
+      const parts = new Intl.DateTimeFormat(
+        "en-CA",
+        {
+          timeZone:"Asia/Tokyo",
+          year:"numeric",
+          month:"2-digit",
+          day:"2-digit"
+        }
+      ).formatToParts(date);
+
+      const map = {};
+      parts.forEach(part => {
+        map[part.type] = part.value;
+      });
+
+      return `${map.year}-${map.month}-${map.day}`;
+    }
+
+    function getLatestPublishedMap_(data){
+      const result = {};
+      const sections = Array.isArray(data && data.sections)
+        ? data.sections
+        : [];
+
+      sections.forEach(section => {
+        const cards = Array.isArray(section.cards)
+          ? section.cards
+          : [];
+
+        cards.forEach(card => {
+          if(
+            String(card.card_type || "").toLowerCase() !== "sns"
+          ){
+            return;
+          }
+
+          const key =
+            String(card.source_key || "").toLowerCase();
+
+          if(!key) return;
+
+          result[key] = card.published_at || "";
+        });
+      });
+
+      return result;
+    }
+
+    function renderSocialFromCms_(data){
+      const root = document.getElementById("socialFooter");
+      if(!root) return;
+
+      const socials = Array.isArray(data && data.social)
+        ? data.social
+        : [];
+
+      const publishedMap = getLatestPublishedMap_(data);
+      const todayKey = getTodayKeyJst_();
+      const lang = getLang();
+
+      root.innerHTML = socials.map(item => {
+        const snsKey =
+          String(item.sns_id || "").toLowerCase();
+
+        const publishedAt =
+          publishedMap[snsKey] || "";
+
+        const showToday =
+          item.update_badge === true &&
+          getDateKeyJst_(publishedAt) === todayKey;
+
+        const badgeText =
+          showToday
+            ? (lang === "en" ? "Updated today!" : "本日更新！")
+            : "";
+
+        return `
+          <div class="social-item">
+            <a
+              href="${escHtml(item.url || "#")}"
+              target="_blank"
+              rel="noopener"
+              aria-label="${escHtml(item.name || item.sns_id || "")}"
+            >
+              <img
+                loading="lazy"
+                decoding="async"
+                src="${escHtml(item.icon_url || "")}"
+                alt="${escHtml(item.name || item.sns_id || "")}"
+              >
+            </a>
+            <div class="social-update">
+              ${escHtml(badgeText)}
+            </div>
+          </div>
+        `;
+      }).join("");
     }
 
     // ===== CMS：月額FC =====
@@ -1128,82 +1213,6 @@
       }
     }
 
-    // ===== SNS当日更新表示 =====
-    function getJstDateKey_(dateValue){
-      const date = new Date(dateValue);
-
-      if(Number.isNaN(date.getTime())){
-        return "";
-      }
-
-      const parts = new Intl.DateTimeFormat("en-CA", {
-        timeZone:"Asia/Tokyo",
-        year:"numeric",
-        month:"2-digit",
-        day:"2-digit"
-      }).formatToParts(date);
-
-      const map = {};
-      parts.forEach(part => {
-        if(part.type !== "literal"){
-          map[part.type] = part.value;
-        }
-      });
-
-      return `${map.year}-${map.month}-${map.day}`;
-    }
-
-    function isUpdatedTodayJst_(item){
-      if(!item || !item.published_at){
-        return false;
-      }
-
-      return getJstDateKey_(item.published_at) ===
-        getJstDateKey_(new Date());
-    }
-
-    function renderSnsUpdateBadges_(data){
-      const lang = getLang();
-      const label = lang === "en" ? "Updated today!" : "本日更新！";
-
-      const targets = [
-        ["updateX", data.x_latest],
-        ["updateInstagram", data.instagram_latest],
-        ["updateFacebook", data.facebook_latest]
-      ];
-
-      targets.forEach(([id, item]) => {
-        const el = document.getElementById(id);
-        if(!el) return;
-
-        el.textContent = isUpdatedTodayJst_(item) ? label : "";
-      });
-    }
-
-    async function loadSnsUpdateStatus(){
-      try{
-        const res = await fetch(
-          SNS_API_URL + "?t=" + Date.now(),
-          {cache:"no-store"}
-        );
-
-        if(!res.ok){
-          throw new Error("HTTP " + res.status);
-        }
-
-        const data = await res.json();
-        renderSnsUpdateBadges_(data);
-
-      }catch(error){
-        console.error("SNS update status load error:", error);
-
-        ["updateX","updateInstagram","updateFacebook"].forEach(id => {
-          const el = document.getElementById(id);
-          if(el) el.textContent = "";
-        });
-      }
-    }
-
     // ===== 言語 =====
     const I18N = {
       ja:{
@@ -1250,7 +1259,6 @@
       /* 言語切替で各表示を再描画 */
       loadCampaigns();
       loadVideos();
-      loadSnsUpdateStatus();
     }
 
     (function initLang(){
