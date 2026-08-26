@@ -580,8 +580,16 @@
     const CONTENT_CACHE_KEY =
       "nsfw_content_cache";
 
+    const PAGE_ID = "x18";
+
     const CMS_API_URL =
       "https://script.google.com/macros/s/AKfycbyyhzKs--PsnAylt-bAgGeTOpMV14CrvJieNXsaIBYSDUrlWl0PXmhm_FvhrYKf65QqRw/exec";
+
+    const CMS_STATIC_URL =
+      `/data/cms/${PAGE_ID}.json`;
+
+    const CMS_CACHE_KEY =
+      `cms_cache_${PAGE_ID}`;
 
     const SNS_API_URL =
       "https://script.google.com/macros/s/AKfycbyV4N5O_3INXD4ry7lWM8HoYIsHjPSAHO_0BSSY1_m5fwQQ7H940VyCgAbU_eBGTW5C/exec";
@@ -636,6 +644,67 @@
           <img class="thumb" src="${escHtml(src)}" alt="${escHtml(alt || "")}">
         </div>
       `;
+    }
+
+    // ===== CMSブラウザキャッシュ =====
+    function loadCachedCms_(){
+      try{
+        const raw = localStorage.getItem(CMS_CACHE_KEY);
+        if(!raw) return null;
+
+        const data = JSON.parse(raw);
+        if(!data || data.success !== true) return null;
+
+        return data;
+      }catch(error){
+        console.warn(
+          "CMS cache read error:",
+          error
+        );
+        return null;
+      }
+    }
+
+    function saveCachedCms_(data){
+      try{
+        localStorage.setItem(
+          CMS_CACHE_KEY,
+          JSON.stringify(data)
+        );
+      }catch(error){
+        console.warn(
+          "CMS cache write error:",
+          error
+        );
+      }
+    }
+
+    async function fetchCmsJson_(url){
+      const res = await fetch(
+        url,
+        {cache:"no-store"}
+      );
+
+      if(!res.ok){
+        throw new Error(
+          "HTTP " + res.status
+        );
+      }
+
+      const data = await res.json();
+
+      if(
+        !data ||
+        data.success !== true
+      ){
+        throw new Error(
+          data && data.error
+            ? data.error
+            : "Invalid CMS JSON"
+        );
+      }
+
+      return data;
     }
 
     // ===== CMS：期間限定 =====
@@ -716,52 +785,93 @@
       `;
     }
 
+    function renderCampaignData_(data){
+      const section = document.getElementById("campaignSection");
+      const grid = document.getElementById("campaignGrid");
+
+      if(!section || !grid) return;
+
+      const campaigns = Array.isArray(data.campaigns)
+        ? data.campaigns
+        : [];
+
+      const upcoming = Array.isArray(data.upcoming)
+        ? data.upcoming
+        : [];
+
+      if(!campaigns.length && !upcoming.length){
+        section.hidden = true;
+        grid.innerHTML = "";
+        return;
+      }
+
+      section.hidden = false;
+
+      if(!campaigns.length && upcoming.length){
+        grid.innerHTML =
+          upcoming.map(renderUpcomingText).join("");
+        return;
+      }
+
+      const liveCards =
+        campaigns.map(renderCampaignCard).join("");
+
+      const upcomingCards =
+        upcoming.map(renderUpcomingCard).join("");
+
+      grid.innerHTML =
+        liveCards + upcomingCards;
+    }
+
     async function loadCampaigns(){
       const section = document.getElementById("campaignSection");
       const grid = document.getElementById("campaignGrid");
 
       if(!section || !grid) return;
 
+      // ① 前回CMSデータがあれば即表示
+      const cached = loadCachedCms_();
+
+      if(cached){
+        renderCampaignData_(cached);
+      }
+
+      // ② GitHub静的JSONを優先
       try{
-        const res = await fetch(
-          CMS_API_URL + "?t=" + Date.now(),
-          {cache:"no-store"}
+        const staticData = await fetchCmsJson_(
+          CMS_STATIC_URL + "?v=" + Date.now()
         );
 
-        if(!res.ok) throw new Error("HTTP " + res.status);
+        saveCachedCms_(staticData);
+        renderCampaignData_(staticData);
+        return;
 
-        const data = await res.json();
+      }catch(staticError){
+        console.warn(
+          "Static CMS JSON load error:",
+          staticError
+        );
+      }
 
-        const campaigns = Array.isArray(data.campaigns)
-          ? data.campaigns
-          : [];
+      // ③ 静的JSON失敗時だけGASへフォールバック
+      try{
+        const gasData = await fetchCmsJson_(
+          `${CMS_API_URL}?page_id=${encodeURIComponent(PAGE_ID)}&t=${Date.now()}`
+        );
 
-        const upcoming = Array.isArray(data.upcoming)
-          ? data.upcoming
-          : [];
+        saveCachedCms_(gasData);
+        renderCampaignData_(gasData);
 
-        if(!campaigns.length && !upcoming.length){
+      }catch(gasError){
+        console.error(
+          "CMS GAS fallback error:",
+          gasError
+        );
+
+        if(!cached){
           section.hidden = true;
           grid.innerHTML = "";
-          return;
         }
-
-        section.hidden = false;
-
-        if(!campaigns.length && upcoming.length){
-          grid.innerHTML = upcoming.map(renderUpcomingText).join("");
-          return;
-        }
-
-        const liveCards = campaigns.map(renderCampaignCard).join("");
-        const upcomingCards = upcoming.map(renderUpcomingCard).join("");
-
-        grid.innerHTML = liveCards + upcomingCards;
-
-      }catch(error){
-        console.error("CMS API load error:",error);
-        section.hidden = true;
-        grid.innerHTML = "";
       }
     }
 
