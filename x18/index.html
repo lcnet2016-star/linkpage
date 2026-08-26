@@ -459,15 +459,10 @@
         <div class="grid" id="popularGrid"></div>
       </div>
 
-      <!-- 月額 -->
-      <div class="section" aria-label="Subscribe monthly">
+      <!-- 月額：CMSから自動生成 -->
+      <div class="section" id="monthlySection" aria-label="Subscribe monthly">
         <h2 id="secSub">💎 月額で全部見る</h2>
-        <div class="fc-btns" aria-label="Fanclub links">
-          <a class="btn btn-main fc-btn" href="https://candfans.jp/noanoshita?plan-contents=17822" target="_blank" rel="noopener">CandFans</a>
-          <a class="btn btn-sub fc-btn" href="https://myfans.jp/account/plans/118dc278-f5db-49bb-ab25-f66723160f18?tab=posts" target="_blank" rel="noopener">MyFans</a>
-          <a class="btn btn-sub fc-btn" href="https://fantia.jp/fanclubs/532786" target="_blank" rel="noopener">Fantia</a>
-          <a class="btn btn-sub fc-btn" href="https://onlyfans.com/noanoshita" target="_blank" rel="noopener">OnlyFans</a>
-        </div>
+        <div class="fc-btns" id="monthlyButtons" aria-label="Fanclub links"></div>
       </div>
 
       <!-- SNS：X ｜ Instagram ｜ YouTube ｜ Facebook ｜ ReelFans -->
@@ -786,6 +781,9 @@
     }
 
     function renderCampaignData_(data){
+      // 同じCMS JSONから月額FCも描画
+      renderMonthlyFromCms_(data);
+
       const section = document.getElementById("campaignSection");
       const grid = document.getElementById("campaignGrid");
 
@@ -873,6 +871,71 @@
           grid.innerHTML = "";
         }
       }
+    }
+
+    // ===== CMS：月額FC =====
+    function findCmsSectionByCardGroup_(data, cardGroup){
+      const sections = Array.isArray(data && data.sections)
+        ? data.sections
+        : [];
+
+      return sections.find(section =>
+        String(section.card_group || "") === cardGroup
+      ) || null;
+    }
+
+    function renderMonthlyFromCms_(data){
+      const sectionEl = document.getElementById("monthlySection");
+      const buttonsEl = document.getElementById("monthlyButtons");
+
+      if(!sectionEl || !buttonsEl) return;
+
+      const section = findCmsSectionByCardGroup_(
+        data,
+        "nsfw_subscribe_jp"
+      );
+
+      const cards = section && Array.isArray(section.cards)
+        ? section.cards
+        : [];
+
+      const buttons = [];
+
+      cards.forEach((card, cardIndex) => {
+        const links = Array.isArray(card.links)
+          ? card.links
+          : [];
+
+        links.forEach((link, linkIndex) => {
+          if(!link || !link.url) return;
+
+          const label =
+            String(card.title || "").trim() ||
+            (
+              getLang() === "en"
+                ? (link.label_en || link.label_ja || "View")
+                : (link.label_ja || link.label_en || "見る")
+            );
+
+          buttons.push(`
+            <a
+              class="${buttons.length === 0 ? "btn btn-main fc-btn" : "btn btn-sub fc-btn"}"
+              href="${escHtml(link.url)}"
+              target="_blank"
+              rel="noopener"
+            >${escHtml(label)}</a>
+          `);
+        });
+      });
+
+      if(!buttons.length){
+        sectionEl.hidden = true;
+        buttonsEl.innerHTML = "";
+        return;
+      }
+
+      sectionEl.hidden = false;
+      buttonsEl.innerHTML = buttons.join("");
     }
 
     // ===== 作品DBブラウザキャッシュ =====
