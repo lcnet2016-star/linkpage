@@ -574,6 +574,12 @@
     const API_URL =
       "https://script.google.com/macros/s/AKfycbxT_J40PjHDRD-sGVGrM3zPA8Loj7XV9yDV988lkMB7rXVQ7Epka8ZK8aOdYI5NriY1/exec";
 
+    const CONTENT_STATIC_URL =
+      "/data/content/nsfw.json";
+
+    const CONTENT_CACHE_KEY =
+      "nsfw_content_cache";
+
     const CMS_API_URL =
       "https://script.google.com/macros/s/AKfycbyyhzKs--PsnAylt-bAgGeTOpMV14CrvJieNXsaIBYSDUrlWl0PXmhm_FvhrYKf65QqRw/exec";
 
@@ -759,6 +765,74 @@
       }
     }
 
+    // ===== 作品DBブラウザキャッシュ =====
+    function loadCachedContent_(){
+      try{
+        const raw = localStorage.getItem(CONTENT_CACHE_KEY);
+        if(!raw) return null;
+
+        const data = JSON.parse(raw);
+
+        if(
+          !data ||
+          !Array.isArray(data.myfans_latest) ||
+          !Array.isArray(data.other_bn)
+        ){
+          return null;
+        }
+
+        return data;
+
+      }catch(error){
+        console.warn(
+          "Content cache read error:",
+          error
+        );
+        return null;
+      }
+    }
+
+    function saveCachedContent_(data){
+      try{
+        localStorage.setItem(
+          CONTENT_CACHE_KEY,
+          JSON.stringify(data)
+        );
+      }catch(error){
+        console.warn(
+          "Content cache write error:",
+          error
+        );
+      }
+    }
+
+    async function fetchContentJson_(url){
+      const res = await fetch(
+        url,
+        {cache:"no-store"}
+      );
+
+      if(!res.ok){
+        throw new Error(
+          "HTTP " + res.status
+        );
+      }
+
+      const data = await res.json();
+
+      if(
+        !data ||
+        !Array.isArray(data.myfans_latest) ||
+        !Array.isArray(data.other_bn)
+      ){
+        throw new Error(
+          "Invalid content JSON"
+        );
+      }
+
+      return data;
+    }
+
     // ===== 既存作品 =====
     async function loadVideos(){
       const nowGrid = document.getElementById("videoGrid");
@@ -806,16 +880,7 @@
         `;
       };
 
-      try{
-        const res = await fetch(
-          API_URL + "?t=" + Date.now(),
-          {cache:"no-store"}
-        );
-
-        if(!res.ok) throw new Error("HTTP " + res.status);
-
-        const data = await res.json();
-
+      const renderLists = (data) => {
         const nowList = (data.myfans_latest || [])
           .sort((a,b)=>Number(a.order)-Number(b.order))
           .slice(0,3);
@@ -834,19 +899,59 @@
         popGrid.innerHTML = popList.length
           ? popList.map(renderCard).join("")
           : `<div style="opacity:.9;font-weight:800;text-shadow:var(--textShadow);">${emptyText}</div>`;
+      };
 
-      }catch(error){
-        console.error("Video API load error:",error);
+      // ① 前回取得データがあれば即表示
+      const cached = loadCachedContent_();
 
-        const errorText =
-          lang === "en"
-            ? "Failed to load"
-            : "読み込みに失敗しました";
+      if(cached){
+        renderLists(cached);
+      }
 
-        nowGrid.innerHTML =
-          `<div style="opacity:.9;font-weight:800;text-shadow:var(--textShadow);">${errorText}</div>`;
+      // ② GitHub静的JSONを優先取得
+      try{
+        const staticData = await fetchContentJson_(
+          CONTENT_STATIC_URL + "?v=" + Date.now()
+        );
 
-        popGrid.innerHTML = "";
+        saveCachedContent_(staticData);
+        renderLists(staticData);
+        return;
+
+      }catch(staticError){
+        console.warn(
+          "Static content JSON load error:",
+          staticError
+        );
+      }
+
+      // ③ 静的JSON失敗時だけGASへフォールバック
+      try{
+        const gasData = await fetchContentJson_(
+          API_URL + "?t=" + Date.now()
+        );
+
+        saveCachedContent_(gasData);
+        renderLists(gasData);
+
+      }catch(gasError){
+        console.error(
+          "Content GAS fallback error:",
+          gasError
+        );
+
+        // キャッシュが無い初回だけエラー表示
+        if(!cached){
+          const errorText =
+            lang === "en"
+              ? "Failed to load"
+              : "読み込みに失敗しました";
+
+          nowGrid.innerHTML =
+            `<div style="opacity:.9;font-weight:800;text-shadow:var(--textShadow);">${errorText}</div>`;
+
+          popGrid.innerHTML = "";
+        }
       }
     }
 
