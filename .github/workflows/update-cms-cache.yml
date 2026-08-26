@@ -17,9 +17,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Create CMS directory
-        run: mkdir -p data/cms
+      - name: Create cache directories
+        run: |
+          mkdir -p data/cms
+          mkdir -p data/content
 
+      # ==========================================
+      # リンク集CMS
+      # ==========================================
       - name: Fetch CMS JSON
         run: |
           BASE_URL="https://script.google.com/macros/s/AKfycbyyhzKs--PsnAylt-bAgGeTOpMV14CrvJieNXsaIBYSDUrlWl0PXmhm_FvhrYKf65QqRw/exec"
@@ -52,23 +57,47 @@ jobs:
             "$BASE_URL?page_id=x18" \
             -o data/cms/x18.json
 
-      - name: Validate JSON
+      # ==========================================
+      # 作品DB
+      # ==========================================
+      - name: Fetch Content DB JSON
+        run: |
+          CONTENT_URL="https://script.google.com/macros/s/AKfycbxT_J40PjHDRD-sGVGrM3zPA8Loj7XV9yDV988lkMB7rXVQ7Epka8ZK8aOdYI5NriY1/exec"
+
+          curl -L --fail --silent \
+            "$CONTENT_URL" \
+            -o data/content/nsfw.json
+
+      # ==========================================
+      # JSON検証
+      # ==========================================
+      - name: Validate CMS JSON
         run: |
           for file in data/cms/*.json; do
             jq -e '.success == true' "$file" > /dev/null
           done
 
-      - name: Commit updated CMS cache
+      - name: Validate Content DB JSON
+        run: |
+          jq -e '
+            (.myfans_latest | type == "array") and
+            (.other_bn | type == "array")
+          ' data/content/nsfw.json > /dev/null
+
+      # ==========================================
+      # GitHubへ保存
+      # ==========================================
+      - name: Commit updated cache
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add data/cms
+          git add data/cms data/content
 
           if git diff --cached --quiet; then
-            echo "No CMS changes"
+            echo "No cache changes"
             exit 0
           fi
 
-          git commit -m "Update CMS cache"
+          git commit -m "Update CMS and content cache"
           git push
