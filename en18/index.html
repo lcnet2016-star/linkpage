@@ -273,16 +273,6 @@
       white-space:pre-line;
     }
 
-    .search-link{
-      display:block;
-      margin-top:2px;
-      font-size:11px;
-      line-height:1.35;
-      color:rgba(255,255,255,.90);
-      text-decoration:underline;
-      text-underline-offset:2px;
-      text-shadow:var(--textShadow);
-    }
 
 
     .btn-main{
@@ -452,50 +442,21 @@
       text-shadow:var(--textShadow);
     }
 
-    .service-switch{
-      display:flex;
-      gap:8px;
+
+
+
+    .more-copy{
       margin:0 0 12px;
-    }
-
-    .service-switch button{
-      flex:1;
-      padding:9px 10px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.24);
-      background:rgba(255,255,255,.18);
-      color:#fff;
-      font-family:var(--fontFamily);
-      font-weight:900;
-      cursor:pointer;
-      text-shadow:var(--textShadow);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-    }
-
-    .service-switch button.is-active{
-      background:rgba(166,113,137,.78);
-    }
-
-    .recommend-hint{
-      margin:-4px 0 12px;
-      font-size:13px;
+      font-size:14px;
+      line-height:1.6;
       font-weight:800;
-      color:rgba(255,255,255,.92);
+      color:rgba(255,255,255,.94);
       text-shadow:var(--textShadow);
     }
 
-    .draw-btn{
-      width:100%; margin-top:14px; padding:12px;
-      border:1px solid rgba(255,255,255,.28); border-radius:14px;
-      background:rgba(166,113,137,.75); color:#fff;
-      font-family:var(--fontFamily); font-size:14px; font-weight:900;
-      cursor:pointer; text-shadow:var(--textShadow);
-      backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
-      transition:filter .18s ease,transform .08s ease;
+    .more-btn{
+      margin:0;
     }
-    .draw-btn:hover{filter:brightness(1.08)}
-    .draw-btn:active{transform:scale(.99)}
 
     [hidden]{display:none !important}
   </style>
@@ -514,28 +475,29 @@
         <div class="grid" id="campaignGrid"></div>
       </div>
 
-      <!-- 今すぐ見る -->
-      <div class="section" aria-label="Watch now">
-        <h2 id="secNow">🔥 Watch now</h2>
-        <div class="grid" id="videoGrid"></div>
+      <!-- Solo / OnlyFans -->
+      <div class="section" aria-label="Solo videos">
+        <h2 id="secSolo">🔥 Solo</h2>
+        <div class="grid" id="soloGrid"></div>
       </div>
 
-      <!-- 今週のおすすめ -->
-      <div class="section" aria-label="Weekly recommendations">
-        <h2 id="secPop">⭐ Weekly picks</h2>
-        <div id="recommendHint" class="recommend-hint">This week’s picks — choose a platform or draw 3 more.</div>
-        <div class="service-switch" aria-label="Weekly picks platform">
-          <button id="weeklyOF" type="button" onclick="setWeeklyService('onlyfans')">OnlyFans</button>
-          <button id="weeklyFS" type="button" onclick="setWeeklyService('fansly')">Fansly</button>
-        </div>
-        <div class="grid" id="popularGrid"></div>
-        <button id="recommendDrawButton" class="draw-btn" type="button" onclick="drawRecommendations()">🎲 Draw 3 recommendations</button>
+      <!-- Partner / Fansly -->
+      <div class="section" aria-label="Partner videos">
+        <h2 id="secPartner">🔥 Partner</h2>
+        <div class="grid" id="partnerGrid"></div>
       </div>
 
       <!-- 月額：CMSから自動生成 -->
       <div class="section" id="monthlySection" aria-label="Subscribe monthly">
         <h2 id="secSub">💎 Subscribe monthly</h2>
         <div class="fc-btns" id="monthlyButtons" aria-label="Fanclub links"></div>
+      </div>
+
+      <!-- 日本版NSFW導線 -->
+      <div class="section" id="jpNsfwSection" aria-label="More videos">
+        <h2 id="secMore">✨ Want to see even more?</h2>
+        <p class="more-copy" id="moreCopy">More videos are available on my Japanese fan clubs.</p>
+        <a class="btn btn-main more-btn" href="/x18/" id="jpNsfwLink">View Japanese 18+ links</a>
       </div>
 
       <!-- SNS：CMSから自動生成 -->
@@ -1106,8 +1068,8 @@
 
         if(
           !data ||
-          !Array.isArray(data.en_latest) ||
-          !Array.isArray(data.en_recommendation_candidates)
+          !Array.isArray(data.en_onlyfans) ||
+          !Array.isArray(data.en_fansly)
         ){
           return null;
         }
@@ -1153,8 +1115,8 @@
 
       if(
         !data ||
-        !Array.isArray(data.en_latest) ||
-        !Array.isArray(data.en_recommendation_candidates)
+        !Array.isArray(data.en_onlyfans) ||
+        !Array.isArray(data.en_fansly)
       ){
         throw new Error(
           "Invalid content JSON"
@@ -1164,44 +1126,22 @@
       return data;
     }
 
-    // ===== Weekly picks / visitor draw =====
+    // ===== Overseas content =====
     let currentContentData_ = null;
-    let currentRecommendationList_ = null;
-    let recommendationMode_ = "weekly";
-    let weeklyService_ = "fansly";
 
-    function getRandomItem_(items, excludeIds = []){
-      const excluded = new Set(excludeIds.map(String));
-      const pool = (items || []).filter(item =>
-        item && item.video_id && !excluded.has(String(item.video_id))
-      );
-      return pool.length
-        ? pool[Math.floor(Math.random() * pool.length)]
-        : null;
-    }
-
-    function updateWeeklyServiceButtons_(){
-      const ofBtn = document.getElementById("weeklyOF");
-      const fsBtn = document.getElementById("weeklyFS");
-
-      if(ofBtn){
-        ofBtn.classList.toggle(
-          "is-active",
-          recommendationMode_ === "weekly" && weeklyService_ === "onlyfans"
-        );
-      }
-
-      if(fsBtn){
-        fsBtn.classList.toggle(
-          "is-active",
-          recommendationMode_ === "weekly" && weeklyService_ === "fansly"
-        );
-      }
-    }
-
-    function renderENCard_(v){
+    function renderENCard_(v, service){
       const title = v.title || "";
       const comment = v.comment || "";
+
+      const url =
+        service === "onlyfans"
+          ? (v.url_OF || v.url || "")
+          : (v.url_FS || v.url || "");
+
+      const buttonText =
+        service === "onlyfans"
+          ? "View on OnlyFans"
+          : "View on Fansly";
 
       return `
         <div class="vcard">
@@ -1216,38 +1156,11 @@
             }
 
             ${
-              v.url_OF
+              url
                 ? `<a class="btn btn-main"
-                     href="${escHtml(v.url_OF)}"
+                     href="${escHtml(url)}"
                      target="_blank"
-                     rel="noopener">View on OnlyFans</a>`
-                : ""
-            }
-
-            ${
-              v.url_FS
-                ? `<a class="btn ${v.url_OF ? "btn-sub" : "btn-main"}"
-                     href="${escHtml(v.url_FS)}"
-                     target="_blank"
-                     rel="noopener">View on Fansly</a>`
-                : ""
-            }
-
-            ${
-              v.search_OF
-                ? `<a class="search-link"
-                     href="${escHtml(v.search_OF)}"
-                     target="_blank"
-                     rel="noopener">More like this on OnlyFans →</a>`
-                : ""
-            }
-
-            ${
-              v.search_FS
-                ? `<a class="search-link"
-                     href="${escHtml(v.search_FS)}"
-                     target="_blank"
-                     rel="noopener">More like this on Fansly →</a>`
+                     rel="noopener">${buttonText}</a>`
                 : ""
             }
           </div>
@@ -1255,144 +1168,28 @@
       `;
     }
 
-    function renderRecommendationCards_(list){
-      const grid = document.getElementById("popularGrid");
-      if(!grid) return;
-
-      const cards = (list || []).filter(Boolean);
-
-      if(!cards.length){
-        grid.innerHTML =
-          `<div style="opacity:.9;font-weight:800;text-shadow:var(--textShadow);">Coming soon</div>`;
-        return;
-      }
-
-      grid.innerHTML = cards.map(renderENCard_).join("");
-    }
-
-    function renderWeeklyPicks_(data, service = weeklyService_){
-      if(!data || !data.en_weekly_picks) return false;
-
-      const group = data.en_weekly_picks[service];
-      if(!group) return false;
-
-      const list = [group.s, group.a, group.bc].filter(Boolean);
-      if(!list.length) return false;
-
-      weeklyService_ = service;
-      recommendationMode_ = "weekly";
-      currentRecommendationList_ = list;
-      renderRecommendationCards_(list);
-      updateWeeklyServiceButtons_();
-
-      const hint = document.getElementById("recommendHint");
-      const drawButton = document.getElementById("recommendDrawButton");
-
-      if(hint){
-        hint.textContent =
-          service === "onlyfans"
-            ? "This week’s OnlyFans picks. Want a different mix?"
-            : "This week’s Fansly picks. Want a different mix?";
-      }
-
-      if(drawButton){
-        drawButton.textContent = "🎲 Draw 3 recommendations";
-      }
-
-      return true;
-    }
-
-    function setWeeklyService(service){
-      if(!["onlyfans","fansly"].includes(service)) return;
-
-      weeklyService_ = service;
-      recommendationMode_ = "weekly";
-
-      if(currentContentData_){
-        renderWeeklyPicks_(currentContentData_, service);
-      }else{
-        updateWeeklyServiceButtons_();
-      }
-    }
-
-    function drawRecommendations(){
-      const data = currentContentData_;
-
-      if(
-        !data ||
-        !Array.isArray(data.en_recommendation_candidates) ||
-        !data.en_recommendation_candidates.length
-      ){
-        return;
-      }
-
-      const candidates = data.en_recommendation_candidates;
-      const selected = [];
-
-      while(selected.length < 3){
-        const pick = getRandomItem_(
-          candidates,
-          selected.map(v => String(v.video_id))
-        );
-
-        if(!pick) break;
-        selected.push(pick);
-      }
-
-      recommendationMode_ = "random";
-      currentRecommendationList_ = selected;
-      renderRecommendationCards_(selected);
-      updateWeeklyServiceButtons_();
-
-      const drawButton = document.getElementById("recommendDrawButton");
-      const hint = document.getElementById("recommendHint");
-
-      if(drawButton){
-        drawButton.textContent = "🎲 Draw again";
-      }
-
-      if(hint){
-        hint.textContent = "Here are your 3 picks! Want to draw again?";
-      }
-    }
-
-    // ===== Overseas content =====
     async function loadVideos(){
-      const nowGrid = document.getElementById("videoGrid");
-      const popGrid = document.getElementById("popularGrid");
+      const soloGrid = document.getElementById("soloGrid");
+      const partnerGrid = document.getElementById("partnerGrid");
 
       const renderLists = data => {
         currentContentData_ = data;
 
-        const nowList = Array.isArray(data.en_latest)
-          ? data.en_latest.slice(0,3)
+        const solo = Array.isArray(data.en_onlyfans)
+          ? data.en_onlyfans.slice(0,3)
           : [];
 
-        nowGrid.innerHTML = nowList.length
-          ? nowList.map(renderENCard_).join("")
+        const partner = Array.isArray(data.en_fansly)
+          ? data.en_fansly.slice(0,3)
+          : [];
+
+        soloGrid.innerHTML = solo.length
+          ? solo.map(v => renderENCard_(v, "onlyfans")).join("")
           : `<div style="opacity:.9;font-weight:800;text-shadow:var(--textShadow);">Coming soon</div>`;
 
-        if(
-          recommendationMode_ === "random" &&
-          Array.isArray(currentRecommendationList_) &&
-          currentRecommendationList_.length
-        ){
-          renderRecommendationCards_(currentRecommendationList_);
-          updateWeeklyServiceButtons_();
-          return;
-        }
-
-        // Default to Fansly while the overseas library is still fuller there.
-        if(!renderWeeklyPicks_(data, weeklyService_)){
-          const fallbackService =
-            weeklyService_ === "fansly"
-              ? "onlyfans"
-              : "fansly";
-
-          if(!renderWeeklyPicks_(data, fallbackService)){
-            drawRecommendations();
-          }
-        }
+        partnerGrid.innerHTML = partner.length
+          ? partner.map(v => renderENCard_(v, "fansly")).join("")
+          : `<div style="opacity:.9;font-weight:800;text-shadow:var(--textShadow);">Coming soon</div>`;
       };
 
       const cached = loadCachedContent_();
@@ -1431,9 +1228,9 @@
         );
 
         if(!cached){
-          nowGrid.innerHTML =
+          soloGrid.innerHTML =
             `<div style="opacity:.9;font-weight:800;text-shadow:var(--textShadow);">Failed to load</div>`;
-          popGrid.innerHTML = "";
+          partnerGrid.innerHTML = "";
         }
       }
     }
@@ -1445,18 +1242,24 @@
         title:"Noa",
         sub:"Quiet countryside girl",
         secCampaign:"🎉 Limited time",
-        secNow:"🔥 Watch now",
-        secPop:"⭐ Weekly picks",
-        secSub:"💎 Subscribe monthly"
+        secSolo:"🔥 Solo",
+        secPartner:"🔥 Partner",
+        secSub:"💎 Subscribe monthly",
+        secMore:"✨ Want to see even more?",
+        moreCopy:"More videos are available on my Japanese fan clubs.",
+        moreLink:"View Japanese 18+ links"
       },
       ja:{
         htmlLang:"ja",
         title:"のあ୨୧",
         sub:"田舎で暮らす陰キャ女子",
         secCampaign:"🎉 期間限定",
-        secNow:"🔥 今すぐ見る",
-        secPop:"⭐ 今週のおすすめ",
-        secSub:"💎 月額で全部見る"
+        secSolo:"🔥 Solo",
+        secPartner:"🔥 Partner",
+        secSub:"💎 月額で見る",
+        secMore:"✨ もっと見たい人へ",
+        moreCopy:"日本向けファンクラブには、さらに多くの作品があります。",
+        moreLink:"日本版18+リンクを見る"
       }
     };
 
@@ -1467,9 +1270,12 @@
       document.getElementById("tTitle").textContent = t.title;
       document.getElementById("tSub").textContent = t.sub;
       document.getElementById("secCampaign").textContent = t.secCampaign;
-      document.getElementById("secNow").textContent = t.secNow;
-      document.getElementById("secPop").textContent = t.secPop;
+      document.getElementById("secSolo").textContent = t.secSolo;
+      document.getElementById("secPartner").textContent = t.secPartner;
       document.getElementById("secSub").textContent = t.secSub;
+      document.getElementById("secMore").textContent = t.secMore;
+      document.getElementById("moreCopy").textContent = t.moreCopy;
+      document.getElementById("jpNsfwLink").textContent = t.moreLink;
 
       document.getElementById("btnJP")
         .classList.toggle("is-active",lang === "ja");
