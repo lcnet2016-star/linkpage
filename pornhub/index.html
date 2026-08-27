@@ -430,6 +430,26 @@
       text-shadow:var(--textShadow);
     }
 
+    .recommend-hint{
+      margin:-4px 0 12px;
+      font-size:13px;
+      font-weight:800;
+      color:rgba(255,255,255,.92);
+      text-shadow:var(--textShadow);
+    }
+
+    .draw-btn{
+      width:100%; margin-top:14px; padding:12px;
+      border:1px solid rgba(255,255,255,.28); border-radius:14px;
+      background:rgba(166,113,137,.75); color:#fff;
+      font-family:var(--fontFamily); font-size:14px; font-weight:900;
+      cursor:pointer; text-shadow:var(--textShadow);
+      backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+      transition:filter .18s ease,transform .08s ease;
+    }
+    .draw-btn:hover{filter:brightness(1.08)}
+    .draw-btn:active{transform:scale(.99)}
+
     [hidden]{display:none !important}
   </style>
 </head>
@@ -453,53 +473,22 @@
         <div class="grid" id="videoGrid"></div>
       </div>
 
-      <!-- 人気3本 -->
-      <div class="section" aria-label="Popular 3">
-        <h2 id="secPop">⭐ 人気3本</h2>
+      <!-- 今週のおすすめ -->
+      <div class="section" aria-label="Weekly recommendations">
+        <h2 id="secPop">⭐ 今週のおすすめ</h2>
+        <div id="recommendHint" class="recommend-hint">今週はこの3本！もう一度引いてみる？</div>
         <div class="grid" id="popularGrid"></div>
+        <button id="recommendDrawButton" class="draw-btn" type="button" onclick="drawRecommendations()">🎲 おすすめ3本を抽選する</button>
       </div>
 
-      <!-- 月額 -->
-      <div class="section" aria-label="Subscribe monthly">
+      <!-- 月額：CMSから自動生成 -->
+      <div class="section" id="monthlySection" aria-label="Subscribe monthly">
         <h2 id="secSub">💎 月額で全部見る</h2>
-        <div class="fc-btns" aria-label="Fanclub links">
-          <a class="btn btn-main fc-btn" href="https://candfans.jp/noanoshita?plan-contents=17822" target="_blank" rel="noopener">CandFans</a>
-          <a class="btn btn-sub fc-btn" href="https://myfans.jp/account/plans/118dc278-f5db-49bb-ab25-f66723160f18?tab=posts" target="_blank" rel="noopener">MyFans</a>
-          <a class="btn btn-sub fc-btn" href="https://fantia.jp/fanclubs/532786" target="_blank" rel="noopener">Fantia</a>
-          <a class="btn btn-sub fc-btn" href="https://onlyfans.com/noanoshita" target="_blank" rel="noopener">OnlyFans</a>
-        </div>
+        <div class="fc-btns" id="monthlyButtons" aria-label="Fanclub links"></div>
       </div>
 
-      <!-- SNS：X ｜ Instagram ｜ Facebook ｜ ReelFans -->
-      <div class="social" aria-label="SNS links">
-        <div class="social-item">
-          <a href="https://x.com/noanoshita" target="_blank" rel="noopener" aria-label="X">
-            <img src="../images/X.png" alt="X">
-          </a>
-          <div class="social-update" id="updateX" aria-live="polite"></div>
-        </div>
-
-        <div class="social-item">
-          <a href="https://www.instagram.com/noanoshita/" target="_blank" rel="noopener" aria-label="Instagram">
-            <img src="../images/instagram.png" alt="Instagram">
-          </a>
-          <div class="social-update" id="updateInstagram" aria-live="polite"></div>
-        </div>
-
-        <div class="social-item">
-          <a href="https://www.facebook.com/noanoshita.noa" target="_blank" rel="noopener" aria-label="Facebook">
-            <img src="../images/facebook.png" alt="Facebook">
-          </a>
-          <div class="social-update" id="updateFacebook" aria-live="polite"></div>
-        </div>
-
-        <div class="social-item">
-          <a href="https://reelfans.io/@noanoshita" target="_blank" rel="noopener" aria-label="ReelFans">
-            <img src="../images/RF.png" alt="ReelFans">
-          </a>
-          <div class="social-update" aria-hidden="true"></div>
-        </div>
-      </div>
+      <!-- SNS：CMSから自動生成 -->
+      <div class="social" id="socialFooter" aria-label="SNS links"></div>
 
       <!-- 最下部にJP / EN -->
       <div class="lang" aria-label="Language switch">
@@ -514,20 +503,23 @@
 
   <script>
     // ===== 背景 =====
-    const BG = {
-      morning:"../images/morning.png",
-      evening:"../images/evening.jpg",
-      night:"../images/night.jpg"
-    };
-
-    function pickBgByTime(){
+    function applyBackgroundFromCms_(backgrounds){
+      const bg = backgrounds || {};
       const h = new Date().getHours();
-      if(h >= 5 && h < 16) return BG.morning;
-      if(h >= 16 && h < 19) return BG.evening;
-      return BG.night;
-    }
 
-    function applyBgModeByAspect(imgUrl){
+      let slot = "night";
+      if(h >= 5 && h < 16) slot = "morning";
+      else if(h >= 16 && h < 19) slot = "evening";
+
+      const imgUrl =
+        bg[slot] ||
+        bg.morning ||
+        bg.evening ||
+        bg.night ||
+        FALLBACK_IMAGE;
+
+      document.body.style.backgroundImage = `url('${imgUrl}')`;
+
       const img = new Image();
 
       img.onload = () => {
@@ -555,23 +547,26 @@
       img.src = imgUrl;
     }
 
-    function setBG(){
-      const imgUrl = pickBgByTime();
-      document.body.style.backgroundImage = `url('${imgUrl}')`;
-      applyBgModeByAspect(imgUrl);
-    }
-
-    setBG();
-
     // ===== API =====
     const API_URL =
       "https://script.google.com/macros/s/AKfycbxT_J40PjHDRD-sGVGrM3zPA8Loj7XV9yDV988lkMB7rXVQ7Epka8ZK8aOdYI5NriY1/exec";
 
+    const CONTENT_STATIC_URL =
+      "/data/content/nsfw.json";
+
+    const CONTENT_CACHE_KEY =
+      "nsfw_content_cache";
+
+    const PAGE_ID = "pornhub
     const CMS_API_URL =
       "https://script.google.com/macros/s/AKfycbyyhzKs--PsnAylt-bAgGeTOpMV14CrvJieNXsaIBYSDUrlWl0PXmhm_FvhrYKf65QqRw/exec";
 
-    const SNS_API_URL =
-      "https://script.google.com/macros/s/AKfycbyV4N5O_3INXD4ry7lWM8HoYIsHjPSAHO_0BSSY1_m5fwQQ7H940VyCgAbU_eBGTW5C/exec";
+    const CMS_STATIC_URL =
+      `/data/cms/${PAGE_ID}.json`;
+
+    const CMS_CACHE_KEY =
+      `cms_cache_${PAGE_ID}`;
+
 
     const FALLBACK_IMAGE = "../images/NY.jpg";
 
@@ -623,6 +618,67 @@
           <img class="thumb" src="${escHtml(src)}" alt="${escHtml(alt || "")}">
         </div>
       `;
+    }
+
+    // ===== CMSブラウザキャッシュ =====
+    function loadCachedCms_(){
+      try{
+        const raw = localStorage.getItem(CMS_CACHE_KEY);
+        if(!raw) return null;
+
+        const data = JSON.parse(raw);
+        if(!data || data.success !== true) return null;
+
+        return data;
+      }catch(error){
+        console.warn(
+          "CMS cache read error:",
+          error
+        );
+        return null;
+      }
+    }
+
+    function saveCachedCms_(data){
+      try{
+        localStorage.setItem(
+          CMS_CACHE_KEY,
+          JSON.stringify(data)
+        );
+      }catch(error){
+        console.warn(
+          "CMS cache write error:",
+          error
+        );
+      }
+    }
+
+    async function fetchCmsJson_(url){
+      const res = await fetch(
+        url,
+        {cache:"no-store"}
+      );
+
+      if(!res.ok){
+        throw new Error(
+          "HTTP " + res.status
+        );
+      }
+
+      const data = await res.json();
+
+      if(
+        !data ||
+        data.success !== true
+      ){
+        throw new Error(
+          data && data.error
+            ? data.error
+            : "Invalid CMS JSON"
+        );
+      }
+
+      return data;
     }
 
     // ===== CMS：期間限定 =====
@@ -703,219 +759,515 @@
       `;
     }
 
+    function renderCampaignData_(data){
+      // 同じCMS JSONから背景・SNS・月額FCも描画
+      applyBackgroundFromCms_(data.backgrounds || {});
+      renderSocialFromCms_(data);
+      renderMonthlyFromCms_(data);
+
+      const section = document.getElementById("campaignSection");
+      const grid = document.getElementById("campaignGrid");
+
+      if(!section || !grid) return;
+
+      const campaigns = Array.isArray(data.campaigns)
+        ? data.campaigns
+        : [];
+
+      const upcoming = Array.isArray(data.upcoming)
+        ? data.upcoming
+        : [];
+
+      if(!campaigns.length && !upcoming.length){
+        section.hidden = true;
+        grid.innerHTML = "";
+        return;
+      }
+
+      section.hidden = false;
+
+      if(!campaigns.length && upcoming.length){
+        grid.innerHTML =
+          upcoming.map(renderUpcomingText).join("");
+        return;
+      }
+
+      const liveCards =
+        campaigns.map(renderCampaignCard).join("");
+
+      const upcomingCards =
+        upcoming.map(renderUpcomingCard).join("");
+
+      grid.innerHTML =
+        liveCards + upcomingCards;
+    }
+
     async function loadCampaigns(){
       const section = document.getElementById("campaignSection");
       const grid = document.getElementById("campaignGrid");
 
       if(!section || !grid) return;
 
+      // ① 前回CMSデータがあれば即表示
+      const cached = loadCachedCms_();
+
+      if(cached){
+        renderCampaignData_(cached);
+      }
+
+      // ② GitHub静的JSONを優先
       try{
-        const res = await fetch(
-          CMS_API_URL + "?t=" + Date.now(),
-          {cache:"no-store"}
+        const staticData = await fetchCmsJson_(
+          CMS_STATIC_URL + "?v=" + Date.now()
         );
 
-        if(!res.ok) throw new Error("HTTP " + res.status);
+        saveCachedCms_(staticData);
+        renderCampaignData_(staticData);
+        return;
 
-        const data = await res.json();
+      }catch(staticError){
+        console.warn(
+          "Static CMS JSON load error:",
+          staticError
+        );
+      }
 
-        const campaigns = Array.isArray(data.campaigns)
-          ? data.campaigns
-          : [];
+      // ③ 静的JSON失敗時だけGASへフォールバック
+      try{
+        const gasData = await fetchCmsJson_(
+          `${CMS_API_URL}?page_id=${encodeURIComponent(PAGE_ID)}&t=${Date.now()}`
+        );
 
-        const upcoming = Array.isArray(data.upcoming)
-          ? data.upcoming
-          : [];
+        saveCachedCms_(gasData);
+        renderCampaignData_(gasData);
 
-        if(!campaigns.length && !upcoming.length){
+      }catch(gasError){
+        console.error(
+          "CMS GAS fallback error:",
+          gasError
+        );
+
+        if(!cached){
           section.hidden = true;
           grid.innerHTML = "";
-          return;
         }
-
-        section.hidden = false;
-
-        if(!campaigns.length && upcoming.length){
-          grid.innerHTML = upcoming.map(renderUpcomingText).join("");
-          return;
-        }
-
-        const liveCards = campaigns.map(renderCampaignCard).join("");
-        const upcomingCards = upcoming.map(renderUpcomingCard).join("");
-
-        grid.innerHTML = liveCards + upcomingCards;
-
-      }catch(error){
-        console.error("CMS API load error:",error);
-        section.hidden = true;
-        grid.innerHTML = "";
       }
     }
 
-    // ===== 既存作品 =====
-    async function loadVideos(){
-      const nowGrid = document.getElementById("videoGrid");
-      const popGrid = document.getElementById("popularGrid");
-      const lang = getLang();
-
-      const candfansText =
-        lang === "en" ? "View on CandFans" : "CandFansで見る";
-
-      const myfansText =
-        lang === "en" ? "View on MyFans" : "MyFansで見る";
-
-      const renderCard = (v) => {
-        const title =
-          lang === "en" && v.translation
-            ? v.translation
-            : v.title;
-
-        return `
-          <div class="vcard">
-            ${thumbHtml(v.thumb_url || FALLBACK_IMAGE, title || "")}
-
-            <div class="vmeta">
-              <div class="vtitle">${escHtml(title || "")}</div>
-
-              ${
-                v.url_CF
-                  ? `<a class="btn btn-main"
-                       href="${escHtml(v.url_CF)}"
-                       target="_blank"
-                       rel="noopener">${candfansText}</a>`
-                  : ""
-              }
-
-              ${
-                v.url_MY
-                  ? `<a class="btn btn-sub"
-                       href="${escHtml(v.url_MY)}"
-                       target="_blank"
-                       rel="noopener">${myfansText}</a>`
-                  : ""
-              }
-            </div>
-          </div>
-        `;
-      };
-
-      try{
-        const res = await fetch(
-          API_URL + "?t=" + Date.now(),
-          {cache:"no-store"}
-        );
-
-        if(!res.ok) throw new Error("HTTP " + res.status);
-
-        const data = await res.json();
-
-        const nowList = (data.myfans_latest || [])
-          .sort((a,b)=>Number(a.order)-Number(b.order))
-          .slice(0,3);
-
-        const popList = (data.other_bn || [])
-          .sort((a,b)=>Number(a.order)-Number(b.order))
-          .slice(0,3);
-
-        const emptyText =
-          lang === "en" ? "Coming soon" : "準備中";
-
-        nowGrid.innerHTML = nowList.length
-          ? nowList.map(renderCard).join("")
-          : `<div style="opacity:.9;font-weight:800;text-shadow:var(--textShadow);">${emptyText}</div>`;
-
-        popGrid.innerHTML = popList.length
-          ? popList.map(renderCard).join("")
-          : `<div style="opacity:.9;font-weight:800;text-shadow:var(--textShadow);">${emptyText}</div>`;
-
-      }catch(error){
-        console.error("Video API load error:",error);
-
-        const errorText =
-          lang === "en"
-            ? "Failed to load"
-            : "読み込みに失敗しました";
-
-        nowGrid.innerHTML =
-          `<div style="opacity:.9;font-weight:800;text-shadow:var(--textShadow);">${errorText}</div>`;
-
-        popGrid.innerHTML = "";
-      }
-    }
-
-    // ===== SNS当日更新表示 =====
-    function getJstDateKey_(dateValue){
-      const date = new Date(dateValue);
-
-      if(Number.isNaN(date.getTime())){
-        return "";
-      }
-
-      const parts = new Intl.DateTimeFormat("en-CA", {
-        timeZone:"Asia/Tokyo",
-        year:"numeric",
-        month:"2-digit",
-        day:"2-digit"
-      }).formatToParts(date);
+    // ===== CMS：SNS =====
+    function getTodayKeyJst_(){
+      const parts = new Intl.DateTimeFormat(
+        "en-CA",
+        {
+          timeZone:"Asia/Tokyo",
+          year:"numeric",
+          month:"2-digit",
+          day:"2-digit"
+        }
+      ).formatToParts(new Date());
 
       const map = {};
       parts.forEach(part => {
-        if(part.type !== "literal"){
-          map[part.type] = part.value;
-        }
+        map[part.type] = part.value;
       });
 
       return `${map.year}-${map.month}-${map.day}`;
     }
 
-    function isUpdatedTodayJst_(item){
-      if(!item || !item.published_at){
-        return false;
+    function getDateKeyJst_(value){
+      if(!value) return "";
+
+      const date = new Date(value);
+      if(Number.isNaN(date.getTime())) return "";
+
+      const parts = new Intl.DateTimeFormat(
+        "en-CA",
+        {
+          timeZone:"Asia/Tokyo",
+          year:"numeric",
+          month:"2-digit",
+          day:"2-digit"
+        }
+      ).formatToParts(date);
+
+      const map = {};
+      parts.forEach(part => {
+        map[part.type] = part.value;
+      });
+
+      return `${map.year}-${map.month}-${map.day}`;
+    }
+
+    function getLatestPublishedMap_(data){
+      const result = {};
+      const sections = Array.isArray(data && data.sections)
+        ? data.sections
+        : [];
+
+      sections.forEach(section => {
+        const cards = Array.isArray(section.cards)
+          ? section.cards
+          : [];
+
+        cards.forEach(card => {
+          if(
+            String(card.card_type || "").toLowerCase() !== "sns"
+          ){
+            return;
+          }
+
+          const key =
+            String(card.source_key || "").toLowerCase();
+
+          if(!key) return;
+
+          result[key] = card.published_at || "";
+        });
+      });
+
+      return result;
+    }
+
+    function renderSocialFromCms_(data){
+      const root = document.getElementById("socialFooter");
+      if(!root) return;
+
+      const socials = Array.isArray(data && data.social)
+        ? data.social
+        : [];
+
+      const publishedMap = getLatestPublishedMap_(data);
+      const todayKey = getTodayKeyJst_();
+      const lang = getLang();
+
+      root.innerHTML = socials.map(item => {
+        const snsKey =
+          String(item.sns_id || "").toLowerCase();
+
+        const publishedAt =
+          publishedMap[snsKey] || "";
+
+        const showToday =
+          item.update_badge === true &&
+          getDateKeyJst_(publishedAt) === todayKey;
+
+        const badgeText =
+          showToday
+            ? (lang === "en" ? "Updated today!" : "本日更新！")
+            : "";
+
+        return `
+          <div class="social-item">
+            <a
+              href="${escHtml(item.url || "#")}"
+              target="_blank"
+              rel="noopener"
+              aria-label="${escHtml(item.name || item.sns_id || "")}"
+            >
+              <img
+                loading="lazy"
+                decoding="async"
+                src="${escHtml(item.icon_url || "")}"
+                alt="${escHtml(item.name || item.sns_id || "")}"
+              >
+            </a>
+            <div class="social-update">
+              ${escHtml(badgeText)}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    // ===== CMS：月額FC =====
+    function findCmsSectionByCardGroup_(data, cardGroup){
+      const sections = Array.isArray(data && data.sections)
+        ? data.sections
+        : [];
+
+      return sections.find(section =>
+        String(section.card_group || "") === cardGroup
+      ) || null;
+    }
+
+    function renderMonthlyFromCms_(data){
+      const sectionEl = document.getElementById("monthlySection");
+      const buttonsEl = document.getElementById("monthlyButtons");
+
+      if(!sectionEl || !buttonsEl) return;
+
+      const section = findCmsSectionByCardGroup_(
+        data,
+        "nsfw_subscribe_jp"
+      );
+
+      const cards = section && Array.isArray(section.cards)
+        ? section.cards
+        : [];
+
+      const buttons = [];
+
+      cards.forEach((card, cardIndex) => {
+        const links = Array.isArray(card.links)
+          ? card.links
+          : [];
+
+        links.forEach((link, linkIndex) => {
+          if(!link || !link.url) return;
+
+          const label =
+            String(card.title || "").trim() ||
+            (
+              getLang() === "en"
+                ? (link.label_en || link.label_ja || "View")
+                : (link.label_ja || link.label_en || "見る")
+            );
+
+          buttons.push(`
+            <a
+              class="${buttons.length === 0 ? "btn btn-main fc-btn" : "btn btn-sub fc-btn"}"
+              href="${escHtml(link.url)}"
+              target="_blank"
+              rel="noopener"
+            >${escHtml(label)}</a>
+          `);
+        });
+      });
+
+      if(!buttons.length){
+        sectionEl.hidden = true;
+        buttonsEl.innerHTML = "";
+        return;
       }
 
-      return getJstDateKey_(item.published_at) ===
-        getJstDateKey_(new Date());
+      sectionEl.hidden = false;
+      buttonsEl.innerHTML = buttons.join("");
     }
 
-    function renderSnsUpdateBadges_(data){
-      const lang = getLang();
-      const label = lang === "en" ? "Updated today!" : "本日更新！";
-
-      const targets = [
-        ["updateX", data.x_latest],
-        ["updateInstagram", data.instagram_latest],
-        ["updateFacebook", data.facebook_latest]
-      ];
-
-      targets.forEach(([id, item]) => {
-        const el = document.getElementById(id);
-        if(!el) return;
-
-        el.textContent = isUpdatedTodayJst_(item) ? label : "";
-      });
-    }
-
-    async function loadSnsUpdateStatus(){
+    // ===== 作品DBブラウザキャッシュ =====
+    function loadCachedContent_(){
       try{
-        const res = await fetch(
-          SNS_API_URL + "?t=" + Date.now(),
-          {cache:"no-store"}
-        );
+        const raw = localStorage.getItem(CONTENT_CACHE_KEY);
+        if(!raw) return null;
 
-        if(!res.ok){
-          throw new Error("HTTP " + res.status);
+        const data = JSON.parse(raw);
+
+        if(
+          !data ||
+          !Array.isArray(data.myfans_latest) ||
+          !Array.isArray(data.other_bn)
+        ){
+          return null;
         }
 
-        const data = await res.json();
-        renderSnsUpdateBadges_(data);
+        return data;
 
       }catch(error){
-        console.error("SNS update status load error:", error);
+        console.warn(
+          "Content cache read error:",
+          error
+        );
+        return null;
+      }
+    }
 
-        ["updateX","updateInstagram","updateFacebook"].forEach(id => {
-          const el = document.getElementById(id);
-          if(el) el.textContent = "";
-        });
+    function saveCachedContent_(data){
+      try{
+        localStorage.setItem(
+          CONTENT_CACHE_KEY,
+          JSON.stringify(data)
+        );
+      }catch(error){
+        console.warn(
+          "Content cache write error:",
+          error
+        );
+      }
+    }
+
+    async function fetchContentJson_(url){
+      const res = await fetch(
+        url,
+        {cache:"no-store"}
+      );
+
+      if(!res.ok){
+        throw new Error(
+          "HTTP " + res.status
+        );
+      }
+
+      const data = await res.json();
+
+      if(
+        !data ||
+        !Array.isArray(data.myfans_latest) ||
+        !Array.isArray(data.other_bn)
+      ){
+        throw new Error(
+          "Invalid content JSON"
+        );
+      }
+
+      return data;
+    }
+
+    // ===== 今週のおすすめ / 閲覧者抽選 =====
+    let currentContentData_ = null;
+    let currentRecommendationList_ = null;
+    let recommendationMode_ = "weekly";
+
+    function getRandomItem_(items, excludeIds = []){
+      const excluded = new Set(excludeIds.map(String));
+      const pool = (items || []).filter(item =>
+        item && item.video_id && !excluded.has(String(item.video_id))
+      );
+      return pool.length ? pool[Math.floor(Math.random() * pool.length)] : null;
+    }
+
+    function renderRecommendationCards_(list){
+      const grid = document.getElementById("popularGrid");
+      if(!grid) return;
+      const lang = getLang();
+      const candfansText = lang === "en" ? "View on CandFans" : "CandFansで見る";
+      const myfansText = lang === "en" ? "View on MyFans" : "MyFansで見る";
+      const cards = (list || []).filter(Boolean);
+
+      if(!cards.length){
+        grid.innerHTML = `<div style="opacity:.9;font-weight:800;text-shadow:var(--textShadow);">${lang === "en" ? "Coming soon" : "準備中"}</div>`;
+        return;
+      }
+
+      grid.innerHTML = cards.map(v => {
+        const title = lang === "en" && v.translation ? v.translation : v.title;
+        return `
+          <div class="vcard">
+            ${thumbHtml(v.thumb_url || FALLBACK_IMAGE, title || "")}
+            <div class="vmeta">
+              <div class="vtitle">${escHtml(title || "")}</div>
+              ${v.url_CF ? `<a class="btn btn-main" href="${escHtml(v.url_CF)}" target="_blank" rel="noopener">${candfansText}</a>` : ""}
+              ${v.url_MY ? `<a class="btn btn-sub" href="${escHtml(v.url_MY)}" target="_blank" rel="noopener">${myfansText}</a>` : ""}
+            </div>
+          </div>`;
+      }).join("");
+    }
+
+    function renderWeeklyPicks_(data){
+      if(!data || !data.weekly_picks) return false;
+      const p = data.weekly_picks;
+      const list = [p.s, p.a, p.bc].filter(Boolean);
+      if(!list.length) return false;
+      recommendationMode_ = "weekly";
+      currentRecommendationList_ = list;
+      renderRecommendationCards_(list);
+      return true;
+    }
+
+    function drawRecommendations(){
+      const data = currentContentData_;
+      if(!data || !Array.isArray(data.recommendation_candidates) || !data.recommendation_candidates.length) return;
+
+      const candidates = data.recommendation_candidates;
+      const sPool = candidates.filter(v => String(v.rank || "").toUpperCase() === "S");
+      const aPool = candidates.filter(v => String(v.rank || "").toUpperCase() === "A");
+      const bcPool = candidates.filter(v => ["B","C"].includes(String(v.rank || "").toUpperCase()));
+      const selected = [];
+
+      const add = item => {
+        if(item && !selected.some(v => String(v.video_id) === String(item.video_id))) selected.push(item);
+      };
+      const ids = () => selected.map(v => String(v.video_id));
+
+      add(getRandomItem_(sPool, ids()));
+      add(getRandomItem_(aPool, ids()));
+      add(getRandomItem_(bcPool, ids()));
+
+      while(selected.length < 3){
+        const fallback = getRandomItem_(candidates, ids());
+        if(!fallback) break;
+        add(fallback);
+      }
+
+      recommendationMode_ = "random";
+      currentRecommendationList_ = selected;
+      renderRecommendationCards_(selected);
+
+      const drawButton = document.getElementById("recommendDrawButton");
+      const hint = document.getElementById("recommendHint");
+
+      if(drawButton){
+        drawButton.textContent =
+          getLang() === "en"
+            ? "🎲 Draw again"
+            : "🎲 もう一度抽選する";
+      }
+
+      if(hint){
+        hint.textContent =
+          getLang() === "en"
+            ? "Here are your 3 picks! Want to draw again?"
+            : "今回はこちらの3本！もう一度引いてみる？";
+      }
+    }
+
+    // ===== 作品DB =====
+    async function loadVideos(){
+      const nowGrid = document.getElementById("videoGrid");
+      const popGrid = document.getElementById("popularGrid");
+      const lang = getLang();
+      const candfansText = lang === "en" ? "View on CandFans" : "CandFansで見る";
+      const myfansText = lang === "en" ? "View on MyFans" : "MyFansで見る";
+
+      const renderCard = v => {
+        const title = lang === "en" && v.translation ? v.translation : v.title;
+        return `
+          <div class="vcard">
+            ${thumbHtml(v.thumb_url || FALLBACK_IMAGE, title || "")}
+            <div class="vmeta">
+              <div class="vtitle">${escHtml(title || "")}</div>
+              ${v.url_CF ? `<a class="btn btn-main" href="${escHtml(v.url_CF)}" target="_blank" rel="noopener">${candfansText}</a>` : ""}
+              ${v.url_MY ? `<a class="btn btn-sub" href="${escHtml(v.url_MY)}" target="_blank" rel="noopener">${myfansText}</a>` : ""}
+            </div>
+          </div>`;
+      };
+
+      const renderLists = data => {
+        currentContentData_ = data;
+        const nowList = (data.myfans_latest || []).sort((a,b)=>Number(a.order)-Number(b.order)).slice(0,3);
+        const emptyText = lang === "en" ? "Coming soon" : "準備中";
+        nowGrid.innerHTML = nowList.length ? nowList.map(renderCard).join("") :
+          `<div style="opacity:.9;font-weight:800;text-shadow:var(--textShadow);">${emptyText}</div>`;
+
+        if(recommendationMode_ === "random" && Array.isArray(currentRecommendationList_) && currentRecommendationList_.length){
+          renderRecommendationCards_(currentRecommendationList_);
+        }else if(!renderWeeklyPicks_(data)){
+          drawRecommendations();
+        }
+      };
+
+      const cached = loadCachedContent_();
+      if(cached) renderLists(cached);
+
+      try{
+        const staticData = await fetchContentJson_(CONTENT_STATIC_URL + "?v=" + Date.now());
+        saveCachedContent_(staticData);
+        renderLists(staticData);
+        return;
+      }catch(staticError){
+        console.warn("Static content JSON load error:", staticError);
+      }
+
+      try{
+        const gasData = await fetchContentJson_(API_URL + "?t=" + Date.now());
+        saveCachedContent_(gasData);
+        renderLists(gasData);
+      }catch(gasError){
+        console.error("Content GAS fallback error:", gasError);
+        if(!cached){
+          const errorText = lang === "en" ? "Failed to load" : "読み込みに失敗しました";
+          nowGrid.innerHTML = `<div style="opacity:.9;font-weight:800;text-shadow:var(--textShadow);">${errorText}</div>`;
+          popGrid.innerHTML = "";
+        }
       }
     }
 
@@ -927,7 +1279,7 @@
         sub:"田舎で暮らす陰キャ女子",
         secCampaign:"🎉 期間限定",
         secNow:"🔥 今すぐ見る",
-        secPop:"⭐ 人気3本",
+        secPop:"⭐ 今週のおすすめ",
         secSub:"💎 月額で全部見る"
       },
       en:{
@@ -936,7 +1288,7 @@
         sub:"Quiet countryside girl",
         secCampaign:"🎉 Limited time",
         secNow:"🔥 Watch now",
-        secPop:"⭐ Popular 3",
+        secPop:"⭐ Weekly picks",
         secSub:"💎 Subscribe monthly"
       }
     };
@@ -951,6 +1303,26 @@
       document.getElementById("secNow").textContent = t.secNow;
       document.getElementById("secPop").textContent = t.secPop;
       document.getElementById("secSub").textContent = t.secSub;
+      const drawButton = document.getElementById("recommendDrawButton");
+      const recommendHint = document.getElementById("recommendHint");
+
+      if(drawButton){
+        drawButton.textContent =
+          recommendationMode_ === "random"
+            ? (lang === "en" ? "🎲 Draw again" : "🎲 もう一度抽選する")
+            : (lang === "en" ? "🎲 Draw 3 recommendations" : "🎲 おすすめ3本を抽選する");
+      }
+
+      if(recommendHint){
+        recommendHint.textContent =
+          recommendationMode_ === "random"
+            ? (lang === "en"
+                ? "Here are your 3 picks! Want to draw again?"
+                : "今回はこちらの3本！もう一度引いてみる？")
+            : (lang === "en"
+                ? "These are this week's 3 picks! Want to draw again?"
+                : "今週はこの3本！もう一度引いてみる？");
+      }
 
       document.getElementById("btnJP")
         .classList.toggle("is-active",lang === "ja");
@@ -965,7 +1337,6 @@
       /* 言語切替で各表示を再描画 */
       loadCampaigns();
       loadVideos();
-      loadSnsUpdateStatus();
     }
 
     (function initLang(){
