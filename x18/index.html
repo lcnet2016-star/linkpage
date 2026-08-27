@@ -430,6 +430,14 @@
       text-shadow:var(--textShadow);
     }
 
+    .recommend-hint{
+      margin:-4px 0 12px;
+      font-size:13px;
+      font-weight:800;
+      color:rgba(255,255,255,.92);
+      text-shadow:var(--textShadow);
+    }
+
     .draw-btn{
       width:100%; margin-top:14px; padding:12px;
       border:1px solid rgba(255,255,255,.28); border-radius:14px;
@@ -468,8 +476,9 @@
       <!-- 今週のおすすめ -->
       <div class="section" aria-label="Weekly recommendations">
         <h2 id="secPop">⭐ 今週のおすすめ</h2>
+        <div id="recommendHint" class="recommend-hint">今週はこの3本！もう一度引いてみる？</div>
         <div class="grid" id="popularGrid"></div>
-        <button id="recommendDrawButton" class="draw-btn" type="button" onclick="drawRecommendations()">🎲 別の3本を見る</button>
+        <button id="recommendDrawButton" class="draw-btn" type="button" onclick="drawRecommendations()">🎲 おすすめ3本を抽選する</button>
       </div>
 
       <!-- 月額：CMSから自動生成 -->
@@ -1183,6 +1192,23 @@
       recommendationMode_ = "random";
       currentRecommendationList_ = selected;
       renderRecommendationCards_(selected);
+
+      const drawButton = document.getElementById("recommendDrawButton");
+      const hint = document.getElementById("recommendHint");
+
+      if(drawButton){
+        drawButton.textContent =
+          getLang() === "en"
+            ? "🎲 Draw again"
+            : "🎲 もう一度抽選する";
+      }
+
+      if(hint){
+        hint.textContent =
+          getLang() === "en"
+            ? "Here are your 3 picks! Want to draw again?"
+            : "今回はこちらの3本！もう一度引いてみる？";
+      }
     }
 
     // ===== 作品DB =====
@@ -1279,8 +1305,24 @@
       document.getElementById("secPop").textContent = t.secPop;
       document.getElementById("secSub").textContent = t.secSub;
       const drawButton = document.getElementById("recommendDrawButton");
+      const recommendHint = document.getElementById("recommendHint");
+
       if(drawButton){
-        drawButton.textContent = lang === "en" ? "🎲 Show 3 more" : "🎲 別の3本を見る";
+        drawButton.textContent =
+          recommendationMode_ === "random"
+            ? (lang === "en" ? "🎲 Draw again" : "🎲 もう一度抽選する")
+            : (lang === "en" ? "🎲 Draw 3 recommendations" : "🎲 おすすめ3本を抽選する");
+      }
+
+      if(recommendHint){
+        recommendHint.textContent =
+          recommendationMode_ === "random"
+            ? (lang === "en"
+                ? "Here are your 3 picks! Want to draw again?"
+                : "今回はこちらの3本！もう一度引いてみる？")
+            : (lang === "en"
+                ? "These are this week's 3 picks! Want to draw again?"
+                : "今週はこの3本！もう一度引いてみる？");
       }
 
       document.getElementById("btnJP")
