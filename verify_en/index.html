@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VSEFPGK0YZ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VSEFPGK0YZ');
+  </script>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Noa | Age Check</title>
+  <meta name="description" content="Age verification for Noa's 18+ links" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Hachi+Maru+Pop&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bgBase:#A67189;
+      --veilOpacity:.30;
+      --fontFamily:"M PLUS Rounded 1c", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      --titleFont:"Hachi Maru Pop", cursive;
+
+      --containerMax:760px;
+      --padTop:30px; --padSide:16px; --padBottom:40px;
+
+      --titleSize:34px;
+      --text:#fff;
+      --textShadow:0 6px 20px rgba(0,0,0,.35);
+
+      --panelMax:560px;
+      --panelBg:rgba(255,255,255,.25);
+      --panelBorder:rgba(255,255,255,.28);
+      --panelRadius:22px;
+      --panelPadY:18px; --panelPadX:18px;
+      --panelShadow:0 18px 50px rgba(0,0,0,.20), inset 0 1px 0 rgba(255,255,255,.35);
+
+      --btnH:46px;
+      --btnRadius:14px;
+      --btnGap:10px;
+      --btnBg:rgba(255,255,255,.30);
+      --btnBorder:rgba(255,255,255,.35);
+      --btnText:#fff;
+
+      --muted:rgba(255,255,255,.88);
+      --footerColor:rgba(255,255,255,.78);
+      --footerSize:12px;
+    }
+
+    @media (max-width:420px){
+      :root{
+        --padTop:22px;
+        --titleSize:28px;
+        --panelMax:92%;
+      }
+    }
+
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--fontFamily);
+      color:var(--text);
+      background-color:var(--bgBase);
+      background-attachment:fixed;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background:rgba(255,240,235,var(--veilOpacity));
+      z-index:-1;
+    }
+
+    .wrap{
+      min-height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:var(--padTop) var(--padSide) var(--padBottom);
+      text-align:center;
+      box-sizing:border-box;
+    }
+
+    .container{width:min(var(--containerMax),100%)}
+
+    .title{
+      margin:0 0 14px;
+      font-family:var(--titleFont);
+      font-size:var(--titleSize);
+      font-weight:900;
+      text-shadow:var(--textShadow);
+    }
+
+    .panel{
+      width:min(var(--panelMax),100%);
+      box-sizing:border-box;
+      margin:0 auto;
+      background:var(--panelBg);
+      border:1px solid var(--panelBorder);
+      border-radius:var(--panelRadius);
+      box-shadow:var(--panelShadow);
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
+      padding:var(--panelPadY) var(--panelPadX);
+    }
+
+    .msg{
+      margin:0 0 14px;
+      font-weight:900;
+      font-size:18px;
+      text-shadow:var(--textShadow);
+    }
+
+    .desc{
+      margin:0 0 18px;
+      color:var(--muted);
+      font-weight:800;
+      line-height:1.4;
+      text-shadow:var(--textShadow);
+    }
+
+    .btns{
+      display:flex;
+      flex-direction:column;
+      gap:var(--btnGap);
+    }
+
+    .btn{
+      height:var(--btnH);
+      border-radius:var(--btnRadius);
+      background:var(--btnBg);
+      border:1px solid var(--btnBorder);
+      color:var(--btnText);
+      font-weight:900;
+      font-size:16px;
+      font-family:var(--fontFamily);
+      cursor:pointer;
+      text-shadow:var(--textShadow);
+      transition:transform .08s ease, filter .18s ease;
+    }
+
+    .btn:hover{filter:brightness(1.06)}
+    .btn:active{transform:scale(.985)}
+
+    .foot{
+      margin-top:14px;
+      font-size:var(--footerSize);
+      color:var(--footerColor);
+      text-shadow:var(--textShadow);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="container">
+      <h1 class="title">Age Check</h1>
+
+      <div class="panel">
+        <p class="msg">Are you 18 or older?</p>
+        <p class="desc">This page may contain adult content. Minors are not allowed.</p>
+
+        <div class="btns">
+          <button class="btn" type="button" onclick="goYes()">Yes (I am 18+)</button>
+          <button class="btn" type="button" onclick="goNo()">No (Go back)</button>
+        </div>
+      </div>
+
+      <div class="foot">© Noa</div>
+    </div>
+  </div>
+
+  <script>
+    // YES → overseas 18+ links
+    function goYes(){
+      try{
+        sessionStorage.setItem("age_ok_en", "1");
+      }catch(e){}
+
+      window.location.href = "../en18/";
+    }
+
+    // NO → Facebook SFW links
+    function goNo(){
+      window.location.href = "../facebook/";
+    }
+  </script>
+</body>
+</html>
