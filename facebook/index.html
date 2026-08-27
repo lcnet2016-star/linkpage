@@ -544,13 +544,19 @@
     function renderButtonSection(section,lang){
       const cards = Array.isArray(section.cards) ? section.cards : [];
       const buttons = [];
-
+    
       cards.forEach(card => {
         (card.links || []).forEach((link,index) => {
+    
+          const destinationUrl =
+            section.section_id === "sfw_adult_en"
+              ? "/verify_en/"
+              : (link.url || "#");
+    
           buttons.push(`
             <a
               class="${index === 0 ? "btn btn-main" : "btn btn-sub"}"
-              href="${escHtml(link.url || "#")}"
+              href="${escHtml(destinationUrl)}"
               target="_blank"
               rel="noopener"
               data-tracking-id="${escHtml(link.tracking_id || card.tracking_id || "")}"
@@ -558,7 +564,7 @@
           `);
         });
       });
-
+    
       return `<div class="single-button-wrap">${buttons.join("")}</div>`;
     }
 
