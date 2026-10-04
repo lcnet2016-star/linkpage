@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>POLARIS プライバシーポリシー</title>
-  <meta name="description" content="POLARISにおけるGoogleユーザーデータの取り扱いについて説明します。">
+  <meta name="description" content="POLARISのGoogle・Meta連携、AI機能、情報の保存・共有・削除について説明します。">
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -49,114 +49,39 @@
 <body>
   <main>
     <h1>プライバシーポリシー</h1>
-
-    <p>
-      POLARIS（以下「本アプリ」）は、動画素材・作品情報・投稿状況等を管理する
-      個人利用向け管理システムです。
-    </p>
-
-    <h2>1. 取得・利用するGoogleユーザーデータ</h2>
-
-    <p>
-      本アプリはGoogle Sheets APIを利用し、
-      ユーザー本人が指定したGoogleスプレッドシートに対して、
-      必要な範囲でデータの読み取りおよび更新を行います。
-    </p>
-
-    <p>
-      本アプリが利用するGoogleユーザーデータは、
-      POLARISの管理情報をGoogle Sheetsと同期する目的に限定されます。
-    </p>
-
-    <h2>2. 利用目的</h2>
-
-    <p>Googleユーザーデータは、以下の目的でのみ使用します。</p>
-
-    <ul>
-      <li>管理対象となるGoogleスプレッドシートの読み取り</li>
-      <li>ユーザー本人が確定した管理情報の保存・更新</li>
-      <li>同期状態、競合状態、保存結果の確認</li>
-      <li>二重送信防止および同期整合性の確認</li>
-    </ul>
-
-    <h2>3. データの保存</h2>
-
-    <p>
-      本アプリは、Google Sheetsとの接続に必要なOAuth認証情報を、
-      ユーザー本人のローカル環境内に保存する場合があります。
-    </p>
-
-    <p>
-      本アプリがGoogleアカウントのパスワードを取得または保存することはありません。
-    </p>
-
-    <h2>4. 第三者への提供</h2>
-
-    <p>
-      本アプリは、取得したGoogleユーザーデータを第三者へ販売、提供、
-      または広告目的で利用しません。
-    </p>
-
-    <p>
-      Googleユーザーデータは、本アプリの管理・同期機能を提供するためにのみ使用されます。
-    </p>
-
-    <h2>5. データの共有</h2>
-
-    <p>
-      Googleユーザーデータを、開発者本人以外の第三者と共有することはありません。
-    </p>
-
-    <h2>6. データの削除</h2>
-
-    <p>
-      ユーザーは、Googleアカウントの設定から本アプリのアクセス権をいつでも取り消すことができます。
-    </p>
-
-    <p>
-      また、ローカル環境に保存されたOAuth認証情報は、
-      ユーザー自身で削除することができます。
-    </p>
-
-    <h2>7. Google API Services User Data Policy</h2>
-
-    <p>
-      本アプリによるGoogle APIから取得した情報の使用および他のアプリへの転送は、
-      Google API Services User Data Policy
-      （Limited Use要件を含む）に従います。
-    </p>
-
-    <p>
-      <a href="https://developers.google.com/terms/api-services-user-data-policy"
-         target="_blank" rel="noopener noreferrer">
-        Google API Services User Data Policy
-      </a>
-    </p>
-
-    <h2>8. お問い合わせ</h2>
-
-    <p>
-      本ポリシーに関するお問い合わせは、以下までご連絡ください。
-    </p>
-
-    <p>
-      Email:
-      <a href="mailto:l.c.net2016@gmail.com">
-        l.c.net2016@gmail.com
-      </a>
-    </p>
-
-    <h2>9. 改定</h2>
-
-    <p>
-      本ポリシーは、必要に応じて変更される場合があります。
-      変更後の内容は本ページに掲載します。
-    </p>
-
-    <footer>
-      制定日: 2026年9月18日<br>
-      © 2026 POLARIS
-    </footer>
+    <p>POLARISは、動画素材・作品情報・投稿状況を管理する個人利用向けアプリケーションです。運営者Noaが、Google・Metaとの連携やAI機能で扱う情報について説明します。</p>
+    <h2>1. 扱う情報と利用目的</h2>
+    <p>Google Sheetsでは、本人が指定したスプレッドシートの管理情報を読み取り、本人が確定した情報の保存・更新、同期・競合・保存結果の確認に利用します。</p>
+    <p>YouTubeでは、本人が管理するチャンネル、動画のタイトル・説明・投稿ID・URL・公開設定・投稿結果などを、動画投稿、結果確認、原稿や翻訳の管理に利用します。</p>
+    <p>Facebook連携「POLARIS SNS」では、Page ID・App ID・Page URL・アカウント表示情報、Page認証・検査用認証を扱い、接続先・権限・有効期限を確認します。本人が選択した動画・原稿・ハッシュタグ・投稿先・日時をMetaへ送り、投稿結果を確認します。</p>
+    <p>原稿、素材の参照情報、投稿承認、投稿ID・確認できたURL・実行状態・履歴は、投稿管理と重複送信防止に利用します。現在のFacebook投稿機能では、閲覧者一覧・フォロワー一覧・コメント・個人メッセージを収集していません。</p>
+    <h2>2. 保存と保護</h2>
+    <p>管理情報・原稿・投稿履歴は管理者のローカルデータベースに保存し、動画は指定されたローカル素材から読み取ります。接続に必要な認証情報と投稿再開用の情報は、Windowsの保護機能で暗号化して保存します。認証ファイルへのアクセスも制限します。</p>
+    <p>保存済み認証値は画面に再表示しません。Googleアカウントのパスワードを取得・保存することはありません。データベース全体を暗号化するという意味ではありません。</p>
+    <h2>3. 外部サービスへの送信</h2>
+    <p>選択した連携機能の実行に必要な情報をGoogleまたはMetaへ送信します。接続確認には認証情報を使い、投稿時には選択した動画や原稿を投稿先へ送信します。取得したGoogleユーザーデータを販売・広告目的で利用することはありません。</p>
+    <p>AI原稿生成では、本人が入力した企画・既存タイトルや説明、文体・テンプレート、関連する作品名・題材・場所などのテキストをOpenAI APIへ送信します。Google Sheetsと同期したローカル作品情報が参照情報になる場合もあります。</p>
+    <p>YouTubeの投稿後翻訳が有効な場合は、投稿成功後に保存済みタイトル・説明をOpenAIへ送り、4言語への翻訳を自動で行います。別の翻訳ボタン操作は必要ありません。また、本人が再翻訳を実行すると、YouTube APIから取得した現在のタイトル・説明をOpenAIへ送信します。</p>
+    <p>通常の投稿原稿作成とFacebook専用生成はテキストのみで、サムネイルをAIへ送りません。これとは別に、画像利用を明示選択した場合に、条件を満たす選択画像を縮小して送る任意の機能があります。動画全体やGoogle・Metaの認証情報をAIの原稿入力として送ることはありません。</p>
+    <h2>4. OpenAIでの取扱い</h2>
+    <p>OpenAIへのリクエストでは応答オブジェクトを保存しない設定（store=false）を使用します。ただし、外部サービスで一切保持されないことを意味するものではありません。</p>
+    <p>OpenAIの一般公表条件では、APIデータは明示的なオプトインがない限り学習に使用されません。不正利用監視ログには入力・出力が含まれる場合があり、通常は最長30日、法令上または危害防止のため合理的に必要な場合には、それより長く保持されることがあります。</p>
+    <p>この利用環境の組織単位の共有オプトインや特別な保持設定は未確認です。上記は一般公表条件の説明で、個別設定やZero Data Retentionを保証するものではありません。</p>
+    <p><a href="https://developers.openai.com/api/docs/guides/your-data">OpenAI APIのデータ取扱い</a> / <a href="https://developers.openai.com/api/docs/guides/conversation-state">Responses APIの会話状態と保存</a></p>
+    <h2>5. 保持と削除</h2>
+    <p>情報は、管理・投稿・結果確認などの業務目的に必要な間保持します。不要になった場合や訂正・削除の依頼を受けた場合は、対象の保存データとバックアップを確認して対応します。</p>
+    <p>依頼はメールで受け付け、本人と対象を確認します。自動削除や一律の日数での完了を約束するものではありません。対応内容は確認のうえご案内します。</p>
+    <p>ローカル認証の削除、原稿・履歴・バックアップの削除、Meta上の投稿削除は別の処理です。詳しくは<a href="../data-deletion/">データ削除の案内</a>をご確認ください。</p>
+    <p>Googleアカウントの設定から本アプリのアクセス権を取り消せます。ローカルに保存されたOAuth認証情報の削除とは別の操作です。</p>
+    <h2>6. Google API Services User Data Policy</h2>
+    <p>Google APIから取得した情報の使用や他のアプリへの転送には、Google API Services User Data Policy（Limited Use要件を含む）と、利用するAPIに適用される条件に従って対応します。</p>
+    <p><a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener noreferrer">Google API Services User Data Policy</a> / <a href="https://developers.google.com/youtube/terms/developer-policies">YouTube API Services Developer Policies</a></p>
+    <h2>7. お問い合わせ</h2>
+    <p>運営者：Noa<br>訂正・削除を含むお問い合わせ：<a href="mailto:l.c.net2016@gmail.com">l.c.net2016@gmail.com</a></p>
+    <p>Pageまたは投稿URLと対象情報の種類をお知らせください。パスワード、アクセストークン、App Secretは送らないでください。</p>
+    <h2>8. 改定</h2>
+    <p>内容を変更する場合は、このページに掲載します。</p>
+    <footer>制定日: 2026年9月18日<br>© 2026 POLARIS</footer>
   </main>
 </body>
 </html>
