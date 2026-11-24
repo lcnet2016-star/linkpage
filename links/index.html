@@ -512,6 +512,7 @@
     </div>
   </div>
 
+  <script src="/assets/polaris-static.js"></script>
   <script>
     // ===== 背景 =====
     const BG = {
@@ -564,14 +565,11 @@
     setBG();
 
     // ===== API =====
-    const API_URL =
-      "https://script.google.com/macros/s/AKfycbxT_J40PjHDRD-sGVGrM3zPA8Loj7XV9yDV988lkMB7rXVQ7Epka8ZK8aOdYI5NriY1/exec";
+    const API_URL = "/data/content/nsfw.json";
 
-    const CMS_API_URL =
-      "https://script.google.com/macros/s/AKfycbyyhzKs--PsnAylt-bAgGeTOpMV14CrvJieNXsaIBYSDUrlWl0PXmhm_FvhrYKf65QqRw/exec";
+    const CMS_API_URL = "/data/content/links-campaigns.json";
 
-    const SNS_API_URL =
-      "https://script.google.com/macros/s/AKfycbyV4N5O_3INXD4ry7lWM8HoYIsHjPSAHO_0BSSY1_m5fwQQ7H940VyCgAbU_eBGTW5C/exec";
+    const SNS_API_URL = "/data/content/sns-status.json";
 
     const FALLBACK_IMAGE = "../images/NY.jpg";
 
@@ -627,18 +625,13 @@
 
     // ===== CMS：期間限定 =====
     function formatUpcomingText(item, lang){
-      const date = new Date(Number(item.start_at_ms));
-
-      const month = date.getMonth() + 1;
-      const day = date.getDate();
-      const hour = String(date.getHours()).padStart(2,"0");
-      const minute = String(date.getMinutes()).padStart(2,"0");
+      const time = PolarisStatic.showTeaserTime(item.start_at_ms);
 
       if(lang === "en"){
-        return `${month}/${day} ${hour}:${minute} Coming soon!?`;
+        return `${time} Coming soon!?`;
       }
 
-      return `${month}/${day} ${hour}:${minute}から開催予定！？`;
+      return `${time}から開催予定！？`;
     }
 
     function renderCampaignCard(c){
@@ -703,53 +696,28 @@
       `;
     }
 
-    async function loadCampaigns(){
+    function renderLinksCampaigns_(data) {
       const section = document.getElementById("campaignSection");
       const grid = document.getElementById("campaignGrid");
+      const campaigns = PolarisStatic.asArray(data.campaigns);
+      const upcoming = PolarisStatic.asArray(data.upcoming);
+      section.hidden = !campaigns.length && !upcoming.length;
+      if (section.hidden) { grid.innerHTML = ""; return; }
+      if (!campaigns.length) { grid.innerHTML = upcoming.map(renderUpcomingText).join(""); return; }
+      grid.innerHTML = campaigns.map(renderCampaignCard).join("") + upcoming.map(renderUpcomingCard).join("");
+    }
 
-      if(!section || !grid) return;
-
-      try{
-        const res = await fetch(
-          CMS_API_URL + "?t=" + Date.now(),
-          {cache:"no-store"}
-        );
-
-        if(!res.ok) throw new Error("HTTP " + res.status);
-
-        const data = await res.json();
-
-        const campaigns = Array.isArray(data.campaigns)
-          ? data.campaigns
-          : [];
-
-        const upcoming = Array.isArray(data.upcoming)
-          ? data.upcoming
-          : [];
-
-        if(!campaigns.length && !upcoming.length){
-          section.hidden = true;
-          grid.innerHTML = "";
-          return;
-        }
-
-        section.hidden = false;
-
-        if(!campaigns.length && upcoming.length){
-          grid.innerHTML = upcoming.map(renderUpcomingText).join("");
-          return;
-        }
-
-        const liveCards = campaigns.map(renderCampaignCard).join("");
-        const upcomingCards = upcoming.map(renderUpcomingCard).join("");
-
-        grid.innerHTML = liveCards + upcomingCards;
-
-      }catch(error){
-        console.error("CMS API load error:",error);
-        section.hidden = true;
-        grid.innerHTML = "";
-      }
+    async function loadCampaigns(){
+      return PolarisStatic.watchCampaignFeed(CMS_API_URL,
+        () => PolarisStatic.getPublicJson(CMS_API_URL, PolarisStatic.isManagedCampaignFeed),
+        data => {
+          document.getElementById("campaignSection").setAttribute("data-polaris-campaign-state", "managed");
+          renderLinksCampaigns_(data);
+        },
+        {retainOnError: false, missing: () => {
+          document.getElementById("campaignSection").setAttribute("data-polaris-campaign-state", "unavailable");
+          renderLinksCampaigns_({});
+        }});
     }
 
     // ===== 既存作品 =====

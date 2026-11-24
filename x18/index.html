@@ -501,6 +501,7 @@
     </div>
   </div>
 
+  <script src="/assets/polaris-static.js"></script>
   <script>
     // ===== 背景 =====
     function applyBackgroundFromCms_(backgrounds){
@@ -548,25 +549,19 @@
     }
 
     // ===== API =====
-    const API_URL =
-      "https://script.google.com/macros/s/AKfycbxT_J40PjHDRD-sGVGrM3zPA8Loj7XV9yDV988lkMB7rXVQ7Epka8ZK8aOdYI5NriY1/exec";
-
-    const CONTENT_STATIC_URL =
+const CONTENT_STATIC_URL =
       "/data/content/nsfw.json";
 
     const CONTENT_CACHE_KEY =
-      "nsfw_content_cache";
+      "polaris_static_v1_nsfw_content_cache";
 
     const PAGE_ID = "x18";
 
-    const CMS_API_URL =
-      "https://script.google.com/macros/s/AKfycbyyhzKs--PsnAylt-bAgGeTOpMV14CrvJieNXsaIBYSDUrlWl0PXmhm_FvhrYKf65QqRw/exec";
-
-    const CMS_STATIC_URL =
+const CMS_STATIC_URL =
       `/data/cms/${PAGE_ID}.json`;
 
     const CMS_CACHE_KEY =
-      `cms_cache_${PAGE_ID}`;
+      `polaris_static_cms_v1_${PAGE_ID}`;
 
 
     const FALLBACK_IMAGE = "../images/NY.jpg";
@@ -684,18 +679,13 @@
 
     // ===== CMS：期間限定 =====
     function formatUpcomingText(item, lang){
-      const date = new Date(Number(item.start_at_ms));
-
-      const month = date.getMonth() + 1;
-      const day = date.getDate();
-      const hour = String(date.getHours()).padStart(2,"0");
-      const minute = String(date.getMinutes()).padStart(2,"0");
+      const time = PolarisStatic.showTeaserTime(item.start_at_ms);
 
       if(lang === "en"){
-        return `${month}/${day} ${hour}:${minute} Coming soon!?`;
+        return `${time} Coming soon!?`;
       }
 
-      return `${month}/${day} ${hour}:${minute}から開催予定！？`;
+      return `${time}から開催予定！？`;
     }
 
     function renderCampaignCard(c){
@@ -806,55 +796,16 @@
     async function loadCampaigns(){
       const section = document.getElementById("campaignSection");
       const grid = document.getElementById("campaignGrid");
-
       if(!section || !grid) return;
-
-      // ① 前回CMSデータがあれば即表示
-      const cached = loadCachedCms_();
-
-      if(cached){
-        renderCampaignData_(cached);
-      }
-
-      // ② GitHub静的JSONを優先
-      try{
-        const staticData = await fetchCmsJson_(
-          CMS_STATIC_URL + "?v=" + Date.now()
-        );
-
-        saveCachedCms_(staticData);
-        renderCampaignData_(staticData);
-        return;
-
-      }catch(staticError){
-        console.warn(
-          "Static CMS JSON load error:",
-          staticError
-        );
-      }
-
-      // ③ 静的JSON失敗時だけGASへフォールバック
-      try{
-        const gasData = await fetchCmsJson_(
-          `${CMS_API_URL}?page_id=${encodeURIComponent(PAGE_ID)}&t=${Date.now()}`
-        );
-
-        saveCachedCms_(gasData);
-        renderCampaignData_(gasData);
-
-      }catch(gasError){
-        console.error(
-          "CMS GAS fallback error:",
-          gasError
-        );
-
-        if(!cached){
-          section.hidden = true;
-          grid.innerHTML = "";
-        }
-      }
+      return PolarisStatic.watchCampaignFeed(CMS_STATIC_URL, async () => {
+        const data = await PolarisStatic.getPublicJson(CMS_STATIC_URL, d => d.success === true && Array.isArray(d.sections));
+        saveCachedCms_(data);
+        return data;
+      }, renderCampaignData_, {initial: loadCachedCms_(), missing: () => {
+        section.hidden = true;
+        grid.innerHTML = "";
+      }});
     }
-
     // ===== CMS：SNS =====
     function getTodayKeyJst_(){
       const parts = new Intl.DateTimeFormat(
@@ -1255,18 +1206,9 @@
         renderLists(staticData);
         return;
       }catch(staticError){
-        console.warn("Static content JSON load error:", staticError);
-      }
-
-      try{
-        const gasData = await fetchContentJson_(API_URL + "?t=" + Date.now());
-        saveCachedContent_(gasData);
-        renderLists(gasData);
-      }catch(gasError){
-        console.error("Content GAS fallback error:", gasError);
         if(!cached){
           const errorText = lang === "en" ? "Failed to load" : "読み込みに失敗しました";
-          nowGrid.innerHTML = `<div style="opacity:.9;font-weight:800;text-shadow:var(--textShadow);">${errorText}</div>`;
+          nowGrid.textContent = errorText;
           popGrid.innerHTML = "";
         }
       }

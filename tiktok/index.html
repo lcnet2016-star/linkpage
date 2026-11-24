@@ -372,17 +372,15 @@
     </div>
   </div>
 
+  <script src="/assets/polaris-static.js"></script>
   <script>
     const PAGE_ID = "tiktok";
 
-    const CMS_API_URL =
-      "https://script.google.com/macros/s/AKfycbyyhzKs--PsnAylt-bAgGeTOpMV14CrvJieNXsaIBYSDUrlWl0PXmhm_FvhrYKf65QqRw/exec";
-
-    const CMS_STATIC_URL = `/data/cms/${PAGE_ID}.json`;
+const CMS_STATIC_URL = `/data/cms/${PAGE_ID}.json`;
 
     const FALLBACK_IMAGE = "/images/NY.jpg";
 
-    const CMS_CACHE_KEY = `cms_cache_${PAGE_ID}`;
+    const CMS_CACHE_KEY = `polaris_static_cms_v1_${PAGE_ID}`;
 
     const PAGE_I18N = {
       ja:{
@@ -851,67 +849,20 @@
     }
 
     async function loadCms(){
-      const lang = getLang();
-      const t = PAGE_I18N[lang] || PAGE_I18N.en;
       const root = document.getElementById("pageContent");
-
-      // ① ブラウザに前回データがあれば即表示
       const cached = loadCachedCms();
-
-      if(cached){
-        cmsData = cached;
-        applyBackground(cached.backgrounds || {});
+      if (!cached) root.innerHTML = `<div class="loading">${escHtml((PAGE_I18N[getLang()] || PAGE_I18N.en).loading)}</div>`;
+      return PolarisStatic.watchCampaignFeed(CMS_STATIC_URL, async () => {
+        const data = await PolarisStatic.getPublicJson(CMS_STATIC_URL, d => d.success === true && Array.isArray(d.sections));
+        saveCachedCms(data);
+        return data;
+      }, data => {
+        cmsData = data;
+        applyBackground(data.backgrounds || {});
         renderPage();
-      }else{
-        root.innerHTML =
-          `<div class="loading">${escHtml(t.loading)}</div>`;
-      }
-
-      // ② GitHub Pages上の静的JSONを優先取得
-      try{
-        const staticData = await fetchJson_(
-          `${CMS_STATIC_URL}?v=${Date.now()}`
-        );
-
-        saveCachedCms(staticData);
-
-        cmsData = staticData;
-        applyBackground(staticData.backgrounds || {});
-        renderPage();
-
-        return;
-
-      }catch(staticError){
-        console.warn(
-          "Static CMS JSON load error:",
-          staticError
-        );
-      }
-
-      // ③ 静的JSONが壊れている・未生成の場合のみGASへフォールバック
-      try{
-        const gasData = await fetchJson_(
-          `${CMS_API_URL}?page_id=${encodeURIComponent(PAGE_ID)}&t=${Date.now()}`
-        );
-
-        saveCachedCms(gasData);
-
-        cmsData = gasData;
-        applyBackground(gasData.backgrounds || {});
-        renderPage();
-
-      }catch(gasError){
-        console.error(
-          "CMS GAS fallback error:",
-          gasError
-        );
-
-        // localStorageにも何も無い初回だけエラー表示
-        if(!cached){
-          root.innerHTML =
-            `<div class="loading">${escHtml(t.loadError)}</div>`;
-        }
-      }
+      }, {initial: cached, missing: () => {
+        root.innerHTML = `<div class="loading">${escHtml((PAGE_I18N[getLang()] || PAGE_I18N.en).loadError)}</div>`;
+      }});
     }
 
     function setLang(lang){
