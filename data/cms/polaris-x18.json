@@ -1,1 +1,284 @@
-{"backgrounds":{"evening":"../images/evening.jpg","morning":"../images/morning.png","night":"../images/night.jpg"},"campaigns":[],"meta":{"cached":false,"generated_at":"2026-11-25T04:08:49.846Z"},"page":{"enabled":true,"group_id":"nsfw_jp","language":"JP","order":7,"page_id":"x18","page_name":"NSFW JP","page_type":"nsfw"},"sections":[{"card_group":"nsfw_campaign_jp","cards":[],"enabled":true,"group_id":"nsfw_jp","icon":"🎉","layout":"cards","order":1,"page_id_override":"","section_id":"nsfw_campaign_jp","status":"published","title":"期間限定"},{"card_group":"nsfw_now_jp","cards":[],"enabled":true,"group_id":"nsfw_jp","icon":"🔥","layout":"cards","order":2,"page_id_override":"","section_id":"nsfw_now_jp","status":"published","title":"今すぐ見る"},{"card_group":"nsfw_popular_jp","cards":[],"enabled":true,"group_id":"nsfw_jp","icon":"⭐","layout":"cards","order":3,"page_id_override":"","section_id":"nsfw_popular_jp","status":"published","title":"人気3本"},{"card_group":"nsfw_subscribe_jp","cards":[{"card_group":"nsfw_subscribe_jp","card_id":"nsfw_myfans","card_type":"static","enabled":true,"image_url":"../images/myfans.jpg","links":[{"enabled":true,"label_en":"View","label_ja":"見る","link_id":"nsfw_myfans_link","order":1,"status":"published","tracking_id":"click_myfans","url":"https://myfans.jp/noanoshita"}],"order":1,"page_id_override":"","source_key":"","status":"published","title":"MyFans","tracking_id":"nsfw_myfans"},{"card_group":"nsfw_subscribe_jp","card_id":"nsfw_candfans","card_type":"static","enabled":true,"image_url":"../images/candfans.jpg","links":[{"enabled":true,"label_en":"View","label_ja":"見る","link_id":"nsfw_candfans_link","order":1,"status":"published","tracking_id":"click_candfans","url":"https://candfans.jp/noanoshita"}],"order":2,"page_id_override":"","source_key":"","status":"published","title":"CandFans","tracking_id":"nsfw_candfans"},{"card_group":"nsfw_subscribe_jp","card_id":"nsfw_fantia","card_type":"static","enabled":true,"image_url":"../images/fantia.jpg","links":[{"enabled":true,"label_en":"View","label_ja":"見る","link_id":"nsfw_fantia_link","order":1,"status":"published","tracking_id":"click_fantia","url":"https://fantia.jp/fanclubs/532786"}],"order":3,"page_id_override":"","source_key":"","status":"published","title":"Fantia","tracking_id":"nsfw_fantia"},{"card_group":"nsfw_subscribe_jp","card_id":"nsfw_english","card_type":"static","enabled":true,"image_url":"../images/NY.jpg","links":[{"enabled":true,"label_en":"For English","label_ja":"海外版はこちら","link_id":"nsfw_english_link","order":1,"status":"published","tracking_id":"click_nsfw_english","url":"https://noanoshita.com/en18/"}],"order":4,"page_id_override":"","source_key":"","status":"published","title":"For English","tracking_id":"nsfw_english"}],"enabled":true,"group_id":"nsfw_jp","icon":"💎","layout":"buttons","order":4,"page_id_override":"","section_id":"nsfw_subscribe_jp","status":"published","title":"月額で全部見る"}],"social":[{"enabled":true,"icon_url":"../images/X.png","name":"X","order":1,"page_id_override":"","show_nsfw":true,"show_sfw":true,"sns_id":"x","status":"published","tracking_id":"click_x","update_badge":true,"url":"https://x.com/noanoshita"},{"enabled":true,"icon_url":"../images/instagram.png","name":"Instagram","order":2,"page_id_override":"","show_nsfw":true,"show_sfw":true,"sns_id":"instagram","status":"published","tracking_id":"click_instagram","update_badge":true,"url":"https://www.instagram.com/noanoshita/"},{"enabled":true,"icon_url":"../images/Youtube.png","name":"YouTube","order":3,"page_id_override":"","show_nsfw":true,"show_sfw":true,"sns_id":"youtube","status":"published","tracking_id":"click_youtube","update_badge":true,"url":"https://www.youtube.com/channel/UC0RDaouFGRuQvStBnnkmqVw"},{"enabled":true,"icon_url":"../images/facebook.png","name":"Facebook","order":4,"page_id_override":"","show_nsfw":true,"show_sfw":true,"sns_id":"facebook","status":"published","tracking_id":"click_facebook","update_badge":true,"url":"https://www.facebook.com/noanoshita.noa"},{"enabled":true,"icon_url":"../images/RF.png","name":"ReelFans","order":5,"page_id_override":"","show_nsfw":true,"show_sfw":false,"sns_id":"reelfans","status":"published","tracking_id":"click_reelfans","update_badge":false,"url":"https://reelfans.io/@noanoshita"}],"success":true,"upcoming":[{"end_at_ms":1796309999000,"id":"polaris_announcement_4ffd711e-e357-4a21-a023-316a47783a1b","start_at_ms":1795780800000,"title":"MYFANS限定ガチャ"},{"end_at_ms":1796309999000,"id":"polaris_announcement_49d5ab5d-a990-453d-a1b3-3cbb6fb0b697","start_at_ms":1795780800000,"title":"FANTIA限定ガチャ"},{"end_at_ms":1796309999000,"id":"polaris_announcement_23f456b6-a0b2-4954-8852-ed63f529c0bb","start_at_ms":1795780800000,"title":"CANDFANS限定ガチャ"}]}
+{
+  "backgrounds": {
+    "evening": "../images/evening.jpg",
+    "morning": "../images/morning.png",
+    "night": "../images/night.jpg"
+  },
+  "campaigns": [
+    {
+      "end_at_ms": 1796741999000,
+      "id": "polaris_announcement_24cc43bd-95d2-46c0-ba95-a4f7cc8c19a7",
+      "image_url": "https://noanoshita.com/images/コスプレダンスガチャ.jpg",
+      "links": [
+        {
+          "text": "FANTIAで見る",
+          "url": "https://fantia.jp/products/1091300"
+        }
+      ],
+      "start_at_ms": 1795600971282,
+      "title": "FANTIA限定ハロウィンガチャ",
+      "tracking_id": "polaris_announcement_24cc43bd-95d2-46c0-ba95-a4f7cc8c19a7"
+    }
+  ],
+  "meta": {
+    "cached": false,
+    "generated_at": "2026-11-25T04:08:49.846Z"
+  },
+  "page": {
+    "enabled": true,
+    "group_id": "nsfw_jp",
+    "language": "JP",
+    "order": 7,
+    "page_id": "x18",
+    "page_name": "NSFW JP",
+    "page_type": "nsfw"
+  },
+  "sections": [
+    {
+      "card_group": "nsfw_campaign_jp",
+      "cards": [],
+      "enabled": true,
+      "group_id": "nsfw_jp",
+      "icon": "🎉",
+      "layout": "cards",
+      "order": 1,
+      "page_id_override": "",
+      "section_id": "nsfw_campaign_jp",
+      "status": "published",
+      "title": "期間限定"
+    },
+    {
+      "card_group": "nsfw_now_jp",
+      "cards": [],
+      "enabled": true,
+      "group_id": "nsfw_jp",
+      "icon": "🔥",
+      "layout": "cards",
+      "order": 2,
+      "page_id_override": "",
+      "section_id": "nsfw_now_jp",
+      "status": "published",
+      "title": "今すぐ見る"
+    },
+    {
+      "card_group": "nsfw_popular_jp",
+      "cards": [],
+      "enabled": true,
+      "group_id": "nsfw_jp",
+      "icon": "⭐",
+      "layout": "cards",
+      "order": 3,
+      "page_id_override": "",
+      "section_id": "nsfw_popular_jp",
+      "status": "published",
+      "title": "人気3本"
+    },
+    {
+      "card_group": "nsfw_subscribe_jp",
+      "cards": [
+        {
+          "card_group": "nsfw_subscribe_jp",
+          "card_id": "nsfw_myfans",
+          "card_type": "static",
+          "enabled": true,
+          "image_url": "../images/myfans.jpg",
+          "links": [
+            {
+              "enabled": true,
+              "label_en": "View",
+              "label_ja": "見る",
+              "link_id": "nsfw_myfans_link",
+              "order": 1,
+              "status": "published",
+              "tracking_id": "click_myfans",
+              "url": "https://myfans.jp/noanoshita"
+            }
+          ],
+          "order": 1,
+          "page_id_override": "",
+          "source_key": "",
+          "status": "published",
+          "title": "MyFans",
+          "tracking_id": "nsfw_myfans"
+        },
+        {
+          "card_group": "nsfw_subscribe_jp",
+          "card_id": "nsfw_candfans",
+          "card_type": "static",
+          "enabled": true,
+          "image_url": "../images/candfans.jpg",
+          "links": [
+            {
+              "enabled": true,
+              "label_en": "View",
+              "label_ja": "見る",
+              "link_id": "nsfw_candfans_link",
+              "order": 1,
+              "status": "published",
+              "tracking_id": "click_candfans",
+              "url": "https://candfans.jp/noanoshita"
+            }
+          ],
+          "order": 2,
+          "page_id_override": "",
+          "source_key": "",
+          "status": "published",
+          "title": "CandFans",
+          "tracking_id": "nsfw_candfans"
+        },
+        {
+          "card_group": "nsfw_subscribe_jp",
+          "card_id": "nsfw_fantia",
+          "card_type": "static",
+          "enabled": true,
+          "image_url": "../images/fantia.jpg",
+          "links": [
+            {
+              "enabled": true,
+              "label_en": "View",
+              "label_ja": "見る",
+              "link_id": "nsfw_fantia_link",
+              "order": 1,
+              "status": "published",
+              "tracking_id": "click_fantia",
+              "url": "https://fantia.jp/fanclubs/532786"
+            }
+          ],
+          "order": 3,
+          "page_id_override": "",
+          "source_key": "",
+          "status": "published",
+          "title": "Fantia",
+          "tracking_id": "nsfw_fantia"
+        },
+        {
+          "card_group": "nsfw_subscribe_jp",
+          "card_id": "nsfw_english",
+          "card_type": "static",
+          "enabled": true,
+          "image_url": "../images/NY.jpg",
+          "links": [
+            {
+              "enabled": true,
+              "label_en": "For English",
+              "label_ja": "海外版はこちら",
+              "link_id": "nsfw_english_link",
+              "order": 1,
+              "status": "published",
+              "tracking_id": "click_nsfw_english",
+              "url": "https://noanoshita.com/en18/"
+            }
+          ],
+          "order": 4,
+          "page_id_override": "",
+          "source_key": "",
+          "status": "published",
+          "title": "For English",
+          "tracking_id": "nsfw_english"
+        }
+      ],
+      "enabled": true,
+      "group_id": "nsfw_jp",
+      "icon": "💎",
+      "layout": "buttons",
+      "order": 4,
+      "page_id_override": "",
+      "section_id": "nsfw_subscribe_jp",
+      "status": "published",
+      "title": "月額で全部見る"
+    }
+  ],
+  "social": [
+    {
+      "enabled": true,
+      "icon_url": "../images/X.png",
+      "name": "X",
+      "order": 1,
+      "page_id_override": "",
+      "show_nsfw": true,
+      "show_sfw": true,
+      "sns_id": "x",
+      "status": "published",
+      "tracking_id": "click_x",
+      "update_badge": true,
+      "url": "https://x.com/noanoshita"
+    },
+    {
+      "enabled": true,
+      "icon_url": "../images/instagram.png",
+      "name": "Instagram",
+      "order": 2,
+      "page_id_override": "",
+      "show_nsfw": true,
+      "show_sfw": true,
+      "sns_id": "instagram",
+      "status": "published",
+      "tracking_id": "click_instagram",
+      "update_badge": true,
+      "url": "https://www.instagram.com/noanoshita/"
+    },
+    {
+      "enabled": true,
+      "icon_url": "../images/Youtube.png",
+      "name": "YouTube",
+      "order": 3,
+      "page_id_override": "",
+      "show_nsfw": true,
+      "show_sfw": true,
+      "sns_id": "youtube",
+      "status": "published",
+      "tracking_id": "click_youtube",
+      "update_badge": true,
+      "url": "https://www.youtube.com/channel/UC0RDaouFGRuQvStBnnkmqVw"
+    },
+    {
+      "enabled": true,
+      "icon_url": "../images/facebook.png",
+      "name": "Facebook",
+      "order": 4,
+      "page_id_override": "",
+      "show_nsfw": true,
+      "show_sfw": true,
+      "sns_id": "facebook",
+      "status": "published",
+      "tracking_id": "click_facebook",
+      "update_badge": true,
+      "url": "https://www.facebook.com/noanoshita.noa"
+    },
+    {
+      "enabled": true,
+      "icon_url": "../images/RF.png",
+      "name": "ReelFans",
+      "order": 5,
+      "page_id_override": "",
+      "show_nsfw": true,
+      "show_sfw": false,
+      "sns_id": "reelfans",
+      "status": "published",
+      "tracking_id": "click_reelfans",
+      "update_badge": false,
+      "url": "https://reelfans.io/@noanoshita"
+    }
+  ],
+  "success": true,
+  "upcoming": [
+    {
+      "end_at_ms": 1796309999000,
+      "id": "polaris_announcement_4ffd711e-e357-4a21-a023-316a47783a1b",
+      "start_at_ms": 1795780800000,
+      "title": "MYFANS限定ガチャ"
+    },
+    {
+      "end_at_ms": 1796309999000,
+      "id": "polaris_announcement_49d5ab5d-a990-453d-a1b3-3cbb6fb0b697",
+      "start_at_ms": 1795780800000,
+      "title": "FANTIA限定ガチャ"
+    },
+    {
+      "end_at_ms": 1796309999000,
+      "id": "polaris_announcement_23f456b6-a0b2-4954-8852-ed63f529c0bb",
+      "start_at_ms": 1795780800000,
+      "title": "CANDFANS限定ガチャ"
+    }
+  ]
+}
