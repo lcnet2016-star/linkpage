@@ -421,6 +421,8 @@
       margin-bottom:2px;
     }
 
+    .campaign-teaser-titles{margin:4px 0 0;padding-inline-start:1.35em;overflow-wrap:anywhere;}
+
     .preview-date{
       margin-top:auto;
       color:#fff;
@@ -901,15 +903,22 @@ const CMS_STATIC_URL = "/data/cms/polaris-pornhub.json";
       `;
     }
 
-    function renderUpcomingText(item){
+    function renderUpcomingGroups(items) {
+      const groups = new Map();
+      for (const item of items) {
+        if (!item || !Number.isSafeInteger(item.start_at_ms)) continue;
+        const title = typeof item.title === "string" ? item.title.trim() : "";
+        if (!title) continue;
+        if (!groups.has(item.start_at_ms)) groups.set(item.start_at_ms, []);
+        groups.get(item.start_at_ms).push(title);
+      }
       const lang = getLang();
-
-      return `
-        <div class="campaign-preview-text">
-          <span class="preview-title">${escHtml(item.title || "")}</span>
-          <span>${escHtml(formatUpcomingText(item, lang))}</span>
-        </div>
-      `;
+      return Array.from(groups).sort((a,b) => a[0]-b[0]).map(([start,titles]) => {
+        const time = PolarisStatic.showTeaserTime(start).replace(/\s+JST$/, "");
+        const heading = lang === "en" ? `Coming ${time} (JST)!` : `${time} から開催予定！`;
+        return `<div class="campaign-preview-text campaign-teaser-group"><strong>${escHtml(heading)}</strong>` +
+          `<ul class="campaign-teaser-titles">${titles.map(title => `<li>${escHtml(title)}</li>`).join("")}</ul></div>`;
+      }).join("");
     }
 
     function renderCampaignData_(data){
@@ -941,7 +950,7 @@ const CMS_STATIC_URL = "/data/cms/polaris-pornhub.json";
 
       if(!campaigns.length && upcoming.length){
         grid.innerHTML =
-          upcoming.map(renderUpcomingText).join("");
+          renderUpcomingGroups(upcoming);
         return;
       }
 
@@ -949,7 +958,7 @@ const CMS_STATIC_URL = "/data/cms/polaris-pornhub.json";
         campaigns.map(renderCampaignCard).join("");
 
       const upcomingCards =
-        upcoming.map(renderUpcomingCard).join("");
+        renderUpcomingGroups(upcoming);
 
       grid.innerHTML =
         liveCards + upcomingCards;
