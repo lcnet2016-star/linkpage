@@ -3,6 +3,7 @@
   const rendered = new WeakMap();
   const small = matchMedia("(max-width:700px)");
   const reduce = matchMedia("(prefers-reduced-motion: reduce)");
+  const hoverCapable = matchMedia("(hover: hover)");
   const escape = s => String(s ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
   const validGroup = c => typeof c.announcement_group_id === "string" &&
     /^local_[a-f0-9-]{36}$/.test(c.announcement_group_id) ? c.announcement_group_id : "";
@@ -47,7 +48,7 @@
       const bar=deck.querySelector(".campaign-deck-controls");
       const toggle=bar.querySelector('[data-action="toggle"]'),range=bar.querySelector("input");
       const position=bar.querySelector(".campaign-deck-position");
-      let stopped=false,timer=null,coolUntil=0,hover=false;
+      let stopped=false,timer=null,coolUntil=0,resumeFromToggle=false;
       const max=()=>Math.max(0,count-(small.matches?2:3));
       const x=i=>track.children[i]?.offsetLeft-track.firstElementChild.offsetLeft||0;
       const index=()=>{let k=0;for(let i=1;i<=max();i++)if(Math.abs(track.scrollLeft-x(i))<Math.abs(track.scrollLeft-x(k)))k=i;return k};
@@ -60,16 +61,16 @@
       const go=(i,manual)=>{if(!max())return;if(manual)coolUntil=Date.now()+5500;const clamped=(i+max()+1)%(max()+1);
         track.scrollTo({left:x(clamped),behavior:reduce.matches||Math.abs(clamped-index())>1?"instant":"smooth"});};
       const resize=()=>{if(!max())track.scrollLeft=0;update()};
-      toggle.onclick=()=>{stopped=!stopped;update()};
+      toggle.onclick=()=>{stopped=!stopped;resumeFromToggle=!stopped;update()};
       bar.querySelector('[data-action="prev"]').onclick=()=>go(index()-1,true);
       bar.querySelector('[data-action="next"]').onclick=()=>go(index()+1,true);
       range.oninput=()=>{const i=Number(range.value);coolUntil=Date.now()+5500;track.scrollTo({left:x(i),behavior:"instant"});update()};
       track.addEventListener("scroll",update,{passive:true});
       track.addEventListener("pointerdown",()=>{coolUntil=Date.now()+5500},{passive:true});
-      deck.addEventListener("mouseenter",()=>{hover=true});
-      deck.addEventListener("mouseleave",()=>{hover=false});
       small.addEventListener("change",resize);reduce.addEventListener("change",update);
-      timer=setInterval(()=>{if(!deck.isConnected){dispose();return}if(!stopped&&!reduce.matches&&!hover&&!document.hidden&&!deck.contains(document.activeElement)&&Date.now()>=coolUntil)go(index()+1,false)},4500);
+      timer=setInterval(()=>{if(!deck.isConnected){dispose();return}const focus=document.activeElement;
+        const hovered=hoverCapable.matches&&deck.querySelector('.campaign-deck-track a:hover, .campaign-deck-controls button:not([data-action="toggle"]):hover, .campaign-deck-controls input:hover');
+        if(!stopped&&!reduce.matches&&!hovered&&!document.hidden&&(!deck.contains(focus)||(resumeFromToggle&&focus===toggle))&&Date.now()>=coolUntil)go(index()+1,false)},4500);
       function dispose(){clearInterval(timer);small.removeEventListener("change",resize);reduce.removeEventListener("change",update)}
       disposers.push(dispose);update();
     }
