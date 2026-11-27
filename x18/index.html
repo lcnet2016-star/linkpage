@@ -475,6 +475,8 @@
 
     [hidden]{display:none !important}
   </style>
+  <link rel="stylesheet" href="/assets/announcement-carousel.css">
+  <script src="/assets/announcement-carousel.js"></script>
 </head>
 
 <body>
@@ -964,7 +966,7 @@ const CMS_STATIC_URL = "/data/cms/polaris-x18.json";
 
       if(!campaigns.length && !upcoming.length){
         section.hidden = true;
-        grid.innerHTML = "";
+        window.PolarisCampaignCarousel?.clear(grid); grid.innerHTML = "";
         return;
       }
 
@@ -976,14 +978,8 @@ const CMS_STATIC_URL = "/data/cms/polaris-x18.json";
         return;
       }
 
-      const liveCards =
-        campaigns.map(renderCampaignCard).join("");
-
-      const upcomingCards =
-        renderUpcomingGroups(upcoming);
-
-      grid.innerHTML =
-        liveCards + upcomingCards;
+      if (window.PolarisCampaignCarousel) PolarisCampaignCarousel.render(grid, campaigns, renderUpcomingGroups(upcoming), renderCampaignCard, getLang());
+      else grid.innerHTML = campaigns.map(renderCampaignCard).join("") + renderUpcomingGroups(upcoming);
     }
 
     async function loadCampaigns(){
@@ -996,7 +992,7 @@ const CMS_STATIC_URL = "/data/cms/polaris-x18.json";
         return data;
       }, renderCampaignData_, {initial: loadCachedCms_(), requireFreshCampaigns: true, missing: () => {
         section.hidden = true;
-        grid.innerHTML = "";
+        window.PolarisCampaignCarousel?.clear(grid); grid.innerHTML = "";
       }});
     }
     // ===== CMS：SNS =====

@@ -455,6 +455,8 @@
 
     [hidden]{display:none !important}
   </style>
+  <link rel="stylesheet" href="/assets/announcement-carousel.css">
+  <script src="/assets/announcement-carousel.js"></script>
 </head>
 
 <body>
@@ -895,9 +897,10 @@
       const campaigns = PolarisStatic.asArray(data.campaigns);
       const upcoming = PolarisStatic.asArray(data.upcoming);
       section.hidden = !campaigns.length && !upcoming.length;
-      if (section.hidden) { grid.innerHTML = ""; return; }
+      if (section.hidden) { window.PolarisCampaignCarousel?.clear(grid); grid.innerHTML = ""; return; }
       if (!campaigns.length) { grid.innerHTML = renderUpcomingGroups(upcoming); return; }
-      grid.innerHTML = campaigns.map(renderCampaignCard).join("") + renderUpcomingGroups(upcoming);
+      if (window.PolarisCampaignCarousel) PolarisCampaignCarousel.render(grid, campaigns, renderUpcomingGroups(upcoming), renderCampaignCard, getLang());
+      else grid.innerHTML = campaigns.map(renderCampaignCard).join("") + renderUpcomingGroups(upcoming);
     }
 
     async function loadCampaigns(){
