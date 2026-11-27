@@ -1,6 +1,48 @@
 {
   "campaigns": [
     {
+      "end_at_ms": 1796309999000,
+      "id": "polaris_announcement_4ffd711e-e357-4a21-a023-316a47783a1b",
+      "image_url": "https://noanoshita.com/images/BF_myfans01.jpg",
+      "links": [
+        {
+          "text": "MYFANSで見る",
+          "url": "https://mfco.link/yRg507mQ"
+        }
+      ],
+      "start_at_ms": 1795780800000,
+      "title": "MYFANS限定本編ガチャ🎁第1弾🚀",
+      "tracking_id": "polaris_announcement_4ffd711e-e357-4a21-a023-316a47783a1b"
+    },
+    {
+      "end_at_ms": 1796309999000,
+      "id": "polaris_announcement_49d5ab5d-a990-453d-a1b3-3cbb6fb0b697",
+      "image_url": "https://noanoshita.com/images/BF_fantia01.jpg",
+      "links": [
+        {
+          "text": "FANTIAで見る",
+          "url": "https://fantia.jp/products/1091508"
+        }
+      ],
+      "start_at_ms": 1795780800000,
+      "title": "FANTIA限定本編ガチャ🎁第1弾🚀",
+      "tracking_id": "polaris_announcement_49d5ab5d-a990-453d-a1b3-3cbb6fb0b697"
+    },
+    {
+      "end_at_ms": 1796309999000,
+      "id": "polaris_announcement_23f456b6-a0b2-4954-8852-ed63f529c0bb",
+      "image_url": "https://noanoshita.com/images/BF_candfans01.jpg",
+      "links": [
+        {
+          "text": "CANDFANSで見る",
+          "url": "https://candfans.jp/posts/comment/show/1339375"
+        }
+      ],
+      "start_at_ms": 1795780800000,
+      "title": "CANDFANS限定本編ガチャ🎁",
+      "tracking_id": "polaris_announcement_23f456b6-a0b2-4954-8852-ed63f529c0bb"
+    },
+    {
       "end_at_ms": 1796741999000,
       "id": "polaris_announcement_24cc43bd-95d2-46c0-ba95-a4f7cc8c19a7",
       "image_url": "https://noanoshita.com/images/コスプレダンスガチャ.jpg",
@@ -16,24 +58,5 @@
     }
   ],
   "success": true,
-  "upcoming": [
-    {
-      "end_at_ms": 1796309999000,
-      "id": "polaris_announcement_4ffd711e-e357-4a21-a023-316a47783a1b",
-      "start_at_ms": 1795780800000,
-      "title": "MYFANS限定本編ガチャ🎁第1弾🚀"
-    },
-    {
-      "end_at_ms": 1796309999000,
-      "id": "polaris_announcement_49d5ab5d-a990-453d-a1b3-3cbb6fb0b697",
-      "start_at_ms": 1795780800000,
-      "title": "FANTIA限定本編ガチャ🎁第1弾🚀"
-    },
-    {
-      "end_at_ms": 1796309999000,
-      "id": "polaris_announcement_23f456b6-a0b2-4954-8852-ed63f529c0bb",
-      "start_at_ms": 1795780800000,
-      "title": "CANDFANS限定本編ガチャ🎁"
-    }
-  ]
+  "upcoming": []
 }
